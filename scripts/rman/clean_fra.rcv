@@ -1,0 +1,28 @@
+# Run this RMAN script to clean Fast Recovery on VM database 
+ 
+
+
+#Switch to noarcivelog
+
+ALTER DATABASE FLASHBACK OFF;
+SHUTDOWN IMMEDIATE;
+STARTUP MOUNT;
+ALTER DATABASE NOARCHIVELOG;
+ALTER DATABASE OPEN;
+
+# Clean 
+
+DELETE NOPROMPT OBSOLETE;
+DELETE NOPROMPT ARCHIVELOG ALL;
+delete noprompt backup; 
+
+#Switch back
+
+SHUTDOWN IMMEDIATE;
+STARTUP MOUNT;
+ALTER DATABASE ARCHIVELOG;
+ALTER DATABASE FLASHBACK ON;
+ALTER DATABASE OPEN;
+
+### Verify
+### du -sh /opt/oracle/oradata/fast_recovery_area/FREE/*

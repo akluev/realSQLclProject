@@ -143,6 +143,17 @@ done < "$img_list"
 
 
 #############################################
+# 6b. Fix Confluence code blocks → ```sql
+#############################################
+
+echo "[6b] Fixing code blocks..."
+
+# Convert <pre class="syntaxhighlighter-pre">...</pre> to fenced code blocks
+sed  \
+  's/class="syntaxhighlighter-pre"/class="sql"/g' \
+  "$fixed_html" > tmp && mv tmp "$fixed_html"
+
+#############################################
 # 7. Convert HTML → Markdown
 #############################################
 echo "[7/7] Converting HTML to Markdown..."
