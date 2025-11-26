@@ -3,6 +3,22 @@
 set -e
 trap 'c=$?; [ $c -ne 0 ] && echo "FAILED with code $c"' EXIT
 
+
+# Resolve the directory where this script is located
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Move to repo root (script is inside repo_root/confluence/)
+repo_root="$(cd "${script_dir}/.." && pwd)"
+cd "$repo_root"
+
+if [ ! -d "${repo_root}/docs" ]; then
+  echo "[error] docs/ folder not found — script must run inside the repo root."
+  exit 1
+fi
+
+#echo "[info] Running from repository root: $repo_root"
+
+
 #############################################
 # Validate input
 #############################################
