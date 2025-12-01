@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<aliases>
+    <alias name="prj_rm_ords">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[
+set define off
+prompt Removing fake changes in ORDS schema...
+!bash -c "cd $(git rev-parse --show-toplevel) && git restore  --worktree --staged -- dist/releases/ords "
+]]></sql>
+            </query>
+        </queries>
+    </alias>
+    <alias name="prj_rm_logs">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[
+set define off
+prompt Removing Logs from the repo...
+!bash -c "cd $(git rev-parse --show-toplevel) && find . -type f -name "*.log" -delete"
+]]></sql>
+            </query>
+        </queries>
+    </alias>
+
+
+    <alias name="prj_exp_app">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[set define on
+column app_id new_value app_id
+select :app_id app_id from dual;
+prompt Dropping existing export file in bash shell...
+!rm -fR src/database/*/apex_apps/&APP_ID.
+prompt Dropping existing export file in powershell...
+!powershell -NoLogo -NoProfile -Command "Remove-Item -Recurse -Force 'src/database/*/apex_apps/f&APP_ID.'"
+prompt Exporting APEX Application ID &app_id...
+project  export -o APEX.&APP_ID.]]></sql>
+                <binds>
+                    <bind id="app_id">
+                        <tooltip><![CDATA[app_id]]></tooltip>
+                    </bind>
+                </binds>
+            </query>
+        </queries>
+    </alias>
+    <alias name="prj_install">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[cd dist
+prompt Running Project Installer Script...
+@install.sql
+cd ..]]></sql>
+            </query>
+        </queries>
+    </alias>
+    <alias name="prj_mr">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[cd dist
+prompt Running the Liquibase mark-next-changeset-ran Command to mark the next changeset as executed...
+lb mark-next-changeset-ran -changelog-file releases/main.changelog.xml
+cd ..]]></sql>
+            </query>
+        </queries>
+    </alias>
+    <alias name="prj_status">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[cd dist
+prompt Running the Liquibase Status Command to show pending changesets... 
+lb status -changelog-file releases/main.changelog.xml
+cd ..]]></sql>
+            </query>
+        </queries>
+    </alias>
+    <alias name="prj_sync">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[cd dist
+prompt Running the Liquibase changelog-sync Command to mark all changesets as executed...
+lb changelog-sync -changelog-file releases/main.changelog.xml
+cd ..]]></sql>
+            </query>
+        </queries>
+    </alias>
+   <alias name="prj_force_apex">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[
+pause This will FORCE re-deployment or synching of APEX application even if no changes detected. Press ENTER to continue or Ctrl-C to cancel...
+delete FROM databasechangelog_actions
+    where ID like 'INSTALL_%'
+    and author ='SQLCL-Generated'
+    and filename like 'releases/apex/f%/f%.xml'  ;  
+delete from databasechangelog
+where ID like 'INSTALL_%'
+and author ='SQLCL-Generated'
+and filename like 'releases/apex/f%/f%.xml'
+and description like '%runApexScript%';
+prompt Done. Run 'prj_install' to re-install APEX applications or 'prj_sync' to update the catalog now.
+]]></sql>
+            </query>
+        </queries>
+    </alias>
+</aliases>
