@@ -111,4 +111,13 @@ prompt Done. Run 'prj_install' to re-install APEX applications or 'prj_sync' to 
             </query>
         </queries>
     </alias>
+    <alias name="prj_drift_cleanup">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[!bash -c scripts/bash/tools/drift_cleanup.sh]]></sql>
+            </query>
+        </queries>
+    </alias>
+
 </aliases>
