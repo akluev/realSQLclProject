@@ -27,9 +27,10 @@ function normalize() {   sed '/^-- sqlcl_snapshot/d' "$1" |        # remove snap
   uniq                               # dedupe if SQLcl duplicated entries
 }
 
+git add -- 'src/database'
+
 echo "Starting drift cleanup script in repo: $repo_root"
 show_diffs
-
 
 
 echo "Revert ORDS, USERS, and APEX SQL Files"
