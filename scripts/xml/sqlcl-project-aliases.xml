@@ -53,6 +53,7 @@ project  export -o APEX.&APP_ID.]]></sql>
             <query minversion="8">
                 <sql><![CDATA[cd dist
 prompt Running Project Installer Script...
+set define off
 @install.sql
 cd ..]]></sql>
             </query>
