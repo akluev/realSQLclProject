@@ -38,7 +38,9 @@ prompt Dropping existing export file in bash shell...
 prompt Dropping existing export file in powershell...
 !powershell -NoLogo -NoProfile -Command "Remove-Item -Recurse -Force 'src/database/*/apex_apps/f&APP_ID.'"
 prompt Exporting APEX Application ID &app_id...
-project  export -o APEX.&APP_ID.]]></sql>
+project  export -o APEX.&APP_ID.
+set define off
+]]></sql>
                 <binds>
                     <bind id="app_id">
                         <tooltip><![CDATA[app_id]]></tooltip>
