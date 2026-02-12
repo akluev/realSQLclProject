@@ -1,2 +1,8 @@
 {
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /c/repo/realSQLclProject && git add \\. && git commit -m \"Sanitize documentation: remove external links and sensitive references\n\n- Replace connection string domains with XXXXX\n- Remove Confluence and Bitbucket external links\n- Replace with local markdown references where applicable\n- Update image data-base-url from external URLs to relative paths\n- Keep official Liquibase documentation links\n- Files in tmp/ remain excluded by \\.gitignore\" && git push$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }
