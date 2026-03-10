@@ -19,7 +19,7 @@ prompt Removing fake changes in ORDS schema...
                 <sql><![CDATA[
 set define off
 prompt Removing Logs from the repo...
-!bash -c "cd $(git rev-parse --show-toplevel) && find . -type f -name "*.log" -delete"
+!bash -c "cd $(git rev-parse --show-toplevel) && find . -type f -name '*.log' -delete"
 ]]></sql>
             </query>
         </queries>
