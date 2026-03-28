@@ -41,6 +41,9 @@ A curated set of reproducible findings from real enterprise environments.
 ### ✔ Common commands & scripts  
 Frequently used SQLcl, Liquibase, Git, and APEX commands for deployment pipelines.
 
+### ✔ GitHub Copilot + MCP integration  
+Ready-to-use Copilot instructions and MCP server configuration so GitHub Copilot (Agent mode) understands your SQLcl Project workflows — running `project stage add-custom`, populating DML files, and respecting deployment rules automatically. See [13. Integrating SQLcl Project with GitHub Copilot](docs/13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md).
+
 ---
 
 ## 📚 Full Documentation
@@ -80,7 +83,7 @@ If you deploy Oracle systems at real scale, you will find practical guidance her
 
 oracle oracle-apex sqlcl sqlcl-project database-deployment cicd database-versioning
 oracle-devops liquibase plsql oracle-database oracle-sql apex-deployment drift-detection
-database-automation devops gitops continuous-delivery oracle-cloud apex
+database-automation devops gitops continuous-delivery oracle-cloud apex mcp copilot 
 
 ---
 

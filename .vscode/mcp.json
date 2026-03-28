@@ -1,0 +1,20 @@
+{
+	"servers": {
+		"sqlcl.local": {
+			"type": "stdio",
+			"command": "sql",
+			"args": [
+				"-R",
+				"0",
+				"-mcp"
+			]
+		},
+		"chrome-devtools": {
+			"command": "npx",
+			"args": [
+				"@modelcontextprotocol/server-puppeteer"
+			]
+		}
+	},
+	"inputs": []
+}
