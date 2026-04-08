@@ -6,6 +6,6 @@
 - [6. Mitigating Production Drift](06.-Mitigating-Production-Drift.md)
 - [10.1. SQLcl Project Bugs](10.1-sqlcl_project_bugs.md)
 - [10.2. SQLcl Project Enhancement Requests](10.2.-sqlcl_project_enhancements.md)
-- [11. Best Practices, Tips, and Advises For Deployment Process](11.-Best-Practices-Tips-and-Advises-For-Deployment-Process.md)
+- [11. Best Practices, Tips, and Advice For Deployment Process](11.-Best-Practices-Tips-and-Advises-For-Deployment-Process.md)
 - [12. Common Commands, Directives, and Aliases](12.-Common-Commands-and-Directives.md)
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
