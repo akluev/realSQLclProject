@@ -9,3 +9,7 @@
 - [11. Best Practices, Tips, and Advice For Deployment Process](11.-Best-Practices-Tips-and-Advises-For-Deployment-Process.md)
 - [12. Common Commands, Directives, and Aliases](12.-Common-Commands-and-Directives.md)
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
+
+### VM Configuration
+
+- [VM 1. Configure APEX and ORDS on Secondary PDB](vm/01.-Configure-APEX-and-ORDS-on-Secondary-PDB.md)

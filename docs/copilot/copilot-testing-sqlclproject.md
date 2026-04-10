@@ -2,6 +2,10 @@
 
 This document captures successful interactions testing Copilot's ability to handle SQLcl project-bound workflows.
 
+**Related Documentation:**
+- [VM Configuration Guide](../vm/README.md) — Instructions for setting up test VMs with APEX and ORDS
+- [13. Integrating SQLcl Project with GitHub Copilot](../13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md) — Copilot setup and MCP configuration
+
 - [SQLcl Project Copilot Testing - Interaction Log](#sqlcl-project-copilot-testing---interaction-log)
   - [Test Case 1: Export Tables to Repository](#test-case-1-export-tables-to-repository)
   - [Test Case 2: Export Table Data to DML Files](#test-case-2-export-table-data-to-dml-files)
