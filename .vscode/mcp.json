@@ -8,12 +8,6 @@
 				"0",
 				"-mcp"
 			]
-		},
-		"chrome-devtools": {
-			"command": "npx",
-			"args": [
-				"@modelcontextprotocol/server-puppeteer"
-			]
 		}
 	},
 	"inputs": []
