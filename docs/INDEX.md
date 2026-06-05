@@ -9,6 +9,7 @@
 - [11. Best Practices, Tips, and Advice For Deployment Process](11.-Best-Practices-Tips-and-Advises-For-Deployment-Process.md)
 - [12. Common Commands, Directives, and Aliases](12.-Common-Commands-and-Directives.md)
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
+- [14. SQLcl Project with APEXlang: First Impressions](14.-SQLcl-Project-with-APEXlang-First-Impressions.md)
 
 ### VM Configuration
 
