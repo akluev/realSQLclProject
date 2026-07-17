@@ -29,14 +29,10 @@ prompt Removing Logs from the repo...
     <alias name="prj_exp_app">
         <description/>
         <queries>
-            <query minversion="8">
+            <query minversion="19">
                 <sql><![CDATA[set define on
 column app_id new_value app_id
 select :app_id app_id from dual;
-prompt Dropping existing export file in bash shell...
-!rm -fR src/database/*/apex_apps/&APP_ID.
-prompt Dropping existing export file in powershell...
-!powershell -NoLogo -NoProfile -Command "Remove-Item -Recurse -Force 'src/database/*/apex_apps/f&APP_ID.'"
 prompt Exporting APEX Application ID &app_id...
 project  export -o APEX.&APP_ID.
 column cmd new_value cmd noprint
@@ -44,8 +40,8 @@ column msg  new_value msg noprint
 set verify off
 select 
  case when '&_SQLPLUS_RELEASE' = '2601020000' 
-  then 'export -applicationid &APP_ID. -exptype APEXLANG -dir src/database/'||lower(owner)||'/apex_apps/f'||application_id
-  else 'validate input -input '||'src/database/'||lower(owner)||'/apex_apps/f'||application_id||'/'||lower(alias)||' -ws '||workspace
+  then 'export -applicationid &APP_ID. -exptype APEXLANG -dir src/database/'||lower(owner)||'/apex_apps/f'||application_id|| ' -f'
+  else 'validate  -input '||'src/database/'||lower(owner)||'/apex_apps/f'||application_id||'/'||lower(alias)||' -ws '||workspace
  end as cmd,
  case when '&_SQLPLUS_RELEASE' = '2601020000' 
     then 'Bug in 26.1 -Rexported application '||application_id||' to src/database/'||lower(owner)||'/apex_apps/f'||application_id 
@@ -64,6 +60,46 @@ set define off
             </query>
         </queries>
     </alias>
+
+    <alias name="prj_exp_app_old">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[set define on
+column app_id new_value app_id
+select :app_id app_id from dual;
+prompt Dropping existing export file in bash shell...
+!rm -fR src/database/*/apex_apps/&APP_ID.
+prompt Dropping existing export file in powershell...
+!powershell -NoLogo -NoProfile -Command "Remove-Item -Recurse -Force 'src/database/*/apex_apps/f&APP_ID.'"
+prompt Exporting APEX Application ID &app_id...
+project  export -o APEX.&APP_ID.
+column cmd new_value cmd noprint
+column msg  new_value msg noprint
+set verify off
+select 
+ case when '&_SQLPLUS_RELEASE' = '2601020000' 
+  then 'export -applicationid &APP_ID. -exptype APEXLANG -dir src/database/'||lower(owner)||'/apex_apps/f'||application_id|| '-f'
+  else 'validate  -input '||'src/database/'||lower(owner)||'/apex_apps/f'||application_id||'/'||lower(alias)||' -ws '||workspace
+ end as cmd,
+ case when '&_SQLPLUS_RELEASE' = '2601020000' 
+    then 'Bug in 26.1 -Rexported application '||application_id||' to src/database/'||lower(owner)||'/apex_apps/f'||application_id 
+    else 'Validating APEXlang app &APP_ID.  ...'
+ end as msg   
+from apex_applications where application_id = :app_id;
+prompt &msg.
+apex &cmd.
+set define off
+]]></sql>
+                <binds>
+                    <bind id="app_id">
+                        <tooltip><![CDATA[app_id]]></tooltip>
+                    </bind>
+                </binds>
+            </query>
+        </queries>
+    </alias>
+
     <alias name="prj_install">
         <description/>
         <queries>
