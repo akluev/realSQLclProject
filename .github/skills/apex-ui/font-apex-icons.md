@@ -1,18 +1,20 @@
 # Font APEX Icons — Complete Reference
 
-**Source:** Oracle Database `WWV_FLOW_STANDARD_ICONS` table  
+**Source:** Oracle APEX view `APEX_DG_BUILTIN_FONTAPEX`  
 **Icon Library:** Font APEX (APEX 26.1)  
 **Total Icons:** 1,539  
 **Last Updated:** June 2, 2026
 
-> **Version note:** This file is extracted from `APEX_260100.WWV_FLOW_STANDARD_ICONS`. The same query works for any APEX version — just replace the schema name. Use `select schema from dba_registry where comp_id = 'APEX'` to discover it dynamically.
+> **Version note:** This file is extracted from `APEX_DG_BUILTIN_FONTAPEX`. The view resolves to the correct installed APEX version automatically. You can query it from any APEX workspace schema — no DBA role and no `DBA_REGISTRY` access required.
 
 ## Overview
 
-This file contains all available Font APEX icons extracted from the Oracle APEX metadata table. This is the **authoritative source** for icon names, ensuring accuracy (avoiding hallucinated icon names like `fa-chart-line` which should be `fa-line-chart`).
+This file contains all available Font APEX icons extracted from the Oracle APEX metadata view. This is the **authoritative source** for icon names, ensuring accuracy (avoiding hallucinated icon names like `fa-chart-line` which should be `fa-line-chart`).
 
 **Why this is the authoritative source:**
-- Direct extraction from Oracle APEX metadata (source of truth)
+- Direct extraction from Oracle APEX metadata via `APEX_DG_BUILTIN_FONTAPEX`
+- Works from any APEX workspace schema (no DBA permissions required)
+- Automatically tracks the registered APEX version
 - Includes search hints and categories for better discovery
 - Discovered 1 icon missing from web scraping: `fa-flag-bh`
 

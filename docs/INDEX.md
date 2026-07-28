@@ -10,6 +10,7 @@
 - [12. Common Commands, Directives, and Aliases](12.-Common-Commands-and-Directives.md)
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
 - [14. SQLcl Project with APEXlang: First Impressions](14.-SQLcl-Project-with-APEXlang-First-Impressions.md)
+- [15. Native Boolean Columns in Oracle APEX 26.1 and APEXlang](APEXlang/15.-Native-Boolean-Columns-in-Oracle-APEX-26.1-and-APEXlang.md)
 
 ### VM Configuration
 

@@ -40,6 +40,49 @@ APEXlang page files must keep the page `alias` value synchronized with the page 
 - **Example**: `pages/p00004-salary-dashboard.apx` must contain `alias: SALARY-DASHBOARD`.
 - **Do not** convert dashes to underscores. `alias: SALARY_DASHBOARD` causes `FILENAME_MISMATCH` during `apex validate`.
 
+### 6. Interactive Grid Save Processes
+The native Interactive Grid Save action performs a region-level AJAX request, not a full page submit.
+
+- Page processes that must participate in native IG Save must specify `editableRegion`.
+- An `executeCode` process with `editableRegion` runs once per submitted row.
+- IG columns are available as bind variables, such as `:COLUMN_NAME`.
+- Run the `interactiveGridAutoRowProcessing` process first, followed by dependent row processes using a higher sequence.
+- Avoid calling whole-table refresh procedures from a row process because they execute once for every changed row.
+- To run an ordinary page-level process instead, replace or override native IG Save with a full page submit.
+
+### 7. Native Boolean Support (Oracle Database 23ai and APEX 26.1)
+When a native database `BOOLEAN` column is displayed as `type: checkbox` or `type: switch`:
+
+- **Session State**: Always set `sessionState { dataType: boolean }`.
+- **Source**: Set `source { dataType: boolean }` only when the item or column is backed by a database column. Do not add a `source` block to virtual, local, or default-value-only items.
+- **Default Values**: Use native Boolean literals in expressions: `plsqlExpression: true` or `plsqlExpression: false`, not `to_char(true)` or `to_char(false)`.
+- **IG Column Filters**: Do not use `performanceImpactingOperators`, such as `contains`, `startsWith`, or `caseInsensitive`, for Boolean columns. These operators are incompatible with the `BOOLEAN` type.
+- **Component Settings**: For applications that use native Boolean columns, ensure the application-level component settings for `checkbox` and `switch` use lowercase `true` and `false`, not uppercase string values. Define them in `shared-components/component-settings.apx`:
+
+  ```apx
+  componentSetting (
+      type: item
+      name: checkbox
+      settings {
+          checkedValue: true
+          uncheckedValue: false
+      }
+  )
+
+  componentSetting (
+      type: item
+      name: switch
+      settings {
+          onValue: true
+          onLabel: Yes
+          offValue: false
+          offLabel: No
+      }
+  )
+  ```
+
+  These are application-wide defaults. Uppercase `TRUE` and `FALSE` values carried forward from pre-Boolean `VARCHAR2` conventions can prevent native Boolean values from round-tripping correctly between the page and database.
+
 ## Step-by-Step Workflow for New Features
 
 1. **Research**: Consult the global `apex/apexlang` skill for relevant templates and logic.
