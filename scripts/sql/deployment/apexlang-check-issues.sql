@@ -1,3 +1,7 @@
+-- Thank you to Steve Muench (APEX PM), who provided this diagnostic query in response to the orphaned plugin issue.
+-- See: https://forums.oracle.com/ords/apexds/post/apex-26-1-one-application-fails-to-export-as-apexlang-1776#comment_113334409420231050873039614104885175846
+-- This query identifies APEX application components that reference missing plugins.
+--
 with refs as (
     select application_id, page_id, page_name,
            'Page Item' component_type,
