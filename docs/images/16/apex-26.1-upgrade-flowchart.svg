@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="4700" viewBox="0 0 1600 4700" role="img" aria-labelledby="title desc">
+  <title id="title">APEX 26.1 and SQLcl 26.1 project upgrade flow — version 5</title>
+  <desc id="desc">A detailed flowchart showing preparation, baseline creation, production drift handling, APEXlang validation, clean deployment, regression testing, concurrent feature incorporation, production-first cutover, merge, and cleanup.</desc>
+
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#17324D" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#47637A"/>
+    </marker>
+    <marker id="arrow-dark" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#123B5D"/>
+    </marker>
+    <style>
+      .bg { fill: #F7FAFC; }
+      .phase { fill: #FFFFFF; stroke: #D8E2EA; stroke-width: 2; rx: 28; }
+      .phase-num { fill: #123B5D; }
+      .phase-num-text { fill: #FFFFFF; font: 700 22px 'Segoe UI', Arial, sans-serif; text-anchor: middle; }
+      .phase-title { fill: #123B5D; font: 700 30px 'Segoe UI', Arial, sans-serif; }
+      .phase-sub { fill: #5B7184; font: 400 18px 'Segoe UI', Arial, sans-serif; }
+      .title { fill: #123B5D; font: 700 44px 'Segoe UI', Arial, sans-serif; }
+      .subtitle { fill: #5B7184; font: 400 21px 'Segoe UI', Arial, sans-serif; }
+      .node-title { font: 700 22px 'Segoe UI', Arial, sans-serif; text-anchor: middle; }
+      .node-body { font: 400 17px 'Segoe UI', Arial, sans-serif; text-anchor: middle; }
+      .small { font: 400 15px 'Segoe UI', Arial, sans-serif; }
+      .tiny { font: 400 13px 'Segoe UI', Arial, sans-serif; }
+      .dark-text { fill: #123B5D; }
+      .muted { fill: #5B7184; }
+      .white-text { fill: #FFFFFF; }
+      .clone { fill: #FFF0E6; stroke: #E66B1E; stroke-width: 2.5; }
+      .clone-accent { fill: #E66B1E; }
+      .vm { fill: #EAF8F0; stroke: #21895B; stroke-width: 2.5; }
+      .vm-accent { fill: #21895B; }
+      .fs { fill: #E9F5FC; stroke: #3A94C5; stroke-width: 2.5; }
+      .fs-accent { fill: #3A94C5; }
+      .main { fill: #123B5D; stroke: #123B5D; stroke-width: 2.5; }
+      .neutral { fill: #FFFFFF; stroke: #60788B; stroke-width: 2.5; }
+      .optional { fill: #FBFCFD; stroke: #8AA0B2; stroke-width: 2.5; stroke-dasharray: 10 8; }
+      .decision { fill: #FFFFFF; stroke: #123B5D; stroke-width: 3; }
+      .milestone { fill: #FFFFFF; stroke: #123B5D; stroke-width: 4; filter: url(#shadow); }
+      .milestone-text { fill: #123B5D; font: 700 19px 'Segoe UI', Arial, sans-serif; text-anchor: middle; }
+      .arrow { fill: none; stroke: #47637A; stroke-width: 3; marker-end: url(#arrow); }
+      .arrow-dark { fill: none; stroke: #123B5D; stroke-width: 3.5; marker-end: url(#arrow-dark); }
+      .arrow-dashed { fill: none; stroke: #6E8799; stroke-width: 2.5; stroke-dasharray: 9 8; marker-end: url(#arrow); }
+      .edge-label { fill: #47637A; font: 700 15px 'Segoe UI', Arial, sans-serif; }
+      .callout-title { fill: #123B5D; font: 700 19px 'Segoe UI', Arial, sans-serif; }
+      .callout-body { fill: #405A6D; font: 400 16px 'Segoe UI', Arial, sans-serif; }
+      .tag { font: 700 13px 'Segoe UI', Arial, sans-serif; letter-spacing: 0.7px; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="4700"/>
+
+  <!-- Header -->
+  <text class="title" x="70" y="68">APEX 26.1 + SQLcl 26.1 Project Upgrade</text>
+  <text class="subtitle" x="70" y="105">A production-safe path from the current project line to a tested, deployable 26.1 baseline</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="125" width="1460" height="112" rx="18" fill="#FFF8E8" stroke="#D89A22" stroke-width="2.5"/>
+    <text x="105" y="157" class="callout-title">Workflow-defining constraint: APEX applications move forward only</text>
+    <text x="105" y="188" class="callout-body">Current-line applications can move into the 26.1 clone.</text>
+    <text x="105" y="213" class="callout-body">Applications exported from 26.1 cannot move back.</text>
+
+    <text x="755" y="171" class="small dark-text" font-weight="700">APEX 24.2</text>
+    <path d="M 865 165 H 985" class="arrow-dark"/>
+    <text x="1015" y="171" class="small dark-text" font-weight="700">APEX 26.1</text>
+    <path d="M 1143 164 l 10 10 l 21 -24" fill="none" stroke="#21895B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1195" y="171" class="small" fill="#21895B">supported</text>
+
+    <text x="755" y="215" class="small dark-text" font-weight="700">APEX 26.1</text>
+    <path d="M 865 209 H 985" class="arrow-dark"/>
+    <text x="1015" y="215" class="small dark-text" font-weight="700">APEX 24.2</text>
+    <path d="M 1147 195 l 28 28 M 1175 195 l -28 28" stroke="#C33C3C" stroke-width="6" stroke-linecap="round"/>
+    <text x="1208" y="215" class="small" fill="#C33C3C">not supported</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(70 255)">
+    <text x="0" y="22" class="callout-title">Color convention</text>
+    <circle cx="205" cy="16" r="14" class="milestone"/>
+    <text x="230" y="22" class="small dark-text">Milestone</text>
+    <rect x="365" y="2" width="28" height="28" rx="7" class="clone"/>
+    <text x="405" y="22" class="small dark-text">Production-like clone</text>
+    <rect x="670" y="2" width="28" height="28" rx="7" class="vm"/>
+    <text x="710" y="22" class="small dark-text">Resettable VM / validation</text>
+    <rect x="1010" y="2" width="28" height="28" rx="7" class="fs"/>
+    <text x="1050" y="22" class="small dark-text">Git worktree / filesystem</text>
+    <rect x="1325" y="2" width="28" height="28" rx="7" class="main"/>
+    <text x="1365" y="22" class="small dark-text">Current main line</text>
+
+    <text x="0" y="52" class="callout-title">Line convention</text>
+    <path d="M 205 47 H 270" class="arrow"/>
+    <text x="285" y="52" class="tiny dark-text">mandatory path</text>
+    <path d="M 470 47 H 535" class="arrow-dashed"/>
+    <text x="550" y="52" class="tiny dark-text">optional path</text>
+  </g>
+
+  <!-- Phase 1: Prepare -->
+  <rect x="40" y="315" width="1520" height="425" class="phase"/>
+  <circle cx="85" cy="365" r="25" class="phase-num"/>
+  <text x="85" y="373" class="phase-num-text">1</text>
+  <text x="125" y="375" class="phase-title">Prepare three parallel upgrade components</text>
+  <text x="125" y="405" class="phase-sub">Keep the current DEV / TEST / PROD line available on APEX 24.2 and SQLcl 25.4.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="80" y="445" width="430" height="165" rx="20" class="clone"/>
+    <rect x="80" y="445" width="12" height="165" rx="6" class="clone-accent"/>
+    <text x="295" y="480" class="node-title dark-text">Production-like clone</text>
+    <text x="295" y="514" class="node-body dark-text">
+      <tspan x="295">Clone PROD when possible, or assemble</tspan>
+      <tspan x="295" dy="25">matching metadata plus production APEX apps.</tspan>
+      <tspan x="295" dy="25">Upgrade this environment to APEX 26.1.</tspan>
+    </text>
+
+    <rect x="585" y="445" width="430" height="165" rx="20" class="vm"/>
+    <rect x="585" y="445" width="12" height="165" rx="6" class="vm-accent"/>
+    <text x="800" y="480" class="node-title dark-text">Resettable validation environment</text>
+    <text x="800" y="514" class="node-body dark-text">
+      <tspan x="800">VM, container, or disposable database</tspan>
+      <tspan x="800" dy="25">running APEX 26.1; flash back, rebuild,</tspan>
+      <tspan x="800" dy="25">or clean it reliably between deployments.</tspan>
+    </text>
+
+    <rect x="1090" y="445" width="430" height="165" rx="20" class="fs"/>
+    <rect x="1090" y="445" width="12" height="165" rx="6" class="fs-accent"/>
+    <text x="1305" y="480" class="node-title dark-text">Upgrade Git worktree</text>
+    <text x="1305" y="514" class="node-body dark-text">
+      <tspan x="1305">Create a dedicated upgrade branch/worktree.</tspan>
+      <tspan x="1305" dy="25">Make that folder select SQLcl 26.1 while</tspan>
+      <tspan x="1305" dy="25">the current project continues on SQLcl 25.4.</tspan>
+    </text>
+  </g>
+
+  <path d="M 295 610 V 645 Q 295 680 345 680 H 745" class="arrow"/>
+  <path d="M 800 610 V 625" class="arrow"/>
+  <path d="M 1305 610 V 645 Q 1305 680 1255 680 H 855" class="arrow"/>
+  <circle cx="800" cy="680" r="55" class="milestone"/>
+  <text x="800" y="675" class="milestone-text">START</text>
+  <text x="800" y="698" class="tiny muted" text-anchor="middle">three tracks ready</text>
+
+  <!-- Phase 2: Establish baseline -->
+  <rect x="40" y="770" width="1520" height="1880" class="phase"/>
+  <circle cx="85" cy="820" r="25" class="phase-num"/>
+  <text x="85" y="828" class="phase-num-text">2</text>
+  <text x="125" y="830" class="phase-title">Establish the deployable 26.1 baseline</text>
+  <text x="125" y="860" class="phase-sub">Regenerate source, reconcile production drift, compile APEXlang, stage, and prove a clean installation.</text>
+
+  <path d="M 800 735 V 895" class="arrow-dark"/>
+
+  <!-- Separate database and APEX exports -->
+  <g filter="url(#shadow)">
+    <rect x="580" y="895" width="440" height="88" rx="18" class="fs"/>
+    <text x="800" y="929" class="node-title dark-text">Full database export — exclude APEX apps</text>
+    <text x="800" y="957" class="node-body dark-text">Delete generated database source → run project export</text>
+  </g>
+
+  <!-- Mandatory direct path plus optional database-drift detour -->
+  <path d="M 800 983 V 1105" class="arrow"/>
+  <path d="M 1020 939 H 1070" class="arrow-dashed"/>
+  <g filter="url(#shadow)">
+    <rect x="1070" y="880" width="430" height="138" rx="18" class="fs" stroke-dasharray="10 8"/>
+    <text x="1285" y="909" class="tag muted">OPTIONAL, STRONGLY RECOMMENDED</text>
+    <text x="1285" y="943" class="node-title dark-text">Detect production drift</text>
+    <text x="1285" y="971" class="node-body dark-text">Database objects / PL/SQL only — not APEXlang</text>
+    <text x="1285" y="995" class="tiny muted" text-anchor="middle">Article 06 · full export if synonyms are involved</text>
+  </g>
+  <path d="M 1285 1018 V 1065 H 840 V 1105" class="arrow-dashed"/>
+
+
+  <g filter="url(#shadow)">
+    <rect x="560" y="1105" width="480" height="105" rx="18" class="fs"/>
+    <rect x="560" y="1105" width="12" height="105" rx="6" class="clone-accent"/>
+    <text x="800" y="1138" class="node-title dark-text">Export every APEX application separately</text>
+    <text x="800" y="1166" class="node-body dark-text">Use the custom alias / APEX export workaround</text>
+    <text x="800" y="1191" class="tiny muted" text-anchor="middle">SQLcl 26.1 project export corrupts binary application files</text>
+  </g>
+
+  <path d="M 800 1210 V 1225" class="arrow"/>
+  <polygon points="800,1225 955,1295 800,1365 645,1295" class="decision"/>
+  <text x="800" y="1303" class="node-title dark-text">APEX app export?</text>
+
+  <!-- APEX application export failure loop -->
+  <g transform="translate(0 230)">
+    <text x="620" y="1041" class="edge-label" text-anchor="end">NO</text>
+    <path d="M 645 1065 H 480" class="arrow"/>
+    <g filter="url(#shadow)">
+      <rect x="75" y="1005" width="405" height="98" rx="18" class="clone"/>
+      <text x="278" y="1040" class="node-title dark-text">Diagnose the APEX app failure</text>
+      <text x="278" y="1068" class="node-body dark-text">Example: orphaned plugin reference</text>
+      <text x="278" y="1090" class="tiny muted" text-anchor="middle">Section 3.2 · Steve Muench diagnostic query</text>
+
+      <rect x="75" y="1140" width="405" height="110" rx="18" class="main"/>
+      <text x="278" y="1174" class="node-title white-text">Fix on the current APEX line</text>
+      <text x="278" y="1203" class="node-body white-text">Repair in 24.2 DEV → TEST → PROD</text>
+      <text x="278" y="1228" class="tiny white-text" text-anchor="middle">The affected 26.1 page may not open in Builder</text>
+
+      <rect x="75" y="1287" width="405" height="88" rx="18" class="clone"/>
+      <text x="278" y="1320" class="node-title dark-text">Refresh the clone</text>
+      <text x="278" y="1348" class="node-body dark-text">SQL-import the corrected production app</text>
+    </g>
+    <path d="M 278 1103 V 1140" class="arrow"/>
+    <path d="M 278 1250 V 1287" class="arrow"/>
+    <path d="M 75 1331 H 55 V 920 H 560" class="arrow"/>
+    <text x="65" y="1267" class="edge-label" transform="rotate(-90 65 1267)">RETRY APEX APP EXPORT</text>
+  </g>
+
+  <!-- Success -> optional drift -->
+  <g transform="translate(0 260)">
+  <text x="827" y="1125" class="edge-label">YES</text>
+
+  <!-- Mandatory path bypasses optional drift analysis -->
+  <path d="M 800 1105 V 1340" class="arrow"/>
+
+  <!-- Database drift is handled before APEX application export -->
+
+  <!-- APEXlang compiler loop -->
+  <g filter="url(#shadow)">
+    <rect x="600" y="1340" width="400" height="76" rx="18" class="fs"/>
+    <text x="800" y="1372" class="node-title dark-text">Validate every APEXlang application</text>
+    <text x="800" y="1398" class="node-body dark-text">Use apex validate / prj_validate</text>
+  </g>
+  <path d="M 800 1416 V 1445" class="arrow"/>
+  <polygon points="800,1445 945,1510 800,1575 655,1510" class="decision"/>
+  <text x="800" y="1518" class="node-title dark-text">All valid?</text>
+
+  <text x="960" y="1488" class="edge-label">NO</text>
+  <path d="M 945 1510 H 1100" class="arrow"/>
+  <g filter="url(#shadow)">
+    <rect x="1100" y="1458" width="410" height="105" rx="18" class="fs"/>
+    <text x="1305" y="1494" class="node-title dark-text">Edit APEXlang from diagnostics</text>
+    <text x="1305" y="1522" class="node-body dark-text">Correct structural/property errors</text>
+    <text x="1305" y="1546" class="tiny muted" text-anchor="middle">Articles 12, 14, and 15</text>
+  </g>
+  <path d="M 1305 1458 V 1378 H 1000" class="arrow"/>
+
+  <text x="828" y="1598" class="edge-label">YES</text>
+  <path d="M 800 1575 V 1605" class="arrow"/>
+  <g filter="url(#shadow)">
+    <rect x="600" y="1605" width="400" height="70" rx="18" class="clone"/>
+    <text x="800" y="1637" class="node-title dark-text">Import validated applications</text>
+    <text x="800" y="1661" class="node-body dark-text">Validation passed → import is expected to succeed</text>
+
+    <rect x="600" y="1710" width="400" height="82" rx="18" class="fs"/>
+    <text x="800" y="1742" class="node-title dark-text">Re-export APEX applications</text>
+    <text x="800" y="1768" class="node-body dark-text">Refresh deployable SQL + checksum (mandatory)</text>
+
+    <rect x="600" y="1827" width="400" height="72" rx="18" class="fs"/>
+    <text x="800" y="1859" class="node-title dark-text">Project stage</text>
+    <text x="800" y="1883" class="node-body dark-text">Create and review the first 26.1 release</text>
+
+    <rect x="600" y="1934" width="400" height="78" rx="18" class="vm"/>
+    <text x="800" y="1966" class="node-title dark-text">Reset VM → deploy from zero</text>
+    <text x="800" y="1992" class="node-body dark-text">Replay the complete SQLcl Project history</text>
+  </g>
+  <path d="M 800 1675 V 1710" class="arrow"/>
+  <path d="M 800 1792 V 1827" class="arrow"/>
+  <path d="M 800 1899 V 1934" class="arrow"/>
+  <path d="M 800 2012 V 2045" class="arrow"/>
+  <polygon points="800,2045 945,2103 800,2161 655,2103" class="decision"/>
+  <text x="800" y="2111" class="node-title dark-text">Deploys cleanly?</text>
+
+  <text x="645" y="2080" class="edge-label" text-anchor="end">NO</text>
+  <path d="M 655 2103 H 490" class="arrow"/>
+  <g filter="url(#shadow)">
+    <rect x="75" y="2048" width="415" height="112" rx="18" class="fs"/>
+    <text x="282" y="2082" class="node-title dark-text">Repair and repeat</text>
+    <text x="282" y="2111" class="node-body dark-text">Fix source / drift / changelog</text>
+    <text x="282" y="2136" class="node-body dark-text">re-export → restage → reset VM</text>
+  </g>
+  <path d="M 75 2103 H 55 V 1973 H 600" class="arrow"/>
+
+  <text x="827" y="2180" class="edge-label">YES</text>
+  <path d="M 800 2161 V 2185" class="arrow"/>
+  <circle cx="800" cy="2240" r="55" class="milestone"/>
+  <text x="800" y="2232" class="milestone-text">BASELINE</text>
+  <text x="800" y="2253" class="tiny muted" text-anchor="middle">clean install</text>
+  <text x="800" y="2269" class="tiny muted" text-anchor="middle">proven</text>
+
+  <g filter="url(#shadow)">
+    <rect x="1080" y="2198" width="430" height="85" rx="18" class="main"/>
+    <text x="1295" y="2232" class="node-title white-text">lb changelog-sync to PROD</text>
+    <text x="1295" y="2260" class="node-body white-text">Record baseline changesets without applying them</text>
+  </g>
+  <path d="M 855 2240 H 1080" class="arrow-dark"/>
+
+  </g>
+
+  <g transform="translate(0 430)">
+  <!-- Phase 3: Test and incorporate production changes -->
+  <rect x="40" y="2250" width="1520" height="1150" class="phase"/>
+  <!-- Drawn after the phase background so the stage-to-stage connection remains visible. -->
+  <path d="M 1295 2113 V 2200 H 800 V 2380" class="arrow-dark"/>
+  <circle cx="85" cy="2300" r="25" class="phase-num"/>
+  <text x="85" y="2308" class="phase-num-text">3</text>
+  <text x="125" y="2310" class="phase-title">Test deeply while production development continues</text>
+  <text x="125" y="2340" class="phase-sub">Functional testing is project-defined; every production release must also be reconciled into the upgrade line.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="590" y="2380" width="420" height="88" rx="18" class="clone"/>
+    <text x="800" y="2415" class="node-title dark-text">Functional regression testing</text>
+    <text x="800" y="2443" class="node-body dark-text">Test behavior—not merely validation or rendering</text>
+  </g>
+
+  <g>
+    <rect x="75" y="2380" width="430" height="205" rx="18" fill="#F8FAFC" stroke="#A8BAC7" stroke-width="2"/>
+    <text x="105" y="2415" class="callout-title">Observed upgrade regressions</text>
+    <circle cx="110" cy="2452" r="6" fill="#21895B"/>
+    <text x="130" y="2458" class="callout-body">Native Boolean session state left</text>
+    <text x="130" y="2482" class="callout-body">checkboxes and switches inoperative.</text>
+    <text x="130" y="2506" class="tiny muted">Article 15</text>
+    <circle cx="110" cy="2540" r="6" fill="#21895B"/>
+    <text x="130" y="2546" class="callout-body">Older Flow for APEX package failed;</text>
+    <text x="130" y="2570" class="callout-body">a newer community release worked.</text>
+  </g>
+
+  <path d="M 800 2468 V 2500" class="arrow"/>
+  <polygon points="800,2500 950,2565 800,2630 650,2565" class="decision"/>
+  <text x="800" y="2573" class="node-title dark-text">Regression found?</text>
+
+  <text x="963" y="2541" class="edge-label">YES</text>
+  <path d="M 950 2565 H 1090" class="arrow"/>
+  <g filter="url(#shadow)">
+    <rect x="1090" y="2490" width="420" height="150" rx="18" class="fs"/>
+    <text x="1300" y="2525" class="node-title dark-text">Correct → rebuild → retest</text>
+    <text x="1300" y="2555" class="node-body dark-text">APEXlang: validate → import → re-export</text>
+    <text x="1300" y="2581" class="node-body dark-text">DB: export affected objects → restage</text>
+    <text x="1300" y="2607" class="node-body dark-text">Reset/deploy VM and repeat the test</text>
+  </g>
+  <path d="M 1300 2490 V 2424 H 1010" class="arrow"/>
+
+  <text x="824" y="2662" class="edge-label">NO</text>
+  <path d="M 800 2630 V 2680" class="arrow"/>
+  <polygon points="800,2680 980,2750 800,2820 620,2750" class="decision"/>
+  <text x="800" y="2744" class="node-title dark-text">Production feature</text>
+  <text x="800" y="2770" class="node-title dark-text">arrived during upgrade?</text>
+
+  <text x="992" y="2723" class="edge-label">YES</text>
+  <path d="M 980 2750 H 1035" class="arrow"/>
+  <g filter="url(#shadow)">
+    <rect x="1035" y="2700" width="475" height="510" rx="22" class="neutral"/>
+    <text x="1273" y="2732" class="tag muted">MANDATORY WHEN A PRODUCTION FEATURE ARRIVES</text>
+
+    <rect x="1070" y="2755" width="405" height="62" rx="15" class="main"/>
+    <text x="1273" y="2782" class="node-title white-text">1 · Deliver normally to PROD</text>
+    <text x="1273" y="2805" class="tiny white-text" text-anchor="middle">APEX 24.2 / SQLcl 25.4 release becomes main history</text>
+
+    <rect x="1070" y="2837" width="405" height="62" rx="15" class="clone"/>
+    <text x="1273" y="2864" class="node-title dark-text">2 · Deliver the same release to clone</text>
+    <text x="1273" y="2887" class="tiny dark-text" text-anchor="middle">Clone receives the exact PROD changeset identities</text>
+
+    <rect x="1070" y="2919" width="405" height="70" rx="15" class="clone"/>
+    <text x="1273" y="2946" class="node-title dark-text">3 · Merge APEX apps in the clone</text>
+    <text x="1273" y="2971" class="tiny dark-text" text-anchor="middle">Working Copy preserves and reapplies 26.1 corrections</text>
+
+    <rect x="1070" y="3011" width="405" height="70" rx="15" class="fs"/>
+    <text x="1273" y="3038" class="node-title dark-text">4 · Carry release history forward</text>
+    <text x="1273" y="3063" class="tiny dark-text" text-anchor="middle">Restore release + changelog; export related objects</text>
+
+    <rect x="1070" y="3103" width="405" height="70" rx="15" class="vm"/>
+    <text x="1273" y="3130" class="node-title dark-text">5 · Deploy to VM</text>
+    <text x="1273" y="3155" class="tiny dark-text" text-anchor="middle">Verify the feature and every earlier 26.1 correction</text>
+
+    <path d="M 1273 2817 V 2837" class="arrow"/>
+    <path d="M 1273 2899 V 2919" class="arrow"/>
+    <path d="M 1273 2989 V 3011" class="arrow"/>
+    <path d="M 1273 3081 V 3103" class="arrow"/>
+  </g>
+  <path d="M 1273 3173 V 3245 H 1530 V 2424 H 1010" class="arrow"/>
+  <text x="1035" y="3275" class="edge-label">RETURN TO FUNCTIONAL REGRESSION TESTING</text>
+  <text x="825" y="2850" class="edge-label">NO</text>
+  <path d="M 800 2820 V 3270" class="arrow-dark"/>
+  <circle cx="800" cy="3330" r="60" class="milestone"/>
+  <text x="800" y="3325" class="milestone-text">CUTOVER</text>
+  <text x="800" y="3348" class="tiny muted" text-anchor="middle">candidate ready</text>
+
+  <g transform="translate(0 300)">
+  <!-- Phase 4: Cutover -->
+  <rect x="40" y="3125" width="1520" height="565" class="phase"/>
+  <circle cx="85" cy="3175" r="25" class="phase-num"/>
+  <text x="85" y="3183" class="phase-num-text">4</text>
+  <text x="125" y="3185" class="phase-title">Cut over in a tight, quiet maintenance window</text>
+  <text x="125" y="3215" class="phase-sub">Upgrade PROD first; use the clone as temporary DEV until DEV and TEST catch up.</text>
+
+  <path d="M 800 3090 V 3260" class="arrow-dark"/>
+
+  <g filter="url(#shadow)">
+    <rect x="555" y="3260" width="490" height="78" rx="18" class="main"/>
+    <text x="800" y="3293" class="node-title white-text">Upgrade PROD to APEX / ORDS 26.1</text>
+    <text x="800" y="3319" class="node-body white-text">DBA/platform step</text>
+
+    <rect x="555" y="3370" width="490" height="82" rx="18" class="main"/>
+    <text x="800" y="3403" class="node-title white-text">Deploy pending post-baseline corrections</text>
+    <text x="800" y="3430" class="node-body white-text">Baseline and prior PROD releases are already recorded</text>
+
+    <rect x="80" y="3370" width="380" height="82" rx="18" class="clone"/>
+    <text x="270" y="3403" class="node-title dark-text">Use clone as temporary DEV</text>
+    <text x="270" y="3430" class="node-body dark-text">Only until normal DEV/TEST are upgraded</text>
+
+    <rect x="555" y="3484" width="490" height="78" rx="18" class="main"/>
+    <text x="800" y="3517" class="node-title white-text">Upgrade DEV and TEST promptly</text>
+    <text x="800" y="3543" class="node-body white-text">Deploy/synchronize the final project state</text>
+
+    <rect x="1140" y="3484" width="370" height="78" rx="18" class="fs"/>
+    <text x="1325" y="3517" class="node-title dark-text">Merge through PR</text>
+    <text x="1325" y="3543" class="node-body dark-text">Final tested upgrade branch → main</text>
+  </g>
+  <path d="M 800 3338 V 3370" class="arrow-dark"/>
+  <path d="M 555 3411 H 460" class="arrow"/>
+  <path d="M 800 3452 V 3484" class="arrow-dark"/>
+  <path d="M 1045 3523 H 1140" class="arrow"/>
+  <path d="M 1325 3562 V 3605 H 800" class="arrow"/>
+
+  <rect x="80" y="3595" width="1430" height="65" rx="16" fill="#F8FAFC" stroke="#A8BAC7" stroke-width="2"/>
+  <text x="795" y="3622" class="callout-title" text-anchor="middle">Conflict rule: preserve the upgrade branch’s reconciled 26.1 state—not a positional “ours/theirs” label.</text>
+  <text x="795" y="3647" class="tiny muted" text-anchor="middle">If main contains an unincorporated business change, stop and run the feature-incorporation loop before completing the merge.</text>
+
+  <!-- Phase 5: Cleanup -->
+  <rect x="40" y="3720" width="1520" height="145" class="phase"/>
+  <circle cx="85" cy="3770" r="25" class="phase-num"/>
+  <text x="85" y="3778" class="phase-num-text">5</text>
+  <text x="125" y="3780" class="phase-title">Cleanup</text>
+
+  <g filter="url(#shadow)">
+    <rect x="300" y="3750" width="300" height="72" rx="18" class="clone"/>
+    <text x="450" y="3780" class="node-title dark-text">Drop the temporary clone</text>
+    <text x="450" y="3805" class="tiny muted" text-anchor="middle">after retention checks</text>
+
+    <rect x="650" y="3750" width="300" height="72" rx="18" class="fs"/>
+    <text x="800" y="3780" class="node-title dark-text">Remove the Git worktree</text>
+    <text x="800" y="3805" class="tiny muted" text-anchor="middle">and merged upgrade branch</text>
+  </g>
+  <path d="M 600 3786 H 650" class="arrow"/>
+  <path d="M 950 3786 H 1125" class="arrow"/>
+  <circle cx="1185" cy="3786" r="60" class="milestone"/>
+  <text x="1185" y="3781" class="milestone-text">CLEANUP</text>
+  <text x="1185" y="3804" class="tiny muted" text-anchor="middle">DONE</text>
+
+  <text x="800" y="3880" class="tiny muted" text-anchor="middle">The resettable VM may remain as reusable deployment-test infrastructure.</text>
+  </g>
+  </g>
+</svg>
