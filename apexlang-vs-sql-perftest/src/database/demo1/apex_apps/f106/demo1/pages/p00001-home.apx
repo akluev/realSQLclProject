@@ -1,0 +1,338 @@
+page 1 (
+    name: Home
+    alias: HOME
+    title: EMP & DEPT Mini Hub
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    css {
+        inline:
+            ```css
+            /* =============================================
+               Department Hub — Page CSS
+               Page → CSS → Inline
+               ============================================= */
+            
+            /* Department Cards Grid */
+            .dept-cards-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+              gap: 24px;
+              padding: 16px;
+            }
+            
+            @media (max-width: 767px) {
+              .dept-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+              }
+            }
+            
+            /* Card container */
+            .dept-card {
+              background: var(--ut-component-background-color);
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: var(--ut-shadow-md);
+              transition: transform 0.2s, box-shadow 0.2s;
+              cursor: pointer;
+            }
+            
+            .dept-card:hover {
+              transform: translateY(-4px);
+              box-shadow: var(--ut-shadow-lg);
+            }
+            
+            /* Card header */
+            .dept-card-header {
+              position: relative;
+              padding: 24px 24px 16px 24px;
+              border-bottom: 1px solid var(--ut-component-border-color);
+            }
+            
+            /* Colored background layer — pale tint from color_class */
+            .dept-card-header-bg {
+              position: absolute;
+              inset: 0;
+              z-index: 0;
+            }
+            
+            /* All header content sits above background layer */
+            .dept-card-icon,
+            .dept-card-title,
+            .dept-card-location {
+              position: relative;
+              z-index: 1;
+            }
+            
+            .dept-card-icon {
+              margin-bottom: 12px;
+              display: inline-block;
+            }
+            
+            .dept-card-title {
+              font-size: 22px;
+              font-weight: 600;
+              margin: 0 0 8px 0;
+              color: var(--ut-component-text-title-color);
+            }
+            
+            .dept-card-location {
+              font-size: 13px;
+              color: var(--ut-component-text-muted-color);
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+            
+            /* Card body — stat rows */
+            .dept-card-body {
+              padding: 4px 24px;
+            }
+            
+            .dept-stat-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 12px 0;
+              border-bottom: 1px solid var(--ut-component-inner-border-color);
+            }
+            
+            .dept-stat-row:last-child {
+              border-bottom: none;
+            }
+            
+            .dept-stat-label {
+              font-size: 13px;
+              color: var(--ut-component-text-muted-color);
+              font-weight: 500;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
+            
+            .dept-stat-value {
+              font-size: 15px;
+              font-weight: 600;
+              color: var(--ut-component-text-title-color);
+            }
+            
+            /* Card footer */
+            .dept-card-footer {
+              padding: 14px 24px;
+              background: var(--ut-component-toolbar-background-color);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 12px;
+            }
+            
+            .city-fact {
+              font-size: 12px;
+              color: var(--ut-component-text-subtitle-color);
+              font-style: italic;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              flex: 1;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+            ```
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region departments (
+        name: Departments
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select d.deptno,
+                       d.dname,
+                       d.loc,
+                       d.icon_class,
+                       d.color_class,
+                       -- Employee metrics
+                       count(e.empno) as emp_count,
+                       round(avg(e.sal), 0) as avg_salary,
+                       max(e.sal) as max_salary,
+                       min(e.sal) as min_salary,
+                       -- Manager info
+                       (select ename from emp where empno = 
+                         (select min(mgr) from emp where deptno = d.deptno)) as dept_manager,
+                       -- Job diversity
+                       count(distinct e.job_id) as unique_jobs,
+                       -- Location attributes (hardcoded city facts)
+                       case d.loc
+                         when 'NEW YORK' then 'Financial capital of the world'
+                         when 'DALLAS' then 'Growing tech and business hub'
+                         when 'CHICAGO' then 'Major trading and commerce center'
+                         when 'BOSTON' then 'Education and innovation leader'
+                         else 'Dynamic business location'
+                       end as city_fact,
+                       case d.loc
+                         when 'NEW YORK' then 'fa-city'
+                         when 'DALLAS' then 'fa-rocket'
+                         when 'CHICAGO' then 'fa-chart-line'
+                         when 'BOSTON' then 'fa-graduation-cap'
+                         else 'fa-map-marker'
+                       end as city_icon,
+                       -- Detail page link
+                       apex_page.get_url(
+                         p_page => 7,
+                         p_items => 'P7_DEPTNO',
+                         p_values => d.deptno
+                       ) as detail_url
+                  from dept d
+                  left join emp e on d.deptno = e.deptno
+                 group by d.deptno, d.dname, d.loc, d.icon_class, d.color_class
+                 order by d.deptno
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+        }
+        componentAppearance {
+            cssClasses: dept-cards-grid
+        }
+        card {
+            primaryKeyColumn1: DEPTNO
+        }
+        title {
+            cssClasses: dept-card-title
+        }
+        body {
+            advancedFormatting: true
+            htmlExpression:
+                ```html
+                <div class="dept-card">
+                  <div class="dept-card-header">
+                    <div class="dept-card-header-bg &COLOR_CLASS. u-opacity-20"></div>
+                    <div class="dept-card-icon">
+                      <span class="fa fa-lg fa-2x &ICON_CLASS. &COLOR_CLASS.-text" aria-hidden="true"></span>
+                    </div>
+                    <h3 class="dept-card-title">&DNAME.</h3>
+                    <div class="dept-card-location">
+                      <span class="fa fa-fw &CITY_ICON." aria-hidden="true"></span>
+                      <span>&LOC.</span>
+                    </div>
+                  </div>
+                  
+                  <div class="dept-card-body">
+                    <div class="dept-stat-row">
+                      <span class="dept-stat-label">
+                        <span class="fa fa-fw fa-users" aria-hidden="true"></span>
+                        Employees
+                      </span>
+                      <span class="dept-stat-value">&EMP_COUNT.</span>
+                    </div>
+                    <div class="dept-stat-row">
+                      <span class="dept-stat-label">
+                        <span class="fa fa-fw fa-money" aria-hidden="true"></span>
+                        Avg Salary
+                      </span>
+                      <span class="dept-stat-value">$&AVG_SALARY.</span>
+                    </div>
+                    <div class="dept-stat-row">
+                      <span class="dept-stat-label">
+                        <span class="fa fa-fw fa-briefcase" aria-hidden="true"></span>
+                        Job Types
+                      </span>
+                      <span class="dept-stat-value">&UNIQUE_JOBS.</span>
+                    </div>
+                    {if DEPT_MANAGER/}
+                    <div class="dept-stat-row">
+                      <span class="dept-stat-label">
+                        <span class="fa fa-fw fa-user-circle" aria-hidden="true"></span>
+                        Manager
+                      </span>
+                      <span class="dept-stat-value u-lineclamp-1">&DEPT_MANAGER.</span>
+                    </div>
+                    {endif/}
+                  </div>
+                  
+                  <div class="dept-card-footer">
+                    <div class="city-fact">
+                      <span class="fa fa-info-circle" aria-hidden="true"></span>
+                      <span>&CITY_FACT.</span>
+                    </div>
+                    <a href="&DETAIL_URL." class="t-Button t-Button--small t-Button--hot">
+                      <span class="fa fa-arrow-right" aria-hidden="true"></span>
+                      View
+                    </a>
+                  </div>
+                </div>
+                ```
+        }
+
+        action action (
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                target: {
+                    page: 7
+                    items: {
+                        P7_DEPTNO: &DEPTNO.
+                    }
+                    clearCache: 7
+                }
+            }
+            config {
+                buildOption: @commented-out
+            }
+        )
+
+    )
+
+    region our-departments (
+        name: Our Departments
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <!--
+                
+                <div class="padding-lg" style="text-align: center;">
+                  <h1 class="u-text-heading-xl margin-bottom-sm">
+                    <span class="fa fa-lg fa-building" aria-hidden="true"></span>
+                    Our Departments
+                  </h1>
+                  <p class="u-text-body-lg u-text-muted-color margin-bottom-none">
+                    Explore our organizational structure and discover the teams that drive our success
+                  </p>
+                </div>
+                -->
+                Explore our organizational structure and discover the teams that drive our success
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/hero
+            templateOptions: #DEFAULT#
+            icon: fa-building
+        }
+    )
+
+)
+

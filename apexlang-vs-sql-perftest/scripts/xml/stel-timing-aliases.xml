@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<aliases>
+    <alias name="test_al_load">
+        <description>Import an APEXlang application folder and report elapsed time.</description>
+        <queries>
+            <query minversion="19">
+                <sql><![CDATA[set define on
+set verify off
+set timing off
+column apexlang_path new_value apexlang_path noprint
+select :apexlang_path apexlang_path from dual;
+column started_at new_value started_at noprint
+select (sysdate - date '2026-01-01') * 86400 as started_at from dual;
+prompt Importing APEXlang application from &apexlang_path. ...
+apex import -input &apexlang_path.
+set verify off
+set define on
+select 'Elapsed time: ' || to_char(
+                     (sysdate - date '2026-01-01') * 86400 - &started_at
+                 , 'FM999999990D000') || ' seconds' as elapsed_time
+    from dual;
+set define off
+]]></sql>
+                <binds>
+                    <bind id="apexlang_path">
+                        <tooltip><![CDATA[Path to the APEXlang application folder.]]></tooltip>
+                    </bind>
+                </binds>
+            </query>
+        </queries>
+    </alias>
+
+    <alias name="test_sql_load">
+        <description>Run an SQL script and report elapsed time.</description>
+        <queries>
+            <query minversion="19">
+                <sql><![CDATA[set define on
+set verify off
+set timing off
+column sql_file new_value sql_file noprint
+select :sql_file sql_file from dual;
+column started_at new_value started_at noprint
+select (sysdate - date '2026-01-01') * 86400 as started_at from dual;
+prompt Running SQL script &sql_file. ...
+@&sql_file.
+set verify off
+set define on
+select 'Elapsed time: ' || to_char(
+                     (sysdate - date '2026-01-01') * 86400 - &started_at
+                 , 'FM999999990D000') || ' seconds' as elapsed_time
+    from dual;
+set define off
+]]></sql>
+                <binds>
+                    <bind id="sql_file">
+                        <tooltip><![CDATA[Path to the SQL script to run.]]></tooltip>
+                    </bind>
+                </binds>
+            </query>
+        </queries>
+    </alias>
+</aliases>

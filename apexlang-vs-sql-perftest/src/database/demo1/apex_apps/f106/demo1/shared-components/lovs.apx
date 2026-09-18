@@ -1,0 +1,183 @@
+lov access-roles (
+    name: ACCESS_ROLES
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select role_name d, role_id r
+            from APEX_APPL_ACL_ROLES where application_id = :APP_ID 
+            order by 1
+            ```
+    }
+    columnMapping {
+        return: R
+        display: D
+    }
+)
+
+lov dept-dname (
+    name: DEPT.DNAME
+    source {
+        tableName: DEPT
+    }
+    columnMapping {
+        return: DEPTNO
+        display: DNAME
+        defaultSort: DNAME
+    }
+)
+
+lov dept-lov (
+    name: DEPT_LOV
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select dname       as d,
+                   deptno      as r,
+                   icon_class,
+                   color_class
+              from dept
+             order by dname
+            ```
+    }
+    columnMapping {
+        return: R
+        display: D
+    }
+
+    column COLOR_CLASS (
+        heading {
+            heading: Color Class
+        }
+        layout {
+            sequence: 40
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column D (
+        heading {
+            heading: D
+        }
+        layout {
+            sequence: 20
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column ICON_CLASS (
+        heading {
+            heading: Icon Class
+        }
+        layout {
+            sequence: 30
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column R (
+        show: false
+        layout {
+            sequence: 10
+        }
+        source {
+            dataType: number
+        }
+        advanced {
+            searchable: false
+        }
+    )
+
+)
+
+lov email-username-format (
+    name: EMAIL_USERNAME_FORMAT
+    source {
+        location: staticValues
+    }
+
+    entry email-addresses (
+        sequence: 1
+        display: Email Addresses
+        return: EMAIL
+    )
+
+)
+
+lov job-lov (
+    name: JOB_LOV
+    source {
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select job_name   as d,
+                   job_id     as r,
+                   icon_class,
+                   color_class
+              from job
+             order by job_name
+            ```
+    }
+    columnMapping {
+        return: R
+        display: D
+    }
+
+    column COLOR_CLASS (
+        heading {
+            heading: Color Class
+        }
+        layout {
+            sequence: 40
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column D (
+        heading {
+            heading: D
+        }
+        layout {
+            sequence: 20
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column ICON_CLASS (
+        heading {
+            heading: Icon Class
+        }
+        layout {
+            sequence: 30
+        }
+        source {
+            dataType: varchar2
+        }
+    )
+
+    column R (
+        show: false
+        layout {
+            sequence: 10
+        }
+        source {
+            dataType: number
+        }
+        advanced {
+            searchable: false
+        }
+    )
+
+)
+

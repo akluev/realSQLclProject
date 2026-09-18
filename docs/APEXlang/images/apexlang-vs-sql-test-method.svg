@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700" role="img" aria-labelledby="diagram-title diagram-desc">
+  <title id="diagram-title">APEXlang versus SQL import timing test cycle</title>
+  <desc id="diagram-desc">Start with the 14-page application. For each target size of 14, 24, 64, 114, 214, and 314 pages, clone page 6 as needed. Warm up the APEXlang import, export the installed application as SQL, and warm up the SQL import. Measure APEXlang then SQL, followed by SQL then APEXlang. Repeat for the next size, then compare the two-run means.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/>
+    </marker>
+    <marker id="loop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2864a2"/>
+    </marker>
+    <filter id="card-shadow" x="-10%" y="-15%" width="120%" height="135%">
+      <feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#1c3046" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #17212b; }
+      .subtitle { font: 16px Arial, sans-serif; fill: #526170; }
+      .stage-label { font: 700 14px Arial, sans-serif; letter-spacing: 1.5px; }
+      .stage-title { font: 700 23px Arial, sans-serif; fill: #17212b; }
+      .step { font: 17px Arial, sans-serif; fill: #273746; }
+      .note { font: 15px Arial, sans-serif; fill: #526170; }
+      .tag { font: 700 14px Arial, sans-serif; letter-spacing: 0.8px; fill: #526170; }
+      .decision { font: 700 18px Arial, sans-serif; fill: #17212b; }
+      .finish { font: 700 19px Arial, sans-serif; fill: #17212b; }
+      .number { font: 700 14px Arial, sans-serif; text-anchor: middle; dominant-baseline: middle; fill: #ffffff; }
+      .flow { fill: none; stroke: #526579; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .loop { fill: none; stroke: #2864a2; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#loop-arrow); }
+    </style>
+  </defs>
+
+  <rect width="1400" height="700" fill="#ffffff"/>
+  <rect x="0" y="0" width="1400" height="112" fill="#f5f8fb"/>
+  <text x="70" y="52" class="title">Import timing test</text>
+  <text x="70" y="82" class="subtitle">The same cycle runs for every application size, then the two measured runs are averaged.</text>
+
+  <rect x="70" y="150" width="360" height="290" rx="18" fill="#ffffff" stroke="#d9e4ef" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <path d="M 88 151 H 412" stroke="#2864a2" stroke-width="5" stroke-linecap="round"/>
+  <text x="100" y="188" class="stage-label" fill="#2864a2">01  BUILD THE TARGET</text>
+  <text x="100" y="223" class="stage-title">Set application size</text>
+  <line x1="100" y1="244" x2="400" y2="244" stroke="#e8eef4" stroke-width="1.5"/>
+  <circle cx="115" cy="275" r="14" fill="#2864a2"/><text x="115" y="275" class="number">1</text>
+  <text x="143" y="281" class="step">Start with 14-page application</text>
+  <circle cx="115" cy="325" r="14" fill="#2864a2"/><text x="115" y="325" class="number">2</text>
+  <text x="143" y="331" class="step">Choose next target size</text>
+  <text x="143" y="354" class="note">14 · 24 · 64 · 114 · 214 · 314 pages</text>
+  <circle cx="115" cy="393" r="14" fill="#2864a2"/><text x="115" y="393" class="number">3</text>
+  <text x="143" y="399" class="step">Clone page 6 as needed</text>
+
+  <path d="M 432 295 H 510" class="flow"/>
+
+  <rect x="520" y="150" width="360" height="290" rx="18" fill="#ffffff" stroke="#d9e9e3" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <path d="M 538 151 H 862" stroke="#23806e" stroke-width="5" stroke-linecap="round"/>
+  <text x="550" y="188" class="stage-label" fill="#23806e">02  PREPARE IMPORTS</text>
+  <text x="550" y="223" class="stage-title">Prepare both formats</text>
+  <line x1="550" y1="244" x2="850" y2="244" stroke="#e8eef4" stroke-width="1.5"/>
+  <circle cx="565" cy="275" r="14" fill="#23806e"/><text x="565" y="275" class="number">4</text>
+  <text x="593" y="281" class="step">Warm up APEXlang import</text>
+  <circle cx="565" cy="334" r="14" fill="#23806e"/><text x="565" y="334" class="number">5</text>
+  <text x="593" y="328" class="step">Export installed app</text>
+  <text x="593" y="350" class="step">as SQL</text>
+  <circle cx="565" cy="393" r="14" fill="#23806e"/><text x="565" y="393" class="number">6</text>
+  <text x="593" y="399" class="step">Warm up SQL import</text>
+
+  <path d="M 882 295 H 960" class="flow"/>
+
+  <rect x="970" y="150" width="360" height="290" rx="18" fill="#ffffff" stroke="#f0dfd9" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <path d="M 988 151 H 1312" stroke="#b4483f" stroke-width="5" stroke-linecap="round"/>
+  <text x="1000" y="188" class="stage-label" fill="#b4483f">03  MEASURE TWICE</text>
+  <text x="1000" y="223" class="stage-title">Reverse the order</text>
+  <line x1="1000" y1="244" x2="1300" y2="244" stroke="#e8eef4" stroke-width="1.5"/>
+  <circle cx="1015" cy="285" r="14" fill="#b4483f"/><text x="1015" y="285" class="number">7</text>
+  <text x="1043" y="291" class="step">APEXlang, then SQL</text>
+  <circle cx="1015" cy="354" r="14" fill="#b4483f"/><text x="1015" y="354" class="number">8</text>
+  <text x="1043" y="360" class="step">SQL, then APEXlang</text>
+  <text x="1000" y="407" class="note">One measured run per method in each order</text>
+
+  <path d="M 1150 442 V 485" class="flow"/>
+  <path d="M 1150 490 L 1228 550 L 1150 610 L 1072 550 Z" fill="#f6f8fb" stroke="#9aabba" stroke-width="2"/>
+  <text x="1150" y="543" text-anchor="middle" class="decision">Another</text>
+  <text x="1150" y="566" text-anchor="middle" class="decision">size?</text>
+
+  <path d="M 1070 550 H 908" class="flow"/>
+  <text x="976" y="536" text-anchor="middle" class="tag">NO</text>
+  <rect x="540" y="504" width="360" height="92" rx="18" fill="#eaf4ef" stroke="#a7d2bb" stroke-width="1.5"/>
+  <circle cx="574" cy="550" r="18" fill="#23806e"/>
+  <path d="M 566 550 L 572 556 L 583 544" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="608" y="545" class="finish">Compare two-run means</text>
+  <text x="608" y="569" class="note">for each method and page count</text>
+
+  <path d="M 1150 612 V 650 H 44 V 325 H 68" class="loop"/>
+  <rect x="430" y="633" width="188" height="28" rx="14" fill="#e8f1fa"/>
+  <text x="524" y="652" text-anchor="middle" class="tag" fill="#2864a2">YES · NEXT SIZE</text>
+</svg>

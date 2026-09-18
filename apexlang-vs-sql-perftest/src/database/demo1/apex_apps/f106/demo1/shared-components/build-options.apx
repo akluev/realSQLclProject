@@ -1,0 +1,17 @@
+buildOption commented-out (
+    name: Commented Out
+)
+
+buildOption feature-access-control (
+    name: Feature: Access Control
+    status {
+        status: include
+    }
+    advanced {
+        featureIdentifier: APPLICATION_ACCESS_CONTROL
+    }
+    comments {
+        comments: Incorporate role based user authentication within your application and manage username mappings to application roles.
+    }
+)
+

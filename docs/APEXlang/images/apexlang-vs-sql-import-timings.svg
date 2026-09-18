@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 680" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">APEXlang and SQL import times by application size and client location</title>
+<desc id="chart-desc">Six lines compare two-run mean seconds at 14, 24, 64, 114, 214, and 314 pages. SQL is faster near the database; APEXlang is faster over the VPN.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="92" y="42" fill="#17212b" font-family="Arial,sans-serif" font-size="25" font-weight="700">APEX application import time</text>
+<text x="92" y="68" fill="#526170" font-family="Arial,sans-serif" font-size="15">Two-run means; lower is faster</text>
+<line x1="92" x2="960" y1="570.0" y2="570.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="575.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">0</text>
+<line x1="92" x2="960" y1="491.0" y2="491.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="496.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">10</text>
+<line x1="92" x2="960" y1="412.0" y2="412.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="417.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">20</text>
+<line x1="92" x2="960" y1="333.0" y2="333.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="338.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">30</text>
+<line x1="92" x2="960" y1="254.0" y2="254.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="259.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">40</text>
+<line x1="92" x2="960" y1="175.0" y2="175.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="180.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">50</text>
+<line x1="92" x2="960" y1="96.0" y2="96.0" stroke="#dde4eb" stroke-width="1"/>
+<text x="78" y="101.0" text-anchor="end" fill="#526170" font-family="Arial,sans-serif" font-size="14">60</text>
+<line x1="92.0" x2="92.0" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="92.0" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">14</text>
+<line x1="120.9" x2="120.9" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="120.9" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">24</text>
+<line x1="236.7" x2="236.7" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="236.7" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">64</text>
+<line x1="381.3" x2="381.3" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="381.3" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">114</text>
+<line x1="670.7" x2="670.7" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="670.7" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">214</text>
+<line x1="960.0" x2="960.0" y1="96" y2="570" stroke="#edf1f5" stroke-width="1"/>
+<text x="960.0" y="597" text-anchor="middle" fill="#526170" font-family="Arial,sans-serif" font-size="14">314</text>
+<line x1="92" x2="960" y1="570" y2="570" stroke="#56616b"/>
+<line x1="92" x2="92" y1="96" y2="570" stroke="#56616b"/>
+<text x="526.0" y="632" text-anchor="middle" fill="#344252" font-family="Arial,sans-serif" font-size="16">Total application pages</text>
+<text transform="translate(28 333) rotate(-90)" text-anchor="middle" fill="#344252" font-family="Arial,sans-serif" font-size="16">Import time (seconds)</text>
+<polyline points="92.0,554.2 120.9,554.2 236.7,550.2 381.3,534.5 670.7,506.8 960.0,479.1" fill="none" stroke="#2864A2" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="554.2" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<circle cx="120.9" cy="554.2" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<circle cx="236.7" cy="550.2" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<circle cx="381.3" cy="534.5" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<circle cx="670.7" cy="506.8" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<circle cx="960.0" cy="479.1" r="4.7" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<polyline points="92.0,554.2 120.9,558.1 236.7,550.2 381.3,542.4 670.7,526.5 960.0,502.9" fill="none" stroke="#2864A2" stroke-width="3.2" stroke-dasharray="9 6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="87.5" y="549.7" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<rect x="116.4" y="553.6" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<rect x="232.2" y="545.8" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<rect x="376.8" y="537.9" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<rect x="666.2" y="522.0" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<rect x="955.5" y="498.4" width="9" height="9" fill="white" stroke="#2864A2" stroke-width="2.5"/>
+<polyline points="92.0,526.5 120.9,530.5 236.7,494.9 381.3,447.5 670.7,404.1 960.0,293.5" fill="none" stroke="#B4483F" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="526.5" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<circle cx="120.9" cy="530.5" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<circle cx="236.7" cy="494.9" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<circle cx="381.3" cy="447.5" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<circle cx="670.7" cy="404.1" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<circle cx="960.0" cy="293.5" r="4.7" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<polyline points="92.0,498.9 120.9,502.9 236.7,459.4 381.3,356.7 670.7,352.8 960.0,127.6" fill="none" stroke="#B4483F" stroke-width="3.2" stroke-dasharray="9 6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="87.5" y="494.4" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<rect x="116.4" y="498.4" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<rect x="232.2" y="454.9" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<rect x="376.8" y="352.2" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<rect x="666.2" y="348.2" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<rect x="955.5" y="123.1" width="9" height="9" fill="white" stroke="#B4483F" stroke-width="2.5"/>
+<polyline points="92.0,558.1 120.9,562.1 236.7,546.3 381.3,542.4 670.7,498.9 960.0,455.4" fill="none" stroke="#23806E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="558.1" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<circle cx="120.9" cy="562.1" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<circle cx="236.7" cy="546.3" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<circle cx="381.3" cy="542.4" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<circle cx="670.7" cy="498.9" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<circle cx="960.0" cy="455.4" r="4.7" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<polyline points="92.0,554.2 120.9,554.2 236.7,554.2 381.3,550.2 670.7,538.4 960.0,526.5" fill="none" stroke="#23806E" stroke-width="3.2" stroke-dasharray="9 6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="87.5" y="549.7" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<rect x="116.4" y="549.7" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<rect x="232.2" y="549.7" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<rect x="376.8" y="545.8" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<rect x="666.2" y="533.9" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<rect x="955.5" y="522.0" width="9" height="9" fill="white" stroke="#23806E" stroke-width="2.5"/>
+<text x="974" y="482.1" fill="#2864A2" font-family="Arial,sans-serif" font-size="13" font-weight="700">Local VM APEXlang  11.5s</text>
+<text x="974" y="505.9" fill="#2864A2" font-family="Arial,sans-serif" font-size="13" font-weight="700">Local VM SQL  8.5s</text>
+<text x="974" y="298.5" fill="#B4483F" font-family="Arial,sans-serif" font-size="13" font-weight="700">VPN to OCI APEXlang  35s</text>
+<text x="974" y="126.6" fill="#B4483F" font-family="Arial,sans-serif" font-size="13" font-weight="700">VPN to OCI SQL  56s</text>
+<text x="974" y="453.4" fill="#23806E" font-family="Arial,sans-serif" font-size="13" font-weight="700">Near OCI APEXlang  14.5s</text>
+<text x="974" y="531.5" fill="#23806E" font-family="Arial,sans-serif" font-size="13" font-weight="700">Near OCI SQL  5.5s</text>
+<line x1="646" x2="680" y1="55" y2="55" stroke="#526170" stroke-width="3"/>
+<circle cx="663" cy="55" r="4" fill="white" stroke="#526170" stroke-width="2"/>
+<text x="688" y="60" fill="#526170" font-family="Arial,sans-serif" font-size="14">APEXlang</text>
+<line x1="796" x2="830" y1="55" y2="55" stroke="#526170" stroke-width="3" stroke-dasharray="9 6"/>
+<rect x="809" y="51" width="8" height="8" fill="white" stroke="#526170" stroke-width="2"/>
+<text x="838" y="60" fill="#526170" font-family="Arial,sans-serif" font-size="14">SQL export</text>
+</svg>

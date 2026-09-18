@@ -1,0 +1,474 @@
+page 2 (
+    name: Employees
+    alias: EMPLOYEES
+    title: Employees
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    help {
+        helpText:
+            ```html
+            <p>To find data enter a search term into the search dialog, or click on the column headings to limit the records returned.</p>
+            
+            <p>You can perform numerous functions by clicking the <strong>Actions</strong> button. This includes selecting the columns that are displayed / hidden and their display sequence, plus numerous data and format functions.  You can also define additional views of the data using the chart, group by, and pivot options.</p>
+            
+            <p>If you want to save your customizations select report, or click download to unload the data. Enter you email address and time frame under subscription to be sent the data on a regular basis.<p>
+            
+            <p>For additional information click Help at the bottom of the Actions menu.</p> 
+            
+            <p>Click the <strong>Reset</strong> button to reset the interactive report back to the default settings.</p>
+            ```
+    }
+
+    region breadcrumb (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 20
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region employees (
+        name: Employees
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select e.empno,
+                       e.ename,
+                       e.job_id,
+                       j.job_name,
+                       j.icon_class  as job_icon,
+                       j.color_class as job_color,
+                       e.mgr,
+                       e.hiredate,
+                       e.sal,
+                       e.comm,
+                       e.deptno,
+                       d.dname       as dept_name,
+                       d.icon_class  as dept_icon,
+                       d.color_class as dept_color
+                  from emp e
+                  left join job  j on j.job_id = e.job_id
+                  left join dept d on d.deptno = e.deptno
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        link {
+            linkColumn: customTarget
+            target: {
+                page: 3
+                items: {
+                    P3_EMPNO: \#EMPNO#\
+                }
+                action: resetPagination
+            }
+            linkIcon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+            authorizationScheme: @contribution-rights
+        }
+        pagination {
+            type: rowRangesXToY
+        }
+        messages {
+            whenNoDataFound: No data found.
+            whenMoreDataFound: The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.
+        }
+        advanced {
+            savedReportMappingIdentifier: 27058116429721409
+        }
+
+        column COMM (
+            type: plainText
+            heading {
+                heading: Commission
+                alignment: end
+            }
+            layout {
+                sequence: 7
+                columnAlignment: end
+            }
+            appearance {
+                formatMask: 999G999G999G999G999G999G999G999G999G990
+            }
+            source {
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: G
+            }
+        )
+
+        column DEPTNO (
+            type: hidden
+            heading {
+                heading: Deptno
+            }
+            layout {
+                sequence: 17
+            }
+            source {
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: I
+            }
+        )
+
+        column DEPT_COLOR (
+            type: hidden
+            heading {
+                heading: Dept Color
+            }
+            layout {
+                sequence: 87
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: P
+            }
+        )
+
+        column DEPT_ICON (
+            type: hidden
+            heading {
+                heading: Dept Icon
+            }
+            layout {
+                sequence: 77
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: O
+            }
+        )
+
+        column DEPT_NAME (
+            type: plainText
+            heading {
+                heading: Dept Name
+            }
+            layout {
+                sequence: 67
+            }
+            columnFormatting {
+                htmlExpression:
+                    ```html
+                    {with/}
+                        LABEL:=#DEPT_NAME#
+                        VALUE:=#DEPT_NAME#
+                        LABEL_DISPLAY:=N
+                        ICON:=fa #DEPT_ICON#
+                        STYLE:=#DEPT_COLOR#
+                    {apply THEME$BADGE/}
+                    ```
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: N
+            }
+        )
+
+        column EMPNO (
+            type: hidden
+            heading {
+                heading: Empno
+            }
+            layout {
+                sequence: 0
+            }
+            source {
+                primaryKey: true
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: A
+            }
+        )
+
+        column ENAME (
+            type: plainText
+            heading {
+                heading: Employee Name
+            }
+            layout {
+                sequence: 2
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: B
+            }
+        )
+
+        column HIREDATE (
+            type: plainText
+            heading {
+                heading: Hired
+            }
+            layout {
+                sequence: 5
+            }
+            source {
+                dataType: DATE
+            }
+            advanced {
+                endUserAlias: E
+            }
+        )
+
+        column JOB_COLOR (
+            type: hidden
+            heading {
+                heading: Job Color
+            }
+            layout {
+                sequence: 57
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: M
+            }
+        )
+
+        column JOB_ICON (
+            type: hidden
+            heading {
+                heading: Job Icon
+            }
+            layout {
+                sequence: 47
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: L
+            }
+        )
+
+        column JOB_ID (
+            type: hidden
+            heading {
+                heading: Job Id
+            }
+            layout {
+                sequence: 27
+            }
+            source {
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: J
+            }
+        )
+
+        column JOB_NAME (
+            type: plainText
+            heading {
+                heading: Job Name
+            }
+            layout {
+                sequence: 37
+            }
+            columnFormatting {
+                htmlExpression:
+                    ```html
+                    {with/}
+                        LABEL:=#JOB_NAME#
+                        VALUE:=#JOB_NAME#
+                        LABEL_DISPLAY:=N
+                        ICON:=fa #JOB_ICON#
+                        STYLE:=#JOB_COLOR#
+                    {apply THEME$BADGE/}
+                    ```
+            }
+            source {
+                dataType: STRING
+            }
+            advanced {
+                endUserAlias: K
+            }
+        )
+
+        column MGR (
+            type: plainText
+            heading {
+                heading: Manager
+                alignment: end
+            }
+            layout {
+                sequence: 4
+                columnAlignment: end
+            }
+            appearance {
+                formatMask: 999G999G999G999G999G999G999G999G999G990
+            }
+            source {
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: D
+            }
+        )
+
+        column SAL (
+            type: plainText
+            heading {
+                heading: Salary
+                alignment: end
+            }
+            layout {
+                sequence: 6
+                columnAlignment: end
+            }
+            appearance {
+                formatMask: 999G999G999G999G999G999G999G999G999G990
+            }
+            source {
+                dataType: NUMBER
+            }
+            advanced {
+                endUserAlias: F
+            }
+        )
+
+        page {
+            borderWidth: 0.5
+            borderColor: #666666
+        }
+        pageHeader {
+            pageHeaderText: Employees
+        }
+
+        savedReport 271085 (
+            visibility: primaryDefault
+            view {
+                rowsPerPage: 50
+            }
+
+            displayColumn COMM (
+                sequence: 7
+            )
+
+            displayColumn DEPT_NAME (
+                sequence: 1
+            )
+
+            displayColumn ENAME (
+                sequence: 3
+            )
+
+            displayColumn HIREDATE (
+                sequence: 5
+            )
+
+            displayColumn JOB_NAME (
+                sequence: 2
+            )
+
+            displayColumn MGR (
+                sequence: 4
+            )
+
+            displayColumn SAL (
+                sequence: 6
+            )
+
+            sort (
+                column: ENAME
+                sort {
+                    sequence: 1
+                }
+            )
+
+        )
+
+    )
+
+    button create (
+        buttonName: CREATE
+        label: Create
+        layout {
+            sequence: 10
+            region: @employees
+            slot: rightOfInteractiveReportSearchBar
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 3
+                clearCache: 3
+            }
+            warnOnUnsavedChanges: doNotCheck
+        }
+    )
+
+    dynamicAction edit-report-dialog-closed (
+        name: Edit Report - Dialog Closed
+        execution {
+            sequence: 10
+        }
+        when {
+            event: apexafterclosedialog
+            selectionType: region
+            region: @employees
+        }
+
+        action native-refresh (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @employees
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
+)
+

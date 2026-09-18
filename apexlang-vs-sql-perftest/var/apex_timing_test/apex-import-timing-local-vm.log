@@ -1,0 +1,4581 @@
+
+SQLcl: Release 26.2 Production on Thu Sep 10 22:01:48 2026
+
+Copyright (c) 1982, 2026, Oracle.  All rights reserved.
+
+Connected.
+Aliases Loaded
+================================================================
+Confirming test variables
+================================================================
+test_app_id    = 106
+test_app_alias = demo1
+test_al_dir    = src/database/demo1/apex_apps/f106/demo1
+test_sql_dir   = src/database/apex_apps/f106
+
+################################################################
+# CYCLE: baseline application (no clones)
+################################################################
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 13.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 4.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+################################################################
+# CYCLE: extra pages = 10
+################################################################
+### STEP: generate extra pages ###
+Created demo1\pages\p02001-departments-2001.apx
+Created demo1\pages\p02002-departments-2002.apx
+Created demo1\pages\p02003-departments-2003.apx
+Created demo1\pages\p02004-departments-2004.apx
+Created demo1\pages\p02005-departments-2005.apx
+Created demo1\pages\p02006-departments-2006.apx
+Created demo1\pages\p02007-departments-2007.apx
+Created demo1\pages\p02008-departments-2008.apx
+Created demo1\pages\p02009-departments-2009.apx
+Created demo1\pages\p02010-departments-2010.apx
+Done. Created 10 page(s) from page 6.
+
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 5.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 1.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+################################################################
+# CYCLE: extra pages = 50
+################################################################
+### STEP: generate extra pages ###
+Skipping page 2001: file already exists (p02001-departments-2001.apx)
+Skipping page 2002: file already exists (p02002-departments-2002.apx)
+Skipping page 2003: file already exists (p02003-departments-2003.apx)
+Skipping page 2004: file already exists (p02004-departments-2004.apx)
+Skipping page 2005: file already exists (p02005-departments-2005.apx)
+Skipping page 2006: file already exists (p02006-departments-2006.apx)
+Skipping page 2007: file already exists (p02007-departments-2007.apx)
+Skipping page 2008: file already exists (p02008-departments-2008.apx)
+Skipping page 2009: file already exists (p02009-departments-2009.apx)
+Skipping page 2010: file already exists (p02010-departments-2010.apx)
+Created demo1\pages\p02011-departments-2011.apx
+Created demo1\pages\p02012-departments-2012.apx
+Created demo1\pages\p02013-departments-2013.apx
+Created demo1\pages\p02014-departments-2014.apx
+Created demo1\pages\p02015-departments-2015.apx
+Created demo1\pages\p02016-departments-2016.apx
+Created demo1\pages\p02017-departments-2017.apx
+Created demo1\pages\p02018-departments-2018.apx
+Created demo1\pages\p02019-departments-2019.apx
+Created demo1\pages\p02020-departments-2020.apx
+Created demo1\pages\p02021-departments-2021.apx
+Created demo1\pages\p02022-departments-2022.apx
+Created demo1\pages\p02023-departments-2023.apx
+Created demo1\pages\p02024-departments-2024.apx
+Created demo1\pages\p02025-departments-2025.apx
+Created demo1\pages\p02026-departments-2026.apx
+Created demo1\pages\p02027-departments-2027.apx
+Created demo1\pages\p02028-departments-2028.apx
+Created demo1\pages\p02029-departments-2029.apx
+Created demo1\pages\p02030-departments-2030.apx
+Created demo1\pages\p02031-departments-2031.apx
+Created demo1\pages\p02032-departments-2032.apx
+Created demo1\pages\p02033-departments-2033.apx
+Created demo1\pages\p02034-departments-2034.apx
+Created demo1\pages\p02035-departments-2035.apx
+Created demo1\pages\p02036-departments-2036.apx
+Created demo1\pages\p02037-departments-2037.apx
+Created demo1\pages\p02038-departments-2038.apx
+Created demo1\pages\p02039-departments-2039.apx
+Created demo1\pages\p02040-departments-2040.apx
+Created demo1\pages\p02041-departments-2041.apx
+Created demo1\pages\p02042-departments-2042.apx
+Created demo1\pages\p02043-departments-2043.apx
+Created demo1\pages\p02044-departments-2044.apx
+Created demo1\pages\p02045-departments-2045.apx
+Created demo1\pages\p02046-departments-2046.apx
+Created demo1\pages\p02047-departments-2047.apx
+Created demo1\pages\p02048-departments-2048.apx
+Created demo1\pages\p02049-departments-2049.apx
+Created demo1\pages\p02050-departments-2050.apx
+Done. Created 40 page(s) from page 6.
+
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 7.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 7.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 3.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 2.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 3.000 seconds
+
+1 row selected. 
+
+
+################################################################
+# CYCLE: extra pages = 100
+################################################################
+### STEP: generate extra pages ###
+Skipping page 2001: file already exists (p02001-departments-2001.apx)
+Skipping page 2002: file already exists (p02002-departments-2002.apx)
+Skipping page 2003: file already exists (p02003-departments-2003.apx)
+Skipping page 2004: file already exists (p02004-departments-2004.apx)
+Skipping page 2005: file already exists (p02005-departments-2005.apx)
+Skipping page 2006: file already exists (p02006-departments-2006.apx)
+Skipping page 2007: file already exists (p02007-departments-2007.apx)
+Skipping page 2008: file already exists (p02008-departments-2008.apx)
+Skipping page 2009: file already exists (p02009-departments-2009.apx)
+Skipping page 2010: file already exists (p02010-departments-2010.apx)
+Skipping page 2011: file already exists (p02011-departments-2011.apx)
+Skipping page 2012: file already exists (p02012-departments-2012.apx)
+Skipping page 2013: file already exists (p02013-departments-2013.apx)
+Skipping page 2014: file already exists (p02014-departments-2014.apx)
+Skipping page 2015: file already exists (p02015-departments-2015.apx)
+Skipping page 2016: file already exists (p02016-departments-2016.apx)
+Skipping page 2017: file already exists (p02017-departments-2017.apx)
+Skipping page 2018: file already exists (p02018-departments-2018.apx)
+Skipping page 2019: file already exists (p02019-departments-2019.apx)
+Skipping page 2020: file already exists (p02020-departments-2020.apx)
+Skipping page 2021: file already exists (p02021-departments-2021.apx)
+Skipping page 2022: file already exists (p02022-departments-2022.apx)
+Skipping page 2023: file already exists (p02023-departments-2023.apx)
+Skipping page 2024: file already exists (p02024-departments-2024.apx)
+Skipping page 2025: file already exists (p02025-departments-2025.apx)
+Skipping page 2026: file already exists (p02026-departments-2026.apx)
+Skipping page 2027: file already exists (p02027-departments-2027.apx)
+Skipping page 2028: file already exists (p02028-departments-2028.apx)
+Skipping page 2029: file already exists (p02029-departments-2029.apx)
+Skipping page 2030: file already exists (p02030-departments-2030.apx)
+Skipping page 2031: file already exists (p02031-departments-2031.apx)
+Skipping page 2032: file already exists (p02032-departments-2032.apx)
+Skipping page 2033: file already exists (p02033-departments-2033.apx)
+Skipping page 2034: file already exists (p02034-departments-2034.apx)
+Skipping page 2035: file already exists (p02035-departments-2035.apx)
+Skipping page 2036: file already exists (p02036-departments-2036.apx)
+Skipping page 2037: file already exists (p02037-departments-2037.apx)
+Skipping page 2038: file already exists (p02038-departments-2038.apx)
+Skipping page 2039: file already exists (p02039-departments-2039.apx)
+Skipping page 2040: file already exists (p02040-departments-2040.apx)
+Skipping page 2041: file already exists (p02041-departments-2041.apx)
+Skipping page 2042: file already exists (p02042-departments-2042.apx)
+Skipping page 2043: file already exists (p02043-departments-2043.apx)
+Skipping page 2044: file already exists (p02044-departments-2044.apx)
+Skipping page 2045: file already exists (p02045-departments-2045.apx)
+Skipping page 2046: file already exists (p02046-departments-2046.apx)
+Skipping page 2047: file already exists (p02047-departments-2047.apx)
+Skipping page 2048: file already exists (p02048-departments-2048.apx)
+Skipping page 2049: file already exists (p02049-departments-2049.apx)
+Skipping page 2050: file already exists (p02050-departments-2050.apx)
+Created demo1\pages\p02051-departments-2051.apx
+Created demo1\pages\p02052-departments-2052.apx
+Created demo1\pages\p02053-departments-2053.apx
+Created demo1\pages\p02054-departments-2054.apx
+Created demo1\pages\p02055-departments-2055.apx
+Created demo1\pages\p02056-departments-2056.apx
+Created demo1\pages\p02057-departments-2057.apx
+Created demo1\pages\p02058-departments-2058.apx
+Created demo1\pages\p02059-departments-2059.apx
+Created demo1\pages\p02060-departments-2060.apx
+Created demo1\pages\p02061-departments-2061.apx
+Created demo1\pages\p02062-departments-2062.apx
+Created demo1\pages\p02063-departments-2063.apx
+Created demo1\pages\p02064-departments-2064.apx
+Created demo1\pages\p02065-departments-2065.apx
+Created demo1\pages\p02066-departments-2066.apx
+Created demo1\pages\p02067-departments-2067.apx
+Created demo1\pages\p02068-departments-2068.apx
+Created demo1\pages\p02069-departments-2069.apx
+Created demo1\pages\p02070-departments-2070.apx
+Created demo1\pages\p02071-departments-2071.apx
+Created demo1\pages\p02072-departments-2072.apx
+Created demo1\pages\p02073-departments-2073.apx
+Created demo1\pages\p02074-departments-2074.apx
+Created demo1\pages\p02075-departments-2075.apx
+Created demo1\pages\p02076-departments-2076.apx
+Created demo1\pages\p02077-departments-2077.apx
+Created demo1\pages\p02078-departments-2078.apx
+Created demo1\pages\p02079-departments-2079.apx
+Created demo1\pages\p02080-departments-2080.apx
+Created demo1\pages\p02081-departments-2081.apx
+Created demo1\pages\p02082-departments-2082.apx
+Created demo1\pages\p02083-departments-2083.apx
+Created demo1\pages\p02084-departments-2084.apx
+Created demo1\pages\p02085-departments-2085.apx
+Created demo1\pages\p02086-departments-2086.apx
+Created demo1\pages\p02087-departments-2087.apx
+Created demo1\pages\p02088-departments-2088.apx
+Created demo1\pages\p02089-departments-2089.apx
+Created demo1\pages\p02090-departments-2090.apx
+Created demo1\pages\p02091-departments-2091.apx
+Created demo1\pages\p02092-departments-2092.apx
+Created demo1\pages\p02093-departments-2093.apx
+Created demo1\pages\p02094-departments-2094.apx
+Created demo1\pages\p02095-departments-2095.apx
+Created demo1\pages\p02096-departments-2096.apx
+Created demo1\pages\p02097-departments-2097.apx
+Created demo1\pages\p02098-departments-2098.apx
+Created demo1\pages\p02099-departments-2099.apx
+Created demo1\pages\p02100-departments-2100.apx
+Done. Created 50 page(s) from page 6.
+
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 9.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 6.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 4.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 4.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 3.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 5.000 seconds
+
+1 row selected. 
+
+
+################################################################
+# CYCLE: extra pages = 200
+################################################################
+### STEP: generate extra pages ###
+Skipping page 2001: file already exists (p02001-departments-2001.apx)
+Skipping page 2002: file already exists (p02002-departments-2002.apx)
+Skipping page 2003: file already exists (p02003-departments-2003.apx)
+Skipping page 2004: file already exists (p02004-departments-2004.apx)
+Skipping page 2005: file already exists (p02005-departments-2005.apx)
+Skipping page 2006: file already exists (p02006-departments-2006.apx)
+Skipping page 2007: file already exists (p02007-departments-2007.apx)
+Skipping page 2008: file already exists (p02008-departments-2008.apx)
+Skipping page 2009: file already exists (p02009-departments-2009.apx)
+Skipping page 2010: file already exists (p02010-departments-2010.apx)
+Skipping page 2011: file already exists (p02011-departments-2011.apx)
+Skipping page 2012: file already exists (p02012-departments-2012.apx)
+Skipping page 2013: file already exists (p02013-departments-2013.apx)
+Skipping page 2014: file already exists (p02014-departments-2014.apx)
+Skipping page 2015: file already exists (p02015-departments-2015.apx)
+Skipping page 2016: file already exists (p02016-departments-2016.apx)
+Skipping page 2017: file already exists (p02017-departments-2017.apx)
+Skipping page 2018: file already exists (p02018-departments-2018.apx)
+Skipping page 2019: file already exists (p02019-departments-2019.apx)
+Skipping page 2020: file already exists (p02020-departments-2020.apx)
+Skipping page 2021: file already exists (p02021-departments-2021.apx)
+Skipping page 2022: file already exists (p02022-departments-2022.apx)
+Skipping page 2023: file already exists (p02023-departments-2023.apx)
+Skipping page 2024: file already exists (p02024-departments-2024.apx)
+Skipping page 2025: file already exists (p02025-departments-2025.apx)
+Skipping page 2026: file already exists (p02026-departments-2026.apx)
+Skipping page 2027: file already exists (p02027-departments-2027.apx)
+Skipping page 2028: file already exists (p02028-departments-2028.apx)
+Skipping page 2029: file already exists (p02029-departments-2029.apx)
+Skipping page 2030: file already exists (p02030-departments-2030.apx)
+Skipping page 2031: file already exists (p02031-departments-2031.apx)
+Skipping page 2032: file already exists (p02032-departments-2032.apx)
+Skipping page 2033: file already exists (p02033-departments-2033.apx)
+Skipping page 2034: file already exists (p02034-departments-2034.apx)
+Skipping page 2035: file already exists (p02035-departments-2035.apx)
+Skipping page 2036: file already exists (p02036-departments-2036.apx)
+Skipping page 2037: file already exists (p02037-departments-2037.apx)
+Skipping page 2038: file already exists (p02038-departments-2038.apx)
+Skipping page 2039: file already exists (p02039-departments-2039.apx)
+Skipping page 2040: file already exists (p02040-departments-2040.apx)
+Skipping page 2041: file already exists (p02041-departments-2041.apx)
+Skipping page 2042: file already exists (p02042-departments-2042.apx)
+Skipping page 2043: file already exists (p02043-departments-2043.apx)
+Skipping page 2044: file already exists (p02044-departments-2044.apx)
+Skipping page 2045: file already exists (p02045-departments-2045.apx)
+Skipping page 2046: file already exists (p02046-departments-2046.apx)
+Skipping page 2047: file already exists (p02047-departments-2047.apx)
+Skipping page 2048: file already exists (p02048-departments-2048.apx)
+Skipping page 2049: file already exists (p02049-departments-2049.apx)
+Skipping page 2050: file already exists (p02050-departments-2050.apx)
+Skipping page 2051: file already exists (p02051-departments-2051.apx)
+Skipping page 2052: file already exists (p02052-departments-2052.apx)
+Skipping page 2053: file already exists (p02053-departments-2053.apx)
+Skipping page 2054: file already exists (p02054-departments-2054.apx)
+Skipping page 2055: file already exists (p02055-departments-2055.apx)
+Skipping page 2056: file already exists (p02056-departments-2056.apx)
+Skipping page 2057: file already exists (p02057-departments-2057.apx)
+Skipping page 2058: file already exists (p02058-departments-2058.apx)
+Skipping page 2059: file already exists (p02059-departments-2059.apx)
+Skipping page 2060: file already exists (p02060-departments-2060.apx)
+Skipping page 2061: file already exists (p02061-departments-2061.apx)
+Skipping page 2062: file already exists (p02062-departments-2062.apx)
+Skipping page 2063: file already exists (p02063-departments-2063.apx)
+Skipping page 2064: file already exists (p02064-departments-2064.apx)
+Skipping page 2065: file already exists (p02065-departments-2065.apx)
+Skipping page 2066: file already exists (p02066-departments-2066.apx)
+Skipping page 2067: file already exists (p02067-departments-2067.apx)
+Skipping page 2068: file already exists (p02068-departments-2068.apx)
+Skipping page 2069: file already exists (p02069-departments-2069.apx)
+Skipping page 2070: file already exists (p02070-departments-2070.apx)
+Skipping page 2071: file already exists (p02071-departments-2071.apx)
+Skipping page 2072: file already exists (p02072-departments-2072.apx)
+Skipping page 2073: file already exists (p02073-departments-2073.apx)
+Skipping page 2074: file already exists (p02074-departments-2074.apx)
+Skipping page 2075: file already exists (p02075-departments-2075.apx)
+Skipping page 2076: file already exists (p02076-departments-2076.apx)
+Skipping page 2077: file already exists (p02077-departments-2077.apx)
+Skipping page 2078: file already exists (p02078-departments-2078.apx)
+Skipping page 2079: file already exists (p02079-departments-2079.apx)
+Skipping page 2080: file already exists (p02080-departments-2080.apx)
+Skipping page 2081: file already exists (p02081-departments-2081.apx)
+Skipping page 2082: file already exists (p02082-departments-2082.apx)
+Skipping page 2083: file already exists (p02083-departments-2083.apx)
+Skipping page 2084: file already exists (p02084-departments-2084.apx)
+Skipping page 2085: file already exists (p02085-departments-2085.apx)
+Skipping page 2086: file already exists (p02086-departments-2086.apx)
+Skipping page 2087: file already exists (p02087-departments-2087.apx)
+Skipping page 2088: file already exists (p02088-departments-2088.apx)
+Skipping page 2089: file already exists (p02089-departments-2089.apx)
+Skipping page 2090: file already exists (p02090-departments-2090.apx)
+Skipping page 2091: file already exists (p02091-departments-2091.apx)
+Skipping page 2092: file already exists (p02092-departments-2092.apx)
+Skipping page 2093: file already exists (p02093-departments-2093.apx)
+Skipping page 2094: file already exists (p02094-departments-2094.apx)
+Skipping page 2095: file already exists (p02095-departments-2095.apx)
+Skipping page 2096: file already exists (p02096-departments-2096.apx)
+Skipping page 2097: file already exists (p02097-departments-2097.apx)
+Skipping page 2098: file already exists (p02098-departments-2098.apx)
+Skipping page 2099: file already exists (p02099-departments-2099.apx)
+Skipping page 2100: file already exists (p02100-departments-2100.apx)
+Created demo1\pages\p02101-departments-2101.apx
+Created demo1\pages\p02102-departments-2102.apx
+Created demo1\pages\p02103-departments-2103.apx
+Created demo1\pages\p02104-departments-2104.apx
+Created demo1\pages\p02105-departments-2105.apx
+Created demo1\pages\p02106-departments-2106.apx
+Created demo1\pages\p02107-departments-2107.apx
+Created demo1\pages\p02108-departments-2108.apx
+Created demo1\pages\p02109-departments-2109.apx
+Created demo1\pages\p02110-departments-2110.apx
+Created demo1\pages\p02111-departments-2111.apx
+Created demo1\pages\p02112-departments-2112.apx
+Created demo1\pages\p02113-departments-2113.apx
+Created demo1\pages\p02114-departments-2114.apx
+Created demo1\pages\p02115-departments-2115.apx
+Created demo1\pages\p02116-departments-2116.apx
+Created demo1\pages\p02117-departments-2117.apx
+Created demo1\pages\p02118-departments-2118.apx
+Created demo1\pages\p02119-departments-2119.apx
+Created demo1\pages\p02120-departments-2120.apx
+Created demo1\pages\p02121-departments-2121.apx
+Created demo1\pages\p02122-departments-2122.apx
+Created demo1\pages\p02123-departments-2123.apx
+Created demo1\pages\p02124-departments-2124.apx
+Created demo1\pages\p02125-departments-2125.apx
+Created demo1\pages\p02126-departments-2126.apx
+Created demo1\pages\p02127-departments-2127.apx
+Created demo1\pages\p02128-departments-2128.apx
+Created demo1\pages\p02129-departments-2129.apx
+Created demo1\pages\p02130-departments-2130.apx
+Created demo1\pages\p02131-departments-2131.apx
+Created demo1\pages\p02132-departments-2132.apx
+Created demo1\pages\p02133-departments-2133.apx
+Created demo1\pages\p02134-departments-2134.apx
+Created demo1\pages\p02135-departments-2135.apx
+Created demo1\pages\p02136-departments-2136.apx
+Created demo1\pages\p02137-departments-2137.apx
+Created demo1\pages\p02138-departments-2138.apx
+Created demo1\pages\p02139-departments-2139.apx
+Created demo1\pages\p02140-departments-2140.apx
+Created demo1\pages\p02141-departments-2141.apx
+Created demo1\pages\p02142-departments-2142.apx
+Created demo1\pages\p02143-departments-2143.apx
+Created demo1\pages\p02144-departments-2144.apx
+Created demo1\pages\p02145-departments-2145.apx
+Created demo1\pages\p02146-departments-2146.apx
+Created demo1\pages\p02147-departments-2147.apx
+Created demo1\pages\p02148-departments-2148.apx
+Created demo1\pages\p02149-departments-2149.apx
+Created demo1\pages\p02150-departments-2150.apx
+Created demo1\pages\p02151-departments-2151.apx
+Created demo1\pages\p02152-departments-2152.apx
+Created demo1\pages\p02153-departments-2153.apx
+Created demo1\pages\p02154-departments-2154.apx
+Created demo1\pages\p02155-departments-2155.apx
+Created demo1\pages\p02156-departments-2156.apx
+Created demo1\pages\p02157-departments-2157.apx
+Created demo1\pages\p02158-departments-2158.apx
+Created demo1\pages\p02159-departments-2159.apx
+Created demo1\pages\p02160-departments-2160.apx
+Created demo1\pages\p02161-departments-2161.apx
+Created demo1\pages\p02162-departments-2162.apx
+Created demo1\pages\p02163-departments-2163.apx
+Created demo1\pages\p02164-departments-2164.apx
+Created demo1\pages\p02165-departments-2165.apx
+Created demo1\pages\p02166-departments-2166.apx
+Created demo1\pages\p02167-departments-2167.apx
+Created demo1\pages\p02168-departments-2168.apx
+Created demo1\pages\p02169-departments-2169.apx
+Created demo1\pages\p02170-departments-2170.apx
+Created demo1\pages\p02171-departments-2171.apx
+Created demo1\pages\p02172-departments-2172.apx
+Created demo1\pages\p02173-departments-2173.apx
+Created demo1\pages\p02174-departments-2174.apx
+Created demo1\pages\p02175-departments-2175.apx
+Created demo1\pages\p02176-departments-2176.apx
+Created demo1\pages\p02177-departments-2177.apx
+Created demo1\pages\p02178-departments-2178.apx
+Created demo1\pages\p02179-departments-2179.apx
+Created demo1\pages\p02180-departments-2180.apx
+Created demo1\pages\p02181-departments-2181.apx
+Created demo1\pages\p02182-departments-2182.apx
+Created demo1\pages\p02183-departments-2183.apx
+Created demo1\pages\p02184-departments-2184.apx
+Created demo1\pages\p02185-departments-2185.apx
+Created demo1\pages\p02186-departments-2186.apx
+Created demo1\pages\p02187-departments-2187.apx
+Created demo1\pages\p02188-departments-2188.apx
+Created demo1\pages\p02189-departments-2189.apx
+Created demo1\pages\p02190-departments-2190.apx
+Created demo1\pages\p02191-departments-2191.apx
+Created demo1\pages\p02192-departments-2192.apx
+Created demo1\pages\p02193-departments-2193.apx
+Created demo1\pages\p02194-departments-2194.apx
+Created demo1\pages\p02195-departments-2195.apx
+Created demo1\pages\p02196-departments-2196.apx
+Created demo1\pages\p02197-departments-2197.apx
+Created demo1\pages\p02198-departments-2198.apx
+Created demo1\pages\p02199-departments-2199.apx
+Created demo1\pages\p02200-departments-2200.apx
+Done. Created 100 page(s) from page 6.
+
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 16.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 9.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 8.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 5.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 6.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 8.000 seconds
+
+1 row selected. 
+
+
+################################################################
+# CYCLE: extra pages = 300
+################################################################
+### STEP: generate extra pages ###
+Skipping page 2001: file already exists (p02001-departments-2001.apx)
+Skipping page 2002: file already exists (p02002-departments-2002.apx)
+Skipping page 2003: file already exists (p02003-departments-2003.apx)
+Skipping page 2004: file already exists (p02004-departments-2004.apx)
+Skipping page 2005: file already exists (p02005-departments-2005.apx)
+Skipping page 2006: file already exists (p02006-departments-2006.apx)
+Skipping page 2007: file already exists (p02007-departments-2007.apx)
+Skipping page 2008: file already exists (p02008-departments-2008.apx)
+Skipping page 2009: file already exists (p02009-departments-2009.apx)
+Skipping page 2010: file already exists (p02010-departments-2010.apx)
+Skipping page 2011: file already exists (p02011-departments-2011.apx)
+Skipping page 2012: file already exists (p02012-departments-2012.apx)
+Skipping page 2013: file already exists (p02013-departments-2013.apx)
+Skipping page 2014: file already exists (p02014-departments-2014.apx)
+Skipping page 2015: file already exists (p02015-departments-2015.apx)
+Skipping page 2016: file already exists (p02016-departments-2016.apx)
+Skipping page 2017: file already exists (p02017-departments-2017.apx)
+Skipping page 2018: file already exists (p02018-departments-2018.apx)
+Skipping page 2019: file already exists (p02019-departments-2019.apx)
+Skipping page 2020: file already exists (p02020-departments-2020.apx)
+Skipping page 2021: file already exists (p02021-departments-2021.apx)
+Skipping page 2022: file already exists (p02022-departments-2022.apx)
+Skipping page 2023: file already exists (p02023-departments-2023.apx)
+Skipping page 2024: file already exists (p02024-departments-2024.apx)
+Skipping page 2025: file already exists (p02025-departments-2025.apx)
+Skipping page 2026: file already exists (p02026-departments-2026.apx)
+Skipping page 2027: file already exists (p02027-departments-2027.apx)
+Skipping page 2028: file already exists (p02028-departments-2028.apx)
+Skipping page 2029: file already exists (p02029-departments-2029.apx)
+Skipping page 2030: file already exists (p02030-departments-2030.apx)
+Skipping page 2031: file already exists (p02031-departments-2031.apx)
+Skipping page 2032: file already exists (p02032-departments-2032.apx)
+Skipping page 2033: file already exists (p02033-departments-2033.apx)
+Skipping page 2034: file already exists (p02034-departments-2034.apx)
+Skipping page 2035: file already exists (p02035-departments-2035.apx)
+Skipping page 2036: file already exists (p02036-departments-2036.apx)
+Skipping page 2037: file already exists (p02037-departments-2037.apx)
+Skipping page 2038: file already exists (p02038-departments-2038.apx)
+Skipping page 2039: file already exists (p02039-departments-2039.apx)
+Skipping page 2040: file already exists (p02040-departments-2040.apx)
+Skipping page 2041: file already exists (p02041-departments-2041.apx)
+Skipping page 2042: file already exists (p02042-departments-2042.apx)
+Skipping page 2043: file already exists (p02043-departments-2043.apx)
+Skipping page 2044: file already exists (p02044-departments-2044.apx)
+Skipping page 2045: file already exists (p02045-departments-2045.apx)
+Skipping page 2046: file already exists (p02046-departments-2046.apx)
+Skipping page 2047: file already exists (p02047-departments-2047.apx)
+Skipping page 2048: file already exists (p02048-departments-2048.apx)
+Skipping page 2049: file already exists (p02049-departments-2049.apx)
+Skipping page 2050: file already exists (p02050-departments-2050.apx)
+Skipping page 2051: file already exists (p02051-departments-2051.apx)
+Skipping page 2052: file already exists (p02052-departments-2052.apx)
+Skipping page 2053: file already exists (p02053-departments-2053.apx)
+Skipping page 2054: file already exists (p02054-departments-2054.apx)
+Skipping page 2055: file already exists (p02055-departments-2055.apx)
+Skipping page 2056: file already exists (p02056-departments-2056.apx)
+Skipping page 2057: file already exists (p02057-departments-2057.apx)
+Skipping page 2058: file already exists (p02058-departments-2058.apx)
+Skipping page 2059: file already exists (p02059-departments-2059.apx)
+Skipping page 2060: file already exists (p02060-departments-2060.apx)
+Skipping page 2061: file already exists (p02061-departments-2061.apx)
+Skipping page 2062: file already exists (p02062-departments-2062.apx)
+Skipping page 2063: file already exists (p02063-departments-2063.apx)
+Skipping page 2064: file already exists (p02064-departments-2064.apx)
+Skipping page 2065: file already exists (p02065-departments-2065.apx)
+Skipping page 2066: file already exists (p02066-departments-2066.apx)
+Skipping page 2067: file already exists (p02067-departments-2067.apx)
+Skipping page 2068: file already exists (p02068-departments-2068.apx)
+Skipping page 2069: file already exists (p02069-departments-2069.apx)
+Skipping page 2070: file already exists (p02070-departments-2070.apx)
+Skipping page 2071: file already exists (p02071-departments-2071.apx)
+Skipping page 2072: file already exists (p02072-departments-2072.apx)
+Skipping page 2073: file already exists (p02073-departments-2073.apx)
+Skipping page 2074: file already exists (p02074-departments-2074.apx)
+Skipping page 2075: file already exists (p02075-departments-2075.apx)
+Skipping page 2076: file already exists (p02076-departments-2076.apx)
+Skipping page 2077: file already exists (p02077-departments-2077.apx)
+Skipping page 2078: file already exists (p02078-departments-2078.apx)
+Skipping page 2079: file already exists (p02079-departments-2079.apx)
+Skipping page 2080: file already exists (p02080-departments-2080.apx)
+Skipping page 2081: file already exists (p02081-departments-2081.apx)
+Skipping page 2082: file already exists (p02082-departments-2082.apx)
+Skipping page 2083: file already exists (p02083-departments-2083.apx)
+Skipping page 2084: file already exists (p02084-departments-2084.apx)
+Skipping page 2085: file already exists (p02085-departments-2085.apx)
+Skipping page 2086: file already exists (p02086-departments-2086.apx)
+Skipping page 2087: file already exists (p02087-departments-2087.apx)
+Skipping page 2088: file already exists (p02088-departments-2088.apx)
+Skipping page 2089: file already exists (p02089-departments-2089.apx)
+Skipping page 2090: file already exists (p02090-departments-2090.apx)
+Skipping page 2091: file already exists (p02091-departments-2091.apx)
+Skipping page 2092: file already exists (p02092-departments-2092.apx)
+Skipping page 2093: file already exists (p02093-departments-2093.apx)
+Skipping page 2094: file already exists (p02094-departments-2094.apx)
+Skipping page 2095: file already exists (p02095-departments-2095.apx)
+Skipping page 2096: file already exists (p02096-departments-2096.apx)
+Skipping page 2097: file already exists (p02097-departments-2097.apx)
+Skipping page 2098: file already exists (p02098-departments-2098.apx)
+Skipping page 2099: file already exists (p02099-departments-2099.apx)
+Skipping page 2100: file already exists (p02100-departments-2100.apx)
+Skipping page 2101: file already exists (p02101-departments-2101.apx)
+Skipping page 2102: file already exists (p02102-departments-2102.apx)
+Skipping page 2103: file already exists (p02103-departments-2103.apx)
+Skipping page 2104: file already exists (p02104-departments-2104.apx)
+Skipping page 2105: file already exists (p02105-departments-2105.apx)
+Skipping page 2106: file already exists (p02106-departments-2106.apx)
+Skipping page 2107: file already exists (p02107-departments-2107.apx)
+Skipping page 2108: file already exists (p02108-departments-2108.apx)
+Skipping page 2109: file already exists (p02109-departments-2109.apx)
+Skipping page 2110: file already exists (p02110-departments-2110.apx)
+Skipping page 2111: file already exists (p02111-departments-2111.apx)
+Skipping page 2112: file already exists (p02112-departments-2112.apx)
+Skipping page 2113: file already exists (p02113-departments-2113.apx)
+Skipping page 2114: file already exists (p02114-departments-2114.apx)
+Skipping page 2115: file already exists (p02115-departments-2115.apx)
+Skipping page 2116: file already exists (p02116-departments-2116.apx)
+Skipping page 2117: file already exists (p02117-departments-2117.apx)
+Skipping page 2118: file already exists (p02118-departments-2118.apx)
+Skipping page 2119: file already exists (p02119-departments-2119.apx)
+Skipping page 2120: file already exists (p02120-departments-2120.apx)
+Skipping page 2121: file already exists (p02121-departments-2121.apx)
+Skipping page 2122: file already exists (p02122-departments-2122.apx)
+Skipping page 2123: file already exists (p02123-departments-2123.apx)
+Skipping page 2124: file already exists (p02124-departments-2124.apx)
+Skipping page 2125: file already exists (p02125-departments-2125.apx)
+Skipping page 2126: file already exists (p02126-departments-2126.apx)
+Skipping page 2127: file already exists (p02127-departments-2127.apx)
+Skipping page 2128: file already exists (p02128-departments-2128.apx)
+Skipping page 2129: file already exists (p02129-departments-2129.apx)
+Skipping page 2130: file already exists (p02130-departments-2130.apx)
+Skipping page 2131: file already exists (p02131-departments-2131.apx)
+Skipping page 2132: file already exists (p02132-departments-2132.apx)
+Skipping page 2133: file already exists (p02133-departments-2133.apx)
+Skipping page 2134: file already exists (p02134-departments-2134.apx)
+Skipping page 2135: file already exists (p02135-departments-2135.apx)
+Skipping page 2136: file already exists (p02136-departments-2136.apx)
+Skipping page 2137: file already exists (p02137-departments-2137.apx)
+Skipping page 2138: file already exists (p02138-departments-2138.apx)
+Skipping page 2139: file already exists (p02139-departments-2139.apx)
+Skipping page 2140: file already exists (p02140-departments-2140.apx)
+Skipping page 2141: file already exists (p02141-departments-2141.apx)
+Skipping page 2142: file already exists (p02142-departments-2142.apx)
+Skipping page 2143: file already exists (p02143-departments-2143.apx)
+Skipping page 2144: file already exists (p02144-departments-2144.apx)
+Skipping page 2145: file already exists (p02145-departments-2145.apx)
+Skipping page 2146: file already exists (p02146-departments-2146.apx)
+Skipping page 2147: file already exists (p02147-departments-2147.apx)
+Skipping page 2148: file already exists (p02148-departments-2148.apx)
+Skipping page 2149: file already exists (p02149-departments-2149.apx)
+Skipping page 2150: file already exists (p02150-departments-2150.apx)
+Skipping page 2151: file already exists (p02151-departments-2151.apx)
+Skipping page 2152: file already exists (p02152-departments-2152.apx)
+Skipping page 2153: file already exists (p02153-departments-2153.apx)
+Skipping page 2154: file already exists (p02154-departments-2154.apx)
+Skipping page 2155: file already exists (p02155-departments-2155.apx)
+Skipping page 2156: file already exists (p02156-departments-2156.apx)
+Skipping page 2157: file already exists (p02157-departments-2157.apx)
+Skipping page 2158: file already exists (p02158-departments-2158.apx)
+Skipping page 2159: file already exists (p02159-departments-2159.apx)
+Skipping page 2160: file already exists (p02160-departments-2160.apx)
+Skipping page 2161: file already exists (p02161-departments-2161.apx)
+Skipping page 2162: file already exists (p02162-departments-2162.apx)
+Skipping page 2163: file already exists (p02163-departments-2163.apx)
+Skipping page 2164: file already exists (p02164-departments-2164.apx)
+Skipping page 2165: file already exists (p02165-departments-2165.apx)
+Skipping page 2166: file already exists (p02166-departments-2166.apx)
+Skipping page 2167: file already exists (p02167-departments-2167.apx)
+Skipping page 2168: file already exists (p02168-departments-2168.apx)
+Skipping page 2169: file already exists (p02169-departments-2169.apx)
+Skipping page 2170: file already exists (p02170-departments-2170.apx)
+Skipping page 2171: file already exists (p02171-departments-2171.apx)
+Skipping page 2172: file already exists (p02172-departments-2172.apx)
+Skipping page 2173: file already exists (p02173-departments-2173.apx)
+Skipping page 2174: file already exists (p02174-departments-2174.apx)
+Skipping page 2175: file already exists (p02175-departments-2175.apx)
+Skipping page 2176: file already exists (p02176-departments-2176.apx)
+Skipping page 2177: file already exists (p02177-departments-2177.apx)
+Skipping page 2178: file already exists (p02178-departments-2178.apx)
+Skipping page 2179: file already exists (p02179-departments-2179.apx)
+Skipping page 2180: file already exists (p02180-departments-2180.apx)
+Skipping page 2181: file already exists (p02181-departments-2181.apx)
+Skipping page 2182: file already exists (p02182-departments-2182.apx)
+Skipping page 2183: file already exists (p02183-departments-2183.apx)
+Skipping page 2184: file already exists (p02184-departments-2184.apx)
+Skipping page 2185: file already exists (p02185-departments-2185.apx)
+Skipping page 2186: file already exists (p02186-departments-2186.apx)
+Skipping page 2187: file already exists (p02187-departments-2187.apx)
+Skipping page 2188: file already exists (p02188-departments-2188.apx)
+Skipping page 2189: file already exists (p02189-departments-2189.apx)
+Skipping page 2190: file already exists (p02190-departments-2190.apx)
+Skipping page 2191: file already exists (p02191-departments-2191.apx)
+Skipping page 2192: file already exists (p02192-departments-2192.apx)
+Skipping page 2193: file already exists (p02193-departments-2193.apx)
+Skipping page 2194: file already exists (p02194-departments-2194.apx)
+Skipping page 2195: file already exists (p02195-departments-2195.apx)
+Skipping page 2196: file already exists (p02196-departments-2196.apx)
+Skipping page 2197: file already exists (p02197-departments-2197.apx)
+Skipping page 2198: file already exists (p02198-departments-2198.apx)
+Skipping page 2199: file already exists (p02199-departments-2199.apx)
+Skipping page 2200: file already exists (p02200-departments-2200.apx)
+Created demo1\pages\p02201-departments-2201.apx
+Created demo1\pages\p02202-departments-2202.apx
+Created demo1\pages\p02203-departments-2203.apx
+Created demo1\pages\p02204-departments-2204.apx
+Created demo1\pages\p02205-departments-2205.apx
+Created demo1\pages\p02206-departments-2206.apx
+Created demo1\pages\p02207-departments-2207.apx
+Created demo1\pages\p02208-departments-2208.apx
+Created demo1\pages\p02209-departments-2209.apx
+Created demo1\pages\p02210-departments-2210.apx
+Created demo1\pages\p02211-departments-2211.apx
+Created demo1\pages\p02212-departments-2212.apx
+Created demo1\pages\p02213-departments-2213.apx
+Created demo1\pages\p02214-departments-2214.apx
+Created demo1\pages\p02215-departments-2215.apx
+Created demo1\pages\p02216-departments-2216.apx
+Created demo1\pages\p02217-departments-2217.apx
+Created demo1\pages\p02218-departments-2218.apx
+Created demo1\pages\p02219-departments-2219.apx
+Created demo1\pages\p02220-departments-2220.apx
+Created demo1\pages\p02221-departments-2221.apx
+Created demo1\pages\p02222-departments-2222.apx
+Created demo1\pages\p02223-departments-2223.apx
+Created demo1\pages\p02224-departments-2224.apx
+Created demo1\pages\p02225-departments-2225.apx
+Created demo1\pages\p02226-departments-2226.apx
+Created demo1\pages\p02227-departments-2227.apx
+Created demo1\pages\p02228-departments-2228.apx
+Created demo1\pages\p02229-departments-2229.apx
+Created demo1\pages\p02230-departments-2230.apx
+Created demo1\pages\p02231-departments-2231.apx
+Created demo1\pages\p02232-departments-2232.apx
+Created demo1\pages\p02233-departments-2233.apx
+Created demo1\pages\p02234-departments-2234.apx
+Created demo1\pages\p02235-departments-2235.apx
+Created demo1\pages\p02236-departments-2236.apx
+Created demo1\pages\p02237-departments-2237.apx
+Created demo1\pages\p02238-departments-2238.apx
+Created demo1\pages\p02239-departments-2239.apx
+Created demo1\pages\p02240-departments-2240.apx
+Created demo1\pages\p02241-departments-2241.apx
+Created demo1\pages\p02242-departments-2242.apx
+Created demo1\pages\p02243-departments-2243.apx
+Created demo1\pages\p02244-departments-2244.apx
+Created demo1\pages\p02245-departments-2245.apx
+Created demo1\pages\p02246-departments-2246.apx
+Created demo1\pages\p02247-departments-2247.apx
+Created demo1\pages\p02248-departments-2248.apx
+Created demo1\pages\p02249-departments-2249.apx
+Created demo1\pages\p02250-departments-2250.apx
+Created demo1\pages\p02251-departments-2251.apx
+Created demo1\pages\p02252-departments-2252.apx
+Created demo1\pages\p02253-departments-2253.apx
+Created demo1\pages\p02254-departments-2254.apx
+Created demo1\pages\p02255-departments-2255.apx
+Created demo1\pages\p02256-departments-2256.apx
+Created demo1\pages\p02257-departments-2257.apx
+Created demo1\pages\p02258-departments-2258.apx
+Created demo1\pages\p02259-departments-2259.apx
+Created demo1\pages\p02260-departments-2260.apx
+Created demo1\pages\p02261-departments-2261.apx
+Created demo1\pages\p02262-departments-2262.apx
+Created demo1\pages\p02263-departments-2263.apx
+Created demo1\pages\p02264-departments-2264.apx
+Created demo1\pages\p02265-departments-2265.apx
+Created demo1\pages\p02266-departments-2266.apx
+Created demo1\pages\p02267-departments-2267.apx
+Created demo1\pages\p02268-departments-2268.apx
+Created demo1\pages\p02269-departments-2269.apx
+Created demo1\pages\p02270-departments-2270.apx
+Created demo1\pages\p02271-departments-2271.apx
+Created demo1\pages\p02272-departments-2272.apx
+Created demo1\pages\p02273-departments-2273.apx
+Created demo1\pages\p02274-departments-2274.apx
+Created demo1\pages\p02275-departments-2275.apx
+Created demo1\pages\p02276-departments-2276.apx
+Created demo1\pages\p02277-departments-2277.apx
+Created demo1\pages\p02278-departments-2278.apx
+Created demo1\pages\p02279-departments-2279.apx
+Created demo1\pages\p02280-departments-2280.apx
+Created demo1\pages\p02281-departments-2281.apx
+Created demo1\pages\p02282-departments-2282.apx
+Created demo1\pages\p02283-departments-2283.apx
+Created demo1\pages\p02284-departments-2284.apx
+Created demo1\pages\p02285-departments-2285.apx
+Created demo1\pages\p02286-departments-2286.apx
+Created demo1\pages\p02287-departments-2287.apx
+Created demo1\pages\p02288-departments-2288.apx
+Created demo1\pages\p02289-departments-2289.apx
+Created demo1\pages\p02290-departments-2290.apx
+Created demo1\pages\p02291-departments-2291.apx
+Created demo1\pages\p02292-departments-2292.apx
+Created demo1\pages\p02293-departments-2293.apx
+Created demo1\pages\p02294-departments-2294.apx
+Created demo1\pages\p02295-departments-2295.apx
+Created demo1\pages\p02296-departments-2296.apx
+Created demo1\pages\p02297-departments-2297.apx
+Created demo1\pages\p02298-departments-2298.apx
+Created demo1\pages\p02299-departments-2299.apx
+Created demo1\pages\p02300-departments-2300.apx
+Done. Created 100 page(s) from page 6.
+
+### STEP: warm-up APEXLANG import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 21.000 seconds
+
+1 row selected. 
+
+### STEP: export SQL file ###
+Exporting Workspace DEMO1 - application 106:EMP & DEPT Mini Hub
+File src\database\apex_apps\f106\f106.sql created
+
+### STEP: warm-up SQL import ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_02201
+--application/pages/page_02202
+--application/pages/page_02203
+--application/pages/page_02204
+--application/pages/page_02205
+--application/pages/page_02206
+--application/pages/page_02207
+--application/pages/page_02208
+--application/pages/page_02209
+--application/pages/page_02210
+--application/pages/page_02211
+--application/pages/page_02212
+--application/pages/page_02213
+--application/pages/page_02214
+--application/pages/page_02215
+--application/pages/page_02216
+--application/pages/page_02217
+--application/pages/page_02218
+--application/pages/page_02219
+--application/pages/page_02220
+--application/pages/page_02221
+--application/pages/page_02222
+--application/pages/page_02223
+--application/pages/page_02224
+--application/pages/page_02225
+--application/pages/page_02226
+--application/pages/page_02227
+--application/pages/page_02228
+--application/pages/page_02229
+--application/pages/page_02230
+--application/pages/page_02231
+--application/pages/page_02232
+--application/pages/page_02233
+--application/pages/page_02234
+--application/pages/page_02235
+--application/pages/page_02236
+--application/pages/page_02237
+--application/pages/page_02238
+--application/pages/page_02239
+--application/pages/page_02240
+--application/pages/page_02241
+--application/pages/page_02242
+--application/pages/page_02243
+--application/pages/page_02244
+--application/pages/page_02245
+--application/pages/page_02246
+--application/pages/page_02247
+--application/pages/page_02248
+--application/pages/page_02249
+--application/pages/page_02250
+--application/pages/page_02251
+--application/pages/page_02252
+--application/pages/page_02253
+--application/pages/page_02254
+--application/pages/page_02255
+--application/pages/page_02256
+--application/pages/page_02257
+--application/pages/page_02258
+--application/pages/page_02259
+--application/pages/page_02260
+--application/pages/page_02261
+--application/pages/page_02262
+--application/pages/page_02263
+--application/pages/page_02264
+--application/pages/page_02265
+--application/pages/page_02266
+--application/pages/page_02267
+--application/pages/page_02268
+--application/pages/page_02269
+--application/pages/page_02270
+--application/pages/page_02271
+--application/pages/page_02272
+--application/pages/page_02273
+--application/pages/page_02274
+--application/pages/page_02275
+--application/pages/page_02276
+--application/pages/page_02277
+--application/pages/page_02278
+--application/pages/page_02279
+--application/pages/page_02280
+--application/pages/page_02281
+--application/pages/page_02282
+--application/pages/page_02283
+--application/pages/page_02284
+--application/pages/page_02285
+--application/pages/page_02286
+--application/pages/page_02287
+--application/pages/page_02288
+--application/pages/page_02289
+--application/pages/page_02290
+--application/pages/page_02291
+--application/pages/page_02292
+--application/pages/page_02293
+--application/pages/page_02294
+--application/pages/page_02295
+--application/pages/page_02296
+--application/pages/page_02297
+--application/pages/page_02298
+--application/pages/page_02299
+--application/pages/page_02300
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 12.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 1 (APEXLANG, then SQL) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 12.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_02201
+--application/pages/page_02202
+--application/pages/page_02203
+--application/pages/page_02204
+--application/pages/page_02205
+--application/pages/page_02206
+--application/pages/page_02207
+--application/pages/page_02208
+--application/pages/page_02209
+--application/pages/page_02210
+--application/pages/page_02211
+--application/pages/page_02212
+--application/pages/page_02213
+--application/pages/page_02214
+--application/pages/page_02215
+--application/pages/page_02216
+--application/pages/page_02217
+--application/pages/page_02218
+--application/pages/page_02219
+--application/pages/page_02220
+--application/pages/page_02221
+--application/pages/page_02222
+--application/pages/page_02223
+--application/pages/page_02224
+--application/pages/page_02225
+--application/pages/page_02226
+--application/pages/page_02227
+--application/pages/page_02228
+--application/pages/page_02229
+--application/pages/page_02230
+--application/pages/page_02231
+--application/pages/page_02232
+--application/pages/page_02233
+--application/pages/page_02234
+--application/pages/page_02235
+--application/pages/page_02236
+--application/pages/page_02237
+--application/pages/page_02238
+--application/pages/page_02239
+--application/pages/page_02240
+--application/pages/page_02241
+--application/pages/page_02242
+--application/pages/page_02243
+--application/pages/page_02244
+--application/pages/page_02245
+--application/pages/page_02246
+--application/pages/page_02247
+--application/pages/page_02248
+--application/pages/page_02249
+--application/pages/page_02250
+--application/pages/page_02251
+--application/pages/page_02252
+--application/pages/page_02253
+--application/pages/page_02254
+--application/pages/page_02255
+--application/pages/page_02256
+--application/pages/page_02257
+--application/pages/page_02258
+--application/pages/page_02259
+--application/pages/page_02260
+--application/pages/page_02261
+--application/pages/page_02262
+--application/pages/page_02263
+--application/pages/page_02264
+--application/pages/page_02265
+--application/pages/page_02266
+--application/pages/page_02267
+--application/pages/page_02268
+--application/pages/page_02269
+--application/pages/page_02270
+--application/pages/page_02271
+--application/pages/page_02272
+--application/pages/page_02273
+--application/pages/page_02274
+--application/pages/page_02275
+--application/pages/page_02276
+--application/pages/page_02277
+--application/pages/page_02278
+--application/pages/page_02279
+--application/pages/page_02280
+--application/pages/page_02281
+--application/pages/page_02282
+--application/pages/page_02283
+--application/pages/page_02284
+--application/pages/page_02285
+--application/pages/page_02286
+--application/pages/page_02287
+--application/pages/page_02288
+--application/pages/page_02289
+--application/pages/page_02290
+--application/pages/page_02291
+--application/pages/page_02292
+--application/pages/page_02293
+--application/pages/page_02294
+--application/pages/page_02295
+--application/pages/page_02296
+--application/pages/page_02297
+--application/pages/page_02298
+--application/pages/page_02299
+--application/pages/page_02300
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 9.000 seconds
+
+1 row selected. 
+
+### STEP: measured set 2 (SQL, then APEXLANG - reversed order) ###
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Running SQL script src/database/apex_apps/f106/f106 ...
+--application/set_environment
+APPLICATION 106 - EMP & DEPT Mini Hub
+--application/delete_application
+--application/create_application
+--application/plugin_settings
+--application/shared_components/navigation/lists/access_control
+--application/shared_components/navigation/lists/navigation_bar
+--application/shared_components/navigation/lists/navigation_menu
+--application/shared_components/navigation/lists/page_navigation
+--application/shared_components/navigation/listentry
+--application/shared_components/files/icons_app_icon_144_rounded_png
+--application/shared_components/files/icons_app_icon_192_png
+--application/shared_components/files/icons_app_icon_256_rounded_png
+--application/shared_components/files/icons_app_icon_32_png
+--application/shared_components/files/icons_app_icon_512_png
+--application/shared_components/security/authorizations/administration_rights
+--application/shared_components/security/authorizations/contribution_rights
+--application/shared_components/security/authorizations/reader_rights
+--application/shared_components/security/app_access_control/administrator
+--application/shared_components/security/app_access_control/contributor
+--application/shared_components/security/app_access_control/reader
+--application/shared_components/navigation/navigation_bar
+--application/shared_components/logic/application_settings
+--application/shared_components/navigation/tabs/standard
+--application/shared_components/navigation/tabs/parent
+--application/shared_components/user_interface/lovs/access_roles
+--application/shared_components/user_interface/lovs/dept_dname
+--application/shared_components/user_interface/lovs/dept_lov
+--application/shared_components/user_interface/lovs/email_username_format
+--application/shared_components/user_interface/lovs/job_lov
+--application/pages/page_groups
+--application/shared_components/navigation/breadcrumbs/breadcrumb
+--application/shared_components/navigation/breadcrumbentry
+--application/shared_components/user_interface/themes
+--application/shared_components/user_interface/theme_style
+--application/shared_components/user_interface/theme_files
+--application/shared_components/user_interface/template_opt_groups
+--application/shared_components/user_interface/template_options
+--application/shared_components/globalization/language
+--application/shared_components/logic/build_options
+--application/shared_components/globalization/messages
+--application/shared_components/globalization/dyntranslations
+--application/shared_components/security/authentications/oracle_apex_accounts
+--application/user_interfaces/combined_files
+--application/pages/page_00000
+--application/pages/page_00001
+--application/pages/page_00002
+--application/pages/page_00003
+--application/pages/page_00006
+--application/pages/page_00007
+--application/pages/page_00100
+--application/pages/page_02001
+--application/pages/page_02002
+--application/pages/page_02003
+--application/pages/page_02004
+--application/pages/page_02005
+--application/pages/page_02006
+--application/pages/page_02007
+--application/pages/page_02008
+--application/pages/page_02009
+--application/pages/page_02010
+--application/pages/page_02011
+--application/pages/page_02012
+--application/pages/page_02013
+--application/pages/page_02014
+--application/pages/page_02015
+--application/pages/page_02016
+--application/pages/page_02017
+--application/pages/page_02018
+--application/pages/page_02019
+--application/pages/page_02020
+--application/pages/page_02021
+--application/pages/page_02022
+--application/pages/page_02023
+--application/pages/page_02024
+--application/pages/page_02025
+--application/pages/page_02026
+--application/pages/page_02027
+--application/pages/page_02028
+--application/pages/page_02029
+--application/pages/page_02030
+--application/pages/page_02031
+--application/pages/page_02032
+--application/pages/page_02033
+--application/pages/page_02034
+--application/pages/page_02035
+--application/pages/page_02036
+--application/pages/page_02037
+--application/pages/page_02038
+--application/pages/page_02039
+--application/pages/page_02040
+--application/pages/page_02041
+--application/pages/page_02042
+--application/pages/page_02043
+--application/pages/page_02044
+--application/pages/page_02045
+--application/pages/page_02046
+--application/pages/page_02047
+--application/pages/page_02048
+--application/pages/page_02049
+--application/pages/page_02050
+--application/pages/page_02051
+--application/pages/page_02052
+--application/pages/page_02053
+--application/pages/page_02054
+--application/pages/page_02055
+--application/pages/page_02056
+--application/pages/page_02057
+--application/pages/page_02058
+--application/pages/page_02059
+--application/pages/page_02060
+--application/pages/page_02061
+--application/pages/page_02062
+--application/pages/page_02063
+--application/pages/page_02064
+--application/pages/page_02065
+--application/pages/page_02066
+--application/pages/page_02067
+--application/pages/page_02068
+--application/pages/page_02069
+--application/pages/page_02070
+--application/pages/page_02071
+--application/pages/page_02072
+--application/pages/page_02073
+--application/pages/page_02074
+--application/pages/page_02075
+--application/pages/page_02076
+--application/pages/page_02077
+--application/pages/page_02078
+--application/pages/page_02079
+--application/pages/page_02080
+--application/pages/page_02081
+--application/pages/page_02082
+--application/pages/page_02083
+--application/pages/page_02084
+--application/pages/page_02085
+--application/pages/page_02086
+--application/pages/page_02087
+--application/pages/page_02088
+--application/pages/page_02089
+--application/pages/page_02090
+--application/pages/page_02091
+--application/pages/page_02092
+--application/pages/page_02093
+--application/pages/page_02094
+--application/pages/page_02095
+--application/pages/page_02096
+--application/pages/page_02097
+--application/pages/page_02098
+--application/pages/page_02099
+--application/pages/page_02100
+--application/pages/page_02101
+--application/pages/page_02102
+--application/pages/page_02103
+--application/pages/page_02104
+--application/pages/page_02105
+--application/pages/page_02106
+--application/pages/page_02107
+--application/pages/page_02108
+--application/pages/page_02109
+--application/pages/page_02110
+--application/pages/page_02111
+--application/pages/page_02112
+--application/pages/page_02113
+--application/pages/page_02114
+--application/pages/page_02115
+--application/pages/page_02116
+--application/pages/page_02117
+--application/pages/page_02118
+--application/pages/page_02119
+--application/pages/page_02120
+--application/pages/page_02121
+--application/pages/page_02122
+--application/pages/page_02123
+--application/pages/page_02124
+--application/pages/page_02125
+--application/pages/page_02126
+--application/pages/page_02127
+--application/pages/page_02128
+--application/pages/page_02129
+--application/pages/page_02130
+--application/pages/page_02131
+--application/pages/page_02132
+--application/pages/page_02133
+--application/pages/page_02134
+--application/pages/page_02135
+--application/pages/page_02136
+--application/pages/page_02137
+--application/pages/page_02138
+--application/pages/page_02139
+--application/pages/page_02140
+--application/pages/page_02141
+--application/pages/page_02142
+--application/pages/page_02143
+--application/pages/page_02144
+--application/pages/page_02145
+--application/pages/page_02146
+--application/pages/page_02147
+--application/pages/page_02148
+--application/pages/page_02149
+--application/pages/page_02150
+--application/pages/page_02151
+--application/pages/page_02152
+--application/pages/page_02153
+--application/pages/page_02154
+--application/pages/page_02155
+--application/pages/page_02156
+--application/pages/page_02157
+--application/pages/page_02158
+--application/pages/page_02159
+--application/pages/page_02160
+--application/pages/page_02161
+--application/pages/page_02162
+--application/pages/page_02163
+--application/pages/page_02164
+--application/pages/page_02165
+--application/pages/page_02166
+--application/pages/page_02167
+--application/pages/page_02168
+--application/pages/page_02169
+--application/pages/page_02170
+--application/pages/page_02171
+--application/pages/page_02172
+--application/pages/page_02173
+--application/pages/page_02174
+--application/pages/page_02175
+--application/pages/page_02176
+--application/pages/page_02177
+--application/pages/page_02178
+--application/pages/page_02179
+--application/pages/page_02180
+--application/pages/page_02181
+--application/pages/page_02182
+--application/pages/page_02183
+--application/pages/page_02184
+--application/pages/page_02185
+--application/pages/page_02186
+--application/pages/page_02187
+--application/pages/page_02188
+--application/pages/page_02189
+--application/pages/page_02190
+--application/pages/page_02191
+--application/pages/page_02192
+--application/pages/page_02193
+--application/pages/page_02194
+--application/pages/page_02195
+--application/pages/page_02196
+--application/pages/page_02197
+--application/pages/page_02198
+--application/pages/page_02199
+--application/pages/page_02200
+--application/pages/page_02201
+--application/pages/page_02202
+--application/pages/page_02203
+--application/pages/page_02204
+--application/pages/page_02205
+--application/pages/page_02206
+--application/pages/page_02207
+--application/pages/page_02208
+--application/pages/page_02209
+--application/pages/page_02210
+--application/pages/page_02211
+--application/pages/page_02212
+--application/pages/page_02213
+--application/pages/page_02214
+--application/pages/page_02215
+--application/pages/page_02216
+--application/pages/page_02217
+--application/pages/page_02218
+--application/pages/page_02219
+--application/pages/page_02220
+--application/pages/page_02221
+--application/pages/page_02222
+--application/pages/page_02223
+--application/pages/page_02224
+--application/pages/page_02225
+--application/pages/page_02226
+--application/pages/page_02227
+--application/pages/page_02228
+--application/pages/page_02229
+--application/pages/page_02230
+--application/pages/page_02231
+--application/pages/page_02232
+--application/pages/page_02233
+--application/pages/page_02234
+--application/pages/page_02235
+--application/pages/page_02236
+--application/pages/page_02237
+--application/pages/page_02238
+--application/pages/page_02239
+--application/pages/page_02240
+--application/pages/page_02241
+--application/pages/page_02242
+--application/pages/page_02243
+--application/pages/page_02244
+--application/pages/page_02245
+--application/pages/page_02246
+--application/pages/page_02247
+--application/pages/page_02248
+--application/pages/page_02249
+--application/pages/page_02250
+--application/pages/page_02251
+--application/pages/page_02252
+--application/pages/page_02253
+--application/pages/page_02254
+--application/pages/page_02255
+--application/pages/page_02256
+--application/pages/page_02257
+--application/pages/page_02258
+--application/pages/page_02259
+--application/pages/page_02260
+--application/pages/page_02261
+--application/pages/page_02262
+--application/pages/page_02263
+--application/pages/page_02264
+--application/pages/page_02265
+--application/pages/page_02266
+--application/pages/page_02267
+--application/pages/page_02268
+--application/pages/page_02269
+--application/pages/page_02270
+--application/pages/page_02271
+--application/pages/page_02272
+--application/pages/page_02273
+--application/pages/page_02274
+--application/pages/page_02275
+--application/pages/page_02276
+--application/pages/page_02277
+--application/pages/page_02278
+--application/pages/page_02279
+--application/pages/page_02280
+--application/pages/page_02281
+--application/pages/page_02282
+--application/pages/page_02283
+--application/pages/page_02284
+--application/pages/page_02285
+--application/pages/page_02286
+--application/pages/page_02287
+--application/pages/page_02288
+--application/pages/page_02289
+--application/pages/page_02290
+--application/pages/page_02291
+--application/pages/page_02292
+--application/pages/page_02293
+--application/pages/page_02294
+--application/pages/page_02295
+--application/pages/page_02296
+--application/pages/page_02297
+--application/pages/page_02298
+--application/pages/page_02299
+--application/pages/page_02300
+--application/pages/page_09999
+--application/pages/page_10000
+--application/pages/page_10010
+--application/pages/page_10011
+--application/pages/page_10012
+--application/pages/page_10013
+--application/pages/page_10014
+--application/deployment/definition
+--application/deployment/checks
+--application/deployment/buildoptions
+--application/end_environment
+...done
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 8.000 seconds
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+
+
+
+1 row selected. 
+
+Importing APEXlang application from src/database/demo1/apex_apps/f106/demo1 ...
+Importing application ID: 106 into workspace: DEMO1
+Import successful.
+
+
+ELAPSED_TIME
+------------------------------------
+Elapsed time: 11.000 seconds
+
+1 row selected. 
+
+
+All cycles complete (baseline, +10, +50, +100, +200, +300). Review the log above.
+Disconnected from Oracle AI Database 26ai Free Release 23.26.1.0.0 - Develop, Learn, and Run for Free
+Version 23.26.1.0.0

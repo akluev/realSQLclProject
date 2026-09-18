@@ -11,6 +11,7 @@
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
 - [14. SQLcl Project with APEXlang: First Impressions](14.-SQLcl-Project-with-APEXlang-First-Impressions.md)
 - [15. Native Boolean Columns in Oracle APEX 26.1 and APEXlang](APEXlang/15.-Native-Boolean-Columns-in-Oracle-APEX-26.1-and-APEXlang.md)
+- [17. APEXlang or SQL for APEX Deployment?](APEXlang/17.-APEXlang-vs-SQL-Deployment-Performance.md)
 
 ### VM Configuration
 
