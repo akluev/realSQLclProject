@@ -4,3 +4,9 @@ tmp/
 *.tar.gz
 *.rar
 *.7z
+
+# Playwright MCP output (screenshots, traces, snapshots)
+.playwright-mcp/
+
+# Local-only Claude Code MCP config (contains machine-specific paths)
+.mcp.json

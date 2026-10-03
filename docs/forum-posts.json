@@ -1,0 +1,240 @@
+{
+  "source": "https://forums.oracle.com/ords/apexds/domain/dev-community/category/sqlcl?filter=mine",
+  "author": "ak-47",
+  "lastRun": "2026-10-03",
+  "trackingSince": "2026-06-01",
+  "categories": {
+    "confirmed-bug": "An -Oracle user confirmed it (bug filed, logged, or being worked on)",
+    "fixed": "Confirmed and fixed in a released version",
+    "unconfirmed": "Reported problem with no -Oracle confirmation yet",
+    "by-design": "An -Oracle user says current behavior is intended",
+    "enhancement": "Enhancement request",
+    "question": "Question answered by Oracle",
+    "discussion": "Discussion or opinion post",
+    "blog": "Post that summarizes a blog article"
+  },
+  "posts": [
+    {
+      "id": "9108",
+      "url": "https://forums.oracle.com/ords/apexds/post/which-deployment-is-faster-sql-or-apexlang-9108",
+      "title": "Which deployment is faster: SQL or APEXlang?",
+      "started": "2026-09-21",
+      "comments": 0,
+      "category": "blog",
+      "oracle": null,
+      "doc": null
+    },
+    {
+      "id": "9777",
+      "url": "https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777",
+      "title": "BUG: SQLcl 26.2.2 project export APEXLang structure is inconsistent with documentation, apex export, and version 26.1",
+      "started": "2026-09-02",
+      "comments": 5,
+      "category": "confirmed-bug",
+      "oracle": { "by": "Neil Fernandez-Oracle", "date": "2026-09-04", "quote": "We have identified two regressions and are working on both", "bug": null },
+      "doc": "10.1"
+    },
+    {
+      "id": "0194",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-synonyms-are-not-exported-with-o-switch-0194",
+      "title": "SQLcl project: synonyms are not exported with -o switch.",
+      "started": "2026-08-20",
+      "comments": 1,
+      "category": "confirmed-bug",
+      "oracle": { "by": "Oussama Assouar-Oracle", "date": "2026-08-27", "quote": "Bug confirmed and filed.", "bug": null },
+      "doc": "10.1"
+    },
+    {
+      "id": "5571",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571",
+      "title": "SQLcl project export lowercases APEXlang file and folder names",
+      "started": "2026-07-17",
+      "comments": 1,
+      "category": "unconfirmed",
+      "oracle": null,
+      "doc": "10.1"
+    },
+    {
+      "id": "2004",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-26-2-fixed-two-big-issues-why-i-m-still-stayi-2004",
+      "title": "SQLcl Project 26.2 Fixed Two Big Issues—Why I’m Still Staying on 26.1",
+      "started": "2026-07-14",
+      "comments": 6,
+      "category": "discussion",
+      "oracle": { "by": "thatJeffSmith-Oracle", "date": "2026-07-14", "quote": "project export still corrupts APEX static files. This has been fixed, and we're targeting a 26.2.1 with that solution included.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "9778",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
+      "title": "SQLcl Project ORDS export should use configured project schemas, not the installer schema",
+      "started": "2026-07-06",
+      "comments": 2,
+      "category": "confirmed-bug",
+      "oracle": { "by": "Oussama Assouar-Oracle", "date": "2026-09-01", "quote": "The dev team is aware of this issue and are currently working on it.", "bug": null },
+      "doc": "10.1"
+    },
+    {
+      "id": "9749",
+      "url": "https://forums.oracle.com/ords/apexds/post/export-to-apexlang-ignores-p-with-supporting-objects-and-al-9749",
+      "title": "PROJECT STAGE Fails when Analyzing Supporting-Object",
+      "started": "2026-07-02",
+      "comments": 6,
+      "category": "fixed",
+      "oracle": null,
+      "note": "Fixed in SQLcl 26.2; fix verified by the author.",
+      "doc": "10.1"
+    },
+    {
+      "id": "7607",
+      "url": "https://forums.oracle.com/ords/apexds/post/make-apexlang-export-validate-and-import-path-behavior-symm-7607",
+      "title": "Make APEXlang export, validate, and import path behavior symmetric",
+      "started": "2026-06-05",
+      "comments": 1,
+      "category": "enhancement",
+      "oracle": null,
+      "doc": "10.2"
+    },
+    {
+      "id": "6627",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-should-remove-stale-apex-alias-folders-6627",
+      "title": "SQLcl Project export should remove stale APEX alias folders when the application alias changes",
+      "started": "2026-06-05",
+      "comments": 3,
+      "category": "by-design",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2026-06-05", "quote": "The current behavior is consistent with changing the name of a table, or a package.", "bug": null },
+      "doc": "10.1"
+    },
+    {
+      "id": "2681",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-skills-sync-should-support-repository-local-installs-2681",
+      "title": "SQLcl skills sync should support repository-local installs and granular subskill sync",
+      "started": "2026-06-05",
+      "comments": 0,
+      "category": "enhancement",
+      "oracle": null,
+      "doc": "10.2"
+    },
+    {
+      "id": "5766",
+      "url": "https://forums.oracle.com/ords/apexds/post/apexlang-import-fails-via-sqlcl-mcp-with-error-ora-17274-co-5766",
+      "title": "APEXLang IMPORT fails via SQLcl MCP with error: ORA-17274: Could not rollback with auto-commit enabled.",
+      "started": "2026-06-02",
+      "comments": 2,
+      "category": "confirmed-bug",
+      "oracle": { "by": "Walid Sabhi-Oracle", "date": "2026-06-05", "quote": "I have reproduced it, logged a bug and we will work on it.", "bug": "39492825" },
+      "doc": "10.1"
+    },
+    {
+      "id": "4562",
+      "url": "https://forums.oracle.com/ords/apexds/post/will-sqlcl-project-support-26ai-db-assertions-anytime-soon-4562",
+      "title": "Will SQLcl Project Support 26ai DB Assertions Anytime Soon?",
+      "started": "2026-03-18",
+      "comments": 2,
+      "category": "question",
+      "oracle": { "by": "thatJeffSmith-Oracle", "date": "2026-03-18", "quote": "Not on super immediate timeline, but in general, yes.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "1214",
+      "url": "https://forums.oracle.com/ords/apexds/post/cannot-run-sql-project-command-via-sqlcl-mcp-configuration-1214",
+      "title": "Cannot Run SQL Project Command via SQLcl MCP ; Configuration files not found",
+      "started": "2026-02-19",
+      "comments": 9,
+      "category": "confirmed-bug",
+      "oracle": { "by": "heraoui-Oracle", "date": "2026-02-21", "quote": "I'll put this issue in my list for the next week. I'll keep you updated once it's fixed.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "3997",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-25-4-1-project-windows-apex-changesets-redeployed-eve-3997",
+      "title": "SQLcl 25.4.1 Project (Windows) – APEX changesets redeployed every time due to path separator change from / to \\",
+      "started": "2026-02-11",
+      "comments": 7,
+      "category": "fixed",
+      "oracle": { "by": "Omar Bakhir-Oracle", "date": "2026-03-30", "quote": "The issue described above has been fixed, and the fix will be available in SQLcl version 26.2.0.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "1758",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-upgrade-to-sqlcl-26-1-export-change-causes-ma-1758",
+      "title": "SQLcl Project: Upgrade to SQLcl 26.1 export change causes massive diff churn (identity columns)",
+      "started": "2026-04-07",
+      "comments": 4,
+      "category": "by-design",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2026-04-08", "quote": "Without these attributes exporting to src, developers ended up with defaults in target envs.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "1644",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-extra-semicolon-added-by-project-export-when-1644",
+      "title": "SQLcl Project: Extra Semicolon Added by project export When View Ends With Line Comment",
+      "started": "2025-12-01",
+      "comments": 4,
+      "category": "fixed",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2026-01-08", "quote": "This bug should be addressed in the 25.4.0 release.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "1668",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-project-export-collapses-leading-comment-line-1668",
+      "title": "SQLcl Project: project export Collapses Leading Comment Lines After \"AS\" AND SPACE in Package Specs/Bodies",
+      "started": "2025-12-01",
+      "comments": 1,
+      "category": "confirmed-bug",
+      "oracle": { "by": "Essiba Alyae-Oracle", "date": "2025-12-08", "quote": "I've logged a bug for this issue.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "1990",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-stage-command-always-regenerates-ords-changes-1990",
+      "title": "SQLcl Project: STAGE Command Always Regenerates ORDS Changesets Even When ORDS Metadata Has Not Changed",
+      "started": "2025-11-21",
+      "comments": 7,
+      "category": "confirmed-bug",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2026-01-29", "quote": "I've reopened bug 38688471.", "bug": "38688471" },
+      "doc": null
+    },
+    {
+      "id": "8780",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-please-split-ddl-statements-in-a-file-into-lo-8780",
+      "title": "SQLcl Project: Please Split DDL Statements in a File Into Logical Changesets",
+      "started": "2025-11-20",
+      "comments": 4,
+      "category": "confirmed-bug",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2025-11-21", "quote": "I've logged a bug internally.", "bug": null },
+      "note": "skutz-Oracle (2026-07-13) answered that the stage.change.changestyle setting controls this behavior.",
+      "doc": null
+    },
+    {
+      "id": "9591",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-system-role-privileges-overwritten-when-expor-9591",
+      "title": "SQLcl Project: System/Role Privileges Overwritten When Exporting Grants Schema-by-Schema",
+      "started": "2025-11-20",
+      "comments": 1,
+      "category": "confirmed-bug",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2025-11-21", "quote": "I've logged a bug internally.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "7170",
+      "url": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-fails-to-stage-changes-when-working-inside-a-7170",
+      "title": "SQLcl Project fails to stage changes when working inside a Git worktree",
+      "started": "2025-11-13",
+      "comments": 7,
+      "category": "fixed",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2026-02-26", "quote": "Support for worktrees should land in 26.1, whenever that's released.", "bug": null },
+      "doc": null
+    },
+    {
+      "id": "8109",
+      "url": "https://forums.oracle.com/ords/apexds/post/unable-to-export-system-role-grants-for-app-schemas-when-co-8109",
+      "title": "Unable to export system/role grants for app schemas when connected as an admin user",
+      "started": "2025-11-05",
+      "comments": 1,
+      "category": "confirmed-bug",
+      "oracle": { "by": "danmcghan-Oracle", "date": "2025-11-05", "quote": "I've logged a bug internally.", "bug": null },
+      "doc": null
+    }
+  ]
+}
