@@ -88,6 +88,27 @@ CHECK (
 
 Creating an `ENABLE VALIDATE` assertion fails with `ORA-08689` followed by `ORA-08601` if existing data violates the expression.
 
+Do not join two top-level predicates with `AND` or `OR`, such as `EXISTS (...) AND NOT EXISTS (...)`. Oracle rejects that with `ORA-08689` followed by `ORA-08680` ("Consider splitting the SQL assertion definition"). Either create two assertions, or nest the second predicate inside the first. "Exactly one president" becomes one outer `EXISTS`, with `NOT EXISTS` inside it for another president:
+
+```sql
+CREATE ASSERTION company_president
+CHECK (
+    EXISTS (
+        SELECT 'the only president'
+          FROM emp p
+         WHERE p.job = 'PRESIDENT'
+           AND p.job IS NOT NULL
+           AND NOT EXISTS (
+                   SELECT 'another president'
+                     FROM emp o
+                    WHERE o.job = p.job
+                      AND o.job IS NOT NULL
+                      AND o.empno <> p.empno
+               )
+    )
+);
+```
+
 ### Universal Form
 
 Use `ALL ... SATISFY` when every row in a row set must satisfy a condition. The predicate is true when every row satisfies the condition or when the `ALL` query returns no rows. An unknown result is treated as true, as with constraints. Nested `[NOT] EXISTS` inside a universal expression is limited to two levels.
@@ -238,6 +259,7 @@ SQLcl `FORMAT` in 26.1.2 skips files containing `ALL ... SATISFY` or the `DEFINI
 | `ORA-08689` | `CREATE ASSERTION` failed; the next error line gives the reason |
 | `ORA-08677` | Unsupported SQL function, for example `SYSDATE` (follows `ORA-08689`) |
 | `ORA-08673` | An equijoin does not meet the criteria for fast validation, typically a nullable join column without `IS NOT NULL` (follows `ORA-08689`) |
+| `ORA-08680` | Consider splitting the SQL assertion definition: two top-level predicates joined with `AND`/`OR`; split the assertion or nest one predicate inside the other (follows `ORA-08689`) |
 | `ORA-08712` | Query block nesting limit exceeded (follows `ORA-08689`) |
 | `ORA-08726` | Number of columns per table limit exceeded, maximum 32 (follows `ORA-08689`) |
 | `ORA-08727` | Assertion definition is too large (maximum 4096 bytes) |

@@ -153,17 +153,18 @@ All scripts live in this skill's `scripts/` directory (`<skill-dir>/scripts`, th
 
 1. Verify the version, connection, and scope, and choose the dictionary view (sections above).
 2. Run the **metadata query** for the requested scope through MCP `sql_run` (see **Discover assertions**). Do not select `DEFINITION_SQL` here.
-3. Prepare each schema once:
+3. Prepare each schema before its first row:
    - "export all assertions" for a schema: `bash "<skill-dir>/scripts/export-assertion.sh" --prepare <OWNER> --clean`. This empties that schema's `assertions` directory, and nothing else.
    - any other scope: `bash "<skill-dir>/scripts/export-assertion.sh" --prepare <OWNER>`.
    - For a named assertion that the metadata query did not return, delete only its destination file and report it as absent from the database.
 4. For **each row**, in order:
-   1. One MCP `sqlcl_run` call:
+   1. For every row after the schema's first, run `bash "<skill-dir>/scripts/export-assertion.sh" --prepare <OWNER>` again, never with `--clean`. Each successful export removes the empty `assertions/tmp/` directory, and without it the next spool fails with `SP2-0556: Invalid file name`. `--clean` here would delete the files already exported in this run.
+   2. One MCP `sqlcl_run` call:
       ```text
       @<absolute skill-dir>/scripts/spool-assertion.sql <USER|DBA> <OWNER> <ASSERTION_NAME> <absolute project root>
       ```
       `USER` or `DBA` follows the dictionary-view choice. For `USER`, `<OWNER>` is the session user.
-   2. One shell call, with the values from the metadata row:
+   3. One shell call, with the values from the metadata row:
       ```bash
       bash "<skill-dir>/scripts/export-assertion.sh" <OWNER> <ASSERTION_NAME> <STATUS> "<DEFERRABLE>" <DEFERRED> "<VALIDATED>"
       ```
