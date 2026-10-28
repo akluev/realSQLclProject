@@ -169,5 +169,43 @@
     "prompt": "On a branch from the baseline, run `project config set -name apex.apexlang -value true`, export the application into an empty apex_apps folder, commit, run `project stage`, and read the <include> entries of dist/releases/apex/apex.changelog.xml.",
     "successCriteria": "apex.changelog.xml no longer includes f<app_id>/f<app_id>.xml once the APEXlang controller is added.",
     "script": "issues/010/test.sh"
+  },
+  {
+    "id": "011",
+    "kind": "bug",
+    "severity": "P1",
+    "title": "project export exports ORDS of the connected user instead of the project schemas",
+    "area": "export",
+    "active": true,
+    "introducedIn": "26.1.2",
+    "fixedIn": null,
+    "lastFailedIn": null,
+    "oracleStatus": "confirmed (Oussama Assouar-Oracle, Sep 1 2026)",
+    "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
+    "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs",
+    "articleUrl": null,
+    "workaround": "None with a deployer connection; export ORDS while connected as (or proxied to) the schema owner.",
+    "prompt": "The baseline REST-enables the project schema and defines module regression.dept (custom changeset). Restore src to the baseline, run `project export -debug` with the deployer connection, and search src/database/<schema> for the module name. The debug log shows `ORA-20012: Schema not REST enabled : <connected user>` from ords_export.export_schema() called without a schema.",
+    "successCriteria": "An exported .sql file under src/database/<schema>/ contains the ORDS module regression.dept.",
+    "script": "issues/011/test.sh"
+  },
+  {
+    "id": "012",
+    "kind": "bug",
+    "severity": "P2",
+    "title": "project stage regenerates ORDS changesets even when ORDS did not change",
+    "area": "stage",
+    "active": true,
+    "introducedIn": null,
+    "fixedIn": null,
+    "lastFailedIn": null,
+    "oracleStatus": "not reported on the forum",
+    "forumUrl": null,
+    "docRef": "docs/10.1-sqlcl_project_bugs.md#16-stage-command-always-regenerates-ords-changesets-even-when-ords_schema-export-type-is-disabled",
+    "articleUrl": null,
+    "workaround": "Discard the regenerated dist/releases/ords/<schema>/ords.sql before committing.",
+    "prompt": "Needs the ORDS export of the project schema in src (src/database/<schema>/ords/...), which `project export` with a deployer connection cannot produce while 011 is open. With such a baseline: on a branch, change one non-ORDS object (e.g. add a column to a REG_012_* table), export it, commit, run `project stage`, and check whether dist/releases/ords/<schema>/ords.sql (or any ORDS changeset) is written although no ORDS metadata changed. Repeat with ORDS_SCHEMA excluded in project.filters.",
+    "successCriteria": "project stage writes no ORDS files when ORDS metadata did not change.",
+    "script": null
   }
 ]

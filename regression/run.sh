@@ -27,9 +27,12 @@ repo() { git -C "$TEST_REPO" "$@"; }
 # 1. Pre-test state: base branch, then the repo's own reset (git + database)
 repo checkout -q "$BASE_BRANCH"
 echo "Resetting baseline: $RESET_CMD"
-if ! (cd "$TEST_REPO" && eval "$RESET_CMD") 2>&1 | tee "$RUN_DIR/reset.log" | sed 's/^/  | /'; then
+# stdin is an empty pipe: SQLcl crashes at startup (yet exits 0) when stdin is the
+# Windows NUL device, as it is for many agents and schedulers.
+if ! : | (cd "$TEST_REPO" && eval "$RESET_CMD") 2>&1 | tee "$RUN_DIR/reset.log" | sed 's/^/  | /'; then
   die "reset failed, see $RUN_DIR/reset.log"
 fi
+! grep -q 'Exception' "$RUN_DIR/reset.log" || die "reset threw a Java exception, see $RUN_DIR/reset.log"
 [[ $(repo rev-parse HEAD) == $(repo rev-parse "$BASELINE_TAG^{commit}") ]] \
   || die "reset did not put $BASE_BRANCH on $BASELINE_TAG"
 [[ -z $(repo status --porcelain) ]] || die "test repo not clean after reset"
@@ -137,7 +140,7 @@ jq -r '
    | ((.title | esc) as $t | (.url // .forumUrl // "") as $u
       | if $u != "" then "[\($t)](\($u))" else $t end) as $issue
    | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind
-   | "| \(.id) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \(.comment | esc) | \(.date) |")
+   | "| \(.id) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \(.comment | esc) | \(.date // "") |")
 ' "$OUT_DIR/results.json" >"$OUT_DIR/results.md"
 
 echo "Results: $OUT_DIR/results.md"
