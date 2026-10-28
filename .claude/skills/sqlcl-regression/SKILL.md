@@ -1,0 +1,118 @@
+---
+name: sqlcl-regression
+description: 'Run and maintain the SQLcl / SQLcl Project regression tests in regression/: test a SQLcl version (e.g. "run regression for 26.3"), interpret PASS/FAIL results, update the test catalogue (tests.json), add a regression test for a bug, change the test baseline, and generate regression reports. Use when asked to regression-test SQLcl, check whether a SQLcl bug is fixed or has come back, add a bug to the regression suite, or report regression results.'
+---
+
+# SQLcl Regression Testing
+
+The suite checks known SQLcl Project bugs and enhancement requests against any installed SQLcl version and produces a PASS/FAIL table. Everything lives in `regression/`:
+
+| Path | What it is |
+|---|---|
+| `tests.json` | The catalogue: one record per issue (a forum post with two problems is two records). |
+| `issues/<id>/test.sh` | Deterministic test script for an issue. |
+| `run.sh <version> [id ...]` | Resets the test project and database, runs the selected tests, writes `results/<full-version>/results.md` and `results.json`. |
+| `report.sh` | Builds the cross-version report `results/README.md`. |
+| `lib/common.sh` | Helpers shared by the runner and the tests. |
+| `config.example.sh` | Template for the local, gitignored `config.sh`. |
+
+Tests run against a separate **test project**: a SQLcl Project repository with an APEX application, installed into a local database. Its `rebuild` script (configured as `RESET_CMD`) puts both git and the database back to the `BASELINE_TAG` state.
+
+## First-time setup
+
+1. Requirements: bash (Git Bash on Windows), git, jq, one or more SQLcl installs, a local database you may drop and rebuild objects in, and a saved SQLcl connection (`conn -save`) with rights to rebuild the test schema and APEX workspace.
+2. Unpack or clone the test project, run its reset once by hand to check it works, and confirm it is clean on its base branch.
+3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN`, `RESET_CMD`, the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
+
+If `config.sh` is missing or a setting is wrong, the runner stops with a message naming it; fix it with the user rather than guessing paths.
+
+## Running a version
+
+1. Confirm the version label has a `SQLCL_HOME_*` entry. The runner checks `sql -V` matches.
+2. To publish results for a release, create a branch in this repo first: `git checkout -b sqlcl-<version>-testing`.
+3. Run `bash regression/run.sh <version>` (or with test ids to run a subset). One run takes a few minutes; the reset output is shown live. Run it in the background and wait for it to finish rather than polling.
+4. Run `bash regression/report.sh`.
+5. Interpret the results (next section), update `tests.json`, and show the user the table from `results/<version>/results.md`.
+6. Commit `results/<version>/results.md`, `results.json`, `results/README.md` and catalogue changes on the testing branch. The user merges and publishes; never push or merge yourself.
+
+`results/*/logs/` holds every SQLcl log of the run and is gitignored. In the test project, each run leaves a branch `regression/<version>-<timestamp>` with one evidence commit per test (and `...-<id>` branches for isolated tests); the next run of the same version replaces them.
+
+## Which tests run
+
+Only records with `"active": true`. For each one, the SQLcl version under test decides the expected result:
+
+| Condition | Expected | Why |
+|---|---|---|
+| version < `introducedIn` | not run (N/A) | The feature or bug did not exist yet; never test backwards. |
+| `fixedIn` set and version >= `fixedIn` | PASS | Fixed earlier; a FAIL is a regression. |
+| otherwise (`introducedIn` empty or reached, not fixed) | FAIL | Known open issue. |
+
+A fixed issue stays active and keeps being tested in every later version; that is what catches regressions. Set `"active": false` only when the user says an issue or the versions it applies to are no longer of interest.
+
+Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open), **REGRESSION** (fixed before, failing again), **NEWLY FIXED** (expected to fail, passed), **ERROR** (the test could not decide), **MANUAL** (no script; run the prompt by hand), **N/A**.
+
+## Interpreting results and updating the catalogue
+
+- **REGRESSION**: read `logs/<id>.log` and the SQLcl logs it names, confirm it is the product and not the environment, and report it prominently. Do not change `fixedIn`.
+- **NEWLY FIXED**: verify by reading the logs and, if useful, repeating the check by hand. Then propose `fixedIn: "<version>"` to the user; change it only after they agree.
+- **KNOWN ISSUE**: set `lastFailedIn` to the version.
+- **ERROR**: usually environment or setup (database down, ORA-00257, connection, baseline drift). Fix the cause or report it; do not record it as a product result.
+- **MANUAL**: follow the record's `prompt` in the test project with SQLcl, judge against `successCriteria`, and add the result to the run's `results.md` by hand with a comment saying it was manual.
+
+## Test records (`tests.json`)
+
+| Field | Meaning |
+|---|---|
+| `id` | Three-digit number, also the folder `issues/<id>/`. Never reuse a number. |
+| `kind` | `bug` or `enhancement`. |
+| `severity` | `P0` critical/blocker, `P1` high, `P2` medium, `P3` low (same scale as the docs). Reports sort by it. |
+| `title` | One line, the issue as a statement. |
+| `area` | `project`, `export`, `stage` or `apex`; tests run in this order. |
+| `active` | Whether to keep testing it. |
+| `introducedIn` / `fixedIn` / `lastFailedIn` | SQLcl versions, e.g. `26.2.2`; `null` when unknown or not yet. |
+| `oracleStatus` | Free text: not reported, reported, confirmed (who, when), fixed. |
+| `forumUrl`, `docRef`, `articleUrl` | Where the issue is described: forum post, section in `docs/`, blog post. |
+| `workaround` | How users get around it today (information only; tests never use it). |
+| `prompt` | How to test it, in words; enough for an agent to run it without the script. |
+| `successCriteria` | What PASS means, checkable from files, output or the database. |
+| `script` | `issues/<id>/test.sh`, or `null` for a prompt-only (MANUAL) test. |
+
+## Writing a new test
+
+1. Find the issue in `docs/` (bugs list, enhancements, articles) or the forum post. Reproduce it by hand in the test project first, on a scratch branch, with the SQLcl version that has it; note the exact command and output.
+2. Add the record to `tests.json` with the next free id, then `issues/<id>/test.sh`. Start the script with a comment saying what must hold, and `source "$(dirname "$0")/../../lib/common.sh"`.
+3. End with `pass "<comment>"`, `fail "<comment>"` or `error "<comment>"` (exit 0/1/2). The comment goes into the results table: say what was observed, with names and numbers.
+4. Rules:
+   - Use only documented SQLcl commands, as a user would. Never the user's personal aliases or scripts.
+   - SQLcl often exits 0 on failure: decide from files, query results or output text (`Validation successful`, `Import successful`, `Stage processing completed`).
+   - Pass paths to SQLcl through `native_path` (Git Bash paths are not Windows paths). SQLcl runs with the test project as its working directory, so repo-relative paths also work.
+   - Name database objects `REG_<id>_*`, and drop them in an `EXIT` trap. Restore files with `restore_from_baseline <path>`.
+   - Tests that commit or run `project stage` call `isolate_branch <id>` and `leave_branch` from the `EXIT` trap.
+   - To give export or stage a real application change, use `remove_page_in_apex` and restore with `restore_apex_app` in the trap.
+   - On Windows the file system ignores case: remove an export folder before exporting into it when names matter (`fresh_apex_export` does).
+   - Use `warn` for problems during cleanup; it adds to the comment without changing the verdict.
+5. Run the new test on a version that has the issue and on one that does not, if available: `bash regression/run.sh 26.1 <id>`. Both outcomes must come out right before the test counts as done.
+
+Helpers in `lib/common.sh`: `sqlcl_script`, `sql_value`, `native_path`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
+
+## Changing the baseline
+
+Some tests need something the baseline does not have yet (an ORDS module, a property, another object type). Change the test project, never only the database:
+
+1. In the test project, branch from the base branch, make the change in the database, then `project export`, commit, `project stage`, commit (or add a custom changeset with `project stage add-custom` when export cannot produce it).
+2. Merge into the base branch and move the tag: `git tag -f <BASELINE_TAG>`.
+3. Run the reset and check the database now contains the change, then re-run the whole suite on the version the baseline was built with to confirm nothing else moved.
+
+## Reports
+
+Generate them from the saved results; never from memory.
+
+| Report | How |
+|---|---|
+| One version, full table | `results/<version>/results.md`, written by `run.sh`. |
+| What needs attention in the latest version (regressions, newly fixed, errors) | Top of `results/README.md` from `report.sh`. |
+| Open issues by severity, with workarounds | `results/README.md`, second section. |
+| Test-by-version matrix | `results/README.md`, last section. |
+| Anything else (one issue's history, issues fixed between two versions, only P0/P1) | Query `tests.json` and `results/*/results.json` with jq and present a table. |
+
+When the user wants a write-up for a forum post or the blog, start from `results/README.md`: lead with regressions and P0/P1 open issues, link each issue to its forum post, and state the SQLcl build and run date.

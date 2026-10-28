@@ -83,27 +83,83 @@ baseline_app_files() {
   git -C "$TEST_REPO" ls-tree -r --name-only "$BASELINE_TAG" -- "$(apex_app_path)"
 }
 
-# export_apex_app: fresh `project export -o APEX.<id>`, done once per run.
-# The old folder is removed first: on a case-insensitive file system an
+# fresh_apex_export <log>: `project export -o APEX.<id>` into an empty apex_apps folder.
+# The old export is removed first: on a case-insensitive file system an
 # overwrite keeps the old file-name case and would hide a lowercasing bug.
-export_apex_app() {
-  local dir="$TEST_REPO/$(apex_app_path)"
-  local marker="$RUN_DIR/apex-export.done" log="$RUN_DIR/apex-export.log"
-  [[ -f $marker ]] && return 0
-  rm -rf "$dir"
+fresh_apex_export() {
+  local log=$1 apps="$TEST_REPO/src/database/$APEX_SCHEMA/apex_apps"
+  rm -rf "$apps"
   echo "project export -o APEX.$APEX_APP_ID" | sqlcl_script "$log" \
     || error "project export failed, see $log"
-  [[ -n $(find "$dir" -type f 2>/dev/null | head -1) ]] \
-    || error "project export wrote nothing to $(apex_app_path), see $log"
+  [[ -n $(find "$apps" -name application.apx 2>/dev/null | head -1) ]] \
+    || error "project export wrote no application.apx under apex_apps, see $log"
+}
+
+# export_apex_app: fresh_apex_export, done once per run and shared by the export tests
+export_apex_app() {
+  local marker="$RUN_DIR/apex-export.done"
+  [[ -f $marker ]] && return 0
+  fresh_apex_export "$RUN_DIR/apex-export.log"
   touch "$marker"
 }
 
-# restore_apex_app_dir: put the app export folder back to BASELINE_TAG and
-# forget the cached export, so later tests export again
+# restore_from_baseline <path>: make a repo path exactly as it is at BASELINE_TAG
+restore_from_baseline() {
+  rm -rf "${TEST_REPO:?}/$1"
+  if git -C "$TEST_REPO" cat-file -e "$BASELINE_TAG:$1" 2>/dev/null; then
+    git -C "$TEST_REPO" checkout -q "$BASELINE_TAG" -- "$1"
+  fi
+}
+
+# restore_apex_app_dir: app export folder back to BASELINE_TAG; later tests export again
 restore_apex_app_dir() {
-  rm -rf "${TEST_REPO:?}/$(apex_app_path)"
-  git -C "$TEST_REPO" checkout -q "$BASELINE_TAG" -- "$(apex_app_path)"
+  restore_from_baseline "src/database/$APEX_SCHEMA/apex_apps"
   rm -f "$RUN_DIR/apex-export.done"
+}
+
+# keep_only_apex_export: undo everything an export wrote outside apex_apps
+# (e.g. unrequested users), so a following stage sees only the application
+keep_only_apex_export() {
+  local apps="src/database/$APEX_SCHEMA/apex_apps" keep="$RUN_DIR/apex_apps.keep"
+  rm -rf "$keep"
+  mv "$TEST_REPO/$apps" "$keep"
+  restore_from_baseline src
+  rm -rf "${TEST_REPO:?}/$apps"
+  mv "$keep" "$TEST_REPO/$apps"
+}
+
+# isolate_branch <id>: continue the test on its own branch from BASELINE_TAG, so its
+# commits and stage output do not leak into later tests. leave_branch (run it from an
+# EXIT trap) commits what is left there as evidence and returns to the previous branch.
+isolate_branch() {
+  ISOLATED_FROM=$(git -C "$TEST_REPO" branch --show-current)
+  ISOLATED_BRANCH="${TEST_BRANCH:-regression/manual}-$1"
+  git -C "$TEST_REPO" branch -q -D "$ISOLATED_BRANCH" 2>/dev/null || true
+  git -C "$TEST_REPO" checkout -q -b "$ISOLATED_BRANCH" "$BASELINE_TAG"
+}
+leave_branch() {
+  [[ -n ${ISOLATED_BRANCH:-} ]] || return 0
+  git -C "$TEST_REPO" add -A
+  git -C "$TEST_REPO" commit -q -m "Evidence" >/dev/null || true
+  git -C "$TEST_REPO" checkout -q -f "$ISOLATED_FROM"
+  ISOLATED_BRANCH=
+}
+
+# commit_all <message>: commit everything in the test repo (on an isolated branch)
+commit_all() {
+  git -C "$TEST_REPO" add -A
+  git -C "$TEST_REPO" commit -q -m "$1" >/dev/null
+}
+
+# project_stage <log>: run project stage; true when it completed
+project_stage() {
+  echo "project stage" | sqlcl_script "$1" || return 1
+  grep -q 'Stage processing completed' "$1"
+}
+
+# first_error <log>: first ERROR / Error / ORA- line of a log, for comments
+first_error() {
+  sed 's/\x1b\[[0-9;]*m//g' "$1" | grep -m1 -E 'ERROR|Error|ORA-' | tr -d '\r' | cut -c1-200
 }
 
 # baseline_apexlang_dir: repo-relative folder holding application.apx at BASELINE_TAG
@@ -116,4 +172,32 @@ baseline_apexlang_dir() {
 # apex_page_count <page-id>: 1 when the page exists in the installed application, else 0
 apex_page_count() {
   sql_value "select count(*) from apex_application_pages where application_id = $APEX_APP_ID and page_id = $1"
+}
+
+# baseline_apexlang_copy <dir>: extract the baseline APEXlang source of the app into dir
+baseline_apexlang_copy() {
+  local src
+  src=$(baseline_apexlang_dir) || return 1
+  rm -rf "$1"
+  mkdir -p "$1"
+  git -C "$TEST_REPO" archive --format=tar "$BASELINE_TAG:$src" | tar -x -C "$1"
+}
+
+# remove_page_in_apex <page-id> <workdir>: delete a page from the installed application
+# (apex import of the baseline source without it). Gives export/stage a real app change.
+remove_page_in_apex() {
+  local page=$1 work=$2
+  baseline_apexlang_copy "$work/app" || error "no application.apx in the baseline export"
+  rm -f "$work/app/pages/"$(printf 'p%05d-*.apx' "$page")
+  apex_import "$work/app" "$work/import.log" \
+    || error "apex validate/import of the app without page $page failed, see $work/import.log"
+  [[ $(apex_page_count "$page") == 0 ]] || error "page $page still installed after apex import"
+}
+
+# restore_apex_app <workdir>: re-import the baseline application (for EXIT traps)
+restore_apex_app() {
+  local work=$1
+  baseline_apexlang_copy "$work/baseline-app" \
+    && apex_import "$work/baseline-app" "$work/restore.log" \
+    || warn "re-import of the baseline app failed, see $work/restore.log"
 }
