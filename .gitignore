@@ -8,3 +8,7 @@ tmp/
 # Playwright MCP output (screenshots, traces, snapshots)
 .playwright-mcp/
 
+
+# Regression testing: local config and raw logs
+regression/config.sh
+regression/results/*/logs/
