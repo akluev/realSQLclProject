@@ -56,6 +56,21 @@ sqlcl_script() {
 
 apex_app_path() { echo "src/database/$APEX_SCHEMA/apex_apps/f$APEX_APP_ID"; }
 
+# native_path <path>: path as SQLcl (Java) expects it; on Git Bash /c/x becomes C:/x
+native_path() {
+  if command -v cygpath >/dev/null; then cygpath -m "$1"; else echo "$1"; fi
+}
+
+# apex_import <apexlang-dir> <log>: apex validate + apex import into APEX_WORKSPACE.
+# SQLcl exits 0 even when they fail, so success is read from the output.
+apex_import() {
+  local src log=$2
+  src=$(native_path "$1")
+  printf 'apex validate -input %s -ws %s\napex import -input %s -ws %s\n' \
+    "$src" "$APEX_WORKSPACE" "$src" "$APEX_WORKSPACE" | sqlcl_script "$log" || return 1
+  grep -q '^Validation successful' "$log" && grep -q '^Import successful' "$log"
+}
+
 # sql_value <query>: print the single value a query returns
 sql_value() {
   local log="$RUN_DIR/sql_value.log"

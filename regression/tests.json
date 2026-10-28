@@ -2,6 +2,7 @@
   {
     "id": "001",
     "kind": "bug",
+    "severity": "P2",
     "title": "project export lowercases APEXlang file and folder names",
     "area": "export",
     "active": true,
@@ -19,6 +20,7 @@
   {
     "id": "002",
     "kind": "bug",
+    "severity": "P0",
     "title": "project export corrupts binary APEX static files",
     "area": "export",
     "active": true,
@@ -36,6 +38,7 @@
   {
     "id": "003",
     "kind": "enhancement",
+    "severity": "P2",
     "title": "project export keeps files of APEX components deleted in APEX",
     "area": "export",
     "active": true,

@@ -12,7 +12,7 @@ work="$RUN_DIR/003"
 # Always leave the baseline behind: export folder from git, page back in the app
 restore() {
   restore_apex_app_dir
-  echo "apex import -input $TEST_REPO/$src -ws $APEX_WORKSPACE" | sqlcl_script "$work/restore.log" \
+  apex_import "$TEST_REPO/$src" "$work/restore.log" \
     || warn "re-import of the baseline app failed, see $work/restore.log"
   [[ $(apex_page_count "$page") == 1 ]] || warn "page $page not back in the app after restore"
 }
@@ -30,8 +30,7 @@ cp -R "$TEST_REPO/$src" "$work/app"
 rm -f "$work/app/pages/"$page_glob
 
 # 3. Install the copy, so the page is deleted in APEX
-printf 'apex validate -input %s -ws %s\napex import -input %s -ws %s\n' \
-  "$work/app" "$APEX_WORKSPACE" "$work/app" "$APEX_WORKSPACE" | sqlcl_script "$work/import.log" \
+apex_import "$work/app" "$work/import.log" \
   || error "apex validate/import of the app without page $page failed, see $work/import.log"
 [[ $(apex_page_count "$page") == 0 ]] || error "page $page still installed after apex import"
 
