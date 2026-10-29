@@ -182,8 +182,8 @@ P2 bug, area `export`.
 - **apexlang mode:** Introduced: –; fixed: –; last failed: –
 - **Oracle status:** not reported
 - **Workaround:** Commit the application folder after each export, before exporting again.
-- **How it is tested:** Export the application into an empty apex_apps folder, then run `project export -o APEX.<app_id>` again straight away, without committing and without any change in APEX. Compare the files of both exports.
-- **Passes when:** The second export succeeds and writes the same files as the first.
+- **How it is tested:** Export the application into an empty apex_apps folder, delete application.apx from the exported folder, then run `project export -o APEX.<app_id>` again straight away, without committing and without any change in APEX, and check application.apx is back. (Comparing the two exports is not enough: in APEXlang mode the second export writes nothing, reports "Exported 0 objects" and "APEXlang export target has tracked or untracked Git changes", and the folder simply keeps the first export.)
+- **Passes when:** The second export exports the application again: application.apx, deleted before it, is recreated.
 - **Script:** [issues/021/test.sh](issues/021/test.sh)
 
 <a id="t008"></a>

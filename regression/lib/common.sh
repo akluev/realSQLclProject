@@ -253,7 +253,7 @@ project_stage() {
 # (SQLcl puts the reason there, after "An error has occurred processing your request:"), for comments
 first_error() {
   sed 's/\x1b\[[0-9;]*m//g' "$1" | tr -d '\r' \
-    | awk '/ERROR|Error|ORA-/ && !n { n = 3 } n && NF { printf "%s%s", (s++ ? " " : ""), $0; n-- } END { print "" }' \
+    | awk '/ERROR|Error|ORA-|Failed to/ && !n { n = 3 } n && NF { printf "%s%s", (s++ ? " " : ""), $0; n-- } END { print "" }' \
     | sed 's/An error has occurred processing your request: *//' | cut -c1-300
 }
 
