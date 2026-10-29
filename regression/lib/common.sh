@@ -44,7 +44,7 @@ load_config() {
     [[ -n ${!v:-} ]] || die "$v is not set in $cfg"
     export "${v?}"
   done
-  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD KEEP_TEST_BRANCHES; do
+  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD KEEP_TEST_BRANCHES SHOW_SQLCL_OUTPUT; do
     [[ -z ${!v:-} ]] || export "${v?}"
   done
 }
@@ -90,14 +90,21 @@ ver_ge() { [[ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | head -1)" == "$2" ]]; }
 
 # sqlcl_script <log>: run SQLcl commands from stdin inside TEST_REPO, connected as SQLCL_CONN
 # (connect as the schema instead with: as_schema sqlcl_script <log>)
+# With SHOW_SQLCL_OUTPUT=true (config.sh) the output is also shown while it runs.
 sqlcl_script() {
   local log=$1
-  { echo "whenever sqlerror exit failure"
+  {
+    echo "whenever sqlerror exit failure"
     echo "whenever oserror exit failure"
     echo "conn -name $SQLCL_CONN"
     cat
     echo "exit"
-  } | (cd "$TEST_REPO" && sql -S -nolog) >"$log" 2>&1
+  } | if [[ ${SHOW_SQLCL_OUTPUT:-false} == true ]]; then
+    # shown on stderr, so callers that capture stdout (sql_value) are not affected
+    (set -o pipefail; cd "$TEST_REPO" && sql -S -nolog 2>&1 | tee "$log" | sed -u 's/^/  sqlcl> /' >&2)
+  else
+    (cd "$TEST_REPO" && sql -S -nolog) >"$log" 2>&1
+  fi
 }
 
 # as_schema <command...>: run a helper connected as SCHEMA_CONN instead of SQLCL_CONN

@@ -161,11 +161,14 @@ for mode in $modes; do
         repo checkout -q -f "$TEST_BRANCH"
       fi
       printf '%-4s %-8s %-6s %-3s running: %s\n' "$id" "${tmode:-–}" "$area" "$severity" "$title"
-      rc=0
       export COMMENT_FILE="$RUN_DIR/$id.comment" WORKAROUND_FILE="$RUN_DIR/$id.workaround" APEX_MODE=$mode
       rm -f "$COMMENT_FILE" "$WORKAROUND_FILE"
-      bash "$REG_ROOT/$script" >"$RUN_DIR/$id.log" 2>&1 </dev/null || rc=$?
-      workaround_result=$(tr -d '\r' <"$WORKAROUND_FILE" 2>/dev/null | head -1 || true)
+      # The test's output goes to its log and, indented, to the screen while it runs
+      set +e
+      bash "$REG_ROOT/$script" 2>&1 </dev/null | tee "$RUN_DIR/$id.log" | sed -u 's/^/     | /'
+      rc=${PIPESTATUS[0]}
+      set -e
+      [[ ! -s $WORKAROUND_FILE ]] || workaround_result=$(tr -d '\r' <"$WORKAROUND_FILE" | head -1)
       if [[ -s $COMMENT_FILE ]]; then
         comment=$(tr -d '\r' <"$COMMENT_FILE" | awk 'NR > 1 { printf "; " } { printf "%s", $0 }')
       else

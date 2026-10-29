@@ -20,6 +20,10 @@ SCHEMA_CONN=demo_vm26
 # false (default) deletes them when the run finishes.
 KEEP_TEST_BRANCHES=false
 
+# Each test's own messages are always shown while it runs. true also shows every SQLcl
+# command's output live (noisy; it still goes to the logs in results/<version>/logs/ too).
+SHOW_SQLCL_OUTPUT=false
+
 # Project schema, APEX workspace and application in the baseline
 APEX_SCHEMA=demo1
 APEX_WORKSPACE=DEMO1
