@@ -137,6 +137,7 @@ for mode in $modes; do
 
   # Fields are separated by \x1f: unlike tab, read keeps empty fields between non-blank separators
   while IFS=$'\x1f' read -r id tmode area kind severity test_from introduced fixed script title url reset_before; do
+    workaround_result=
     # Before introducedIn: not run, unless testFrom says the behaviour existed and worked then
     if [[ -n $introduced ]] && ! ver_ge "$SQLCL_VERSION" "$introduced"; then
       if [[ -n $test_from ]] && ver_ge "$SQLCL_VERSION" "$test_from"; then expected=PASS; else expected=N/A; fi
@@ -161,9 +162,10 @@ for mode in $modes; do
       fi
       printf '%-4s %-8s %-6s %-3s running: %s\n' "$id" "${tmode:-–}" "$area" "$severity" "$title"
       rc=0
-      export COMMENT_FILE="$RUN_DIR/$id.comment" APEX_MODE=$mode
-      rm -f "$COMMENT_FILE"
+      export COMMENT_FILE="$RUN_DIR/$id.comment" WORKAROUND_FILE="$RUN_DIR/$id.workaround" APEX_MODE=$mode
+      rm -f "$COMMENT_FILE" "$WORKAROUND_FILE"
       bash "$REG_ROOT/$script" >"$RUN_DIR/$id.log" 2>&1 </dev/null || rc=$?
+      workaround_result=$(tr -d '\r' <"$WORKAROUND_FILE" 2>/dev/null | head -1 || true)
       if [[ -s $COMMENT_FILE ]]; then
         comment=$(tr -d '\r' <"$COMMENT_FILE" | awk 'NR > 1 { printf "; " } { printf "%s", $0 }')
       else
@@ -188,9 +190,10 @@ for mode in $modes; do
       FAIL/FAIL)   outcome="KNOWN ISSUE" ;;
       FAIL/PASS)   outcome="NEWLY FIXED" ;;
     esac
-    printf '%-4s %-8s %-6s %-3s %-5s %-12s %s\n' "$id" "${tmode:-–}" "$area" "$severity" "$result" "$outcome" "$comment"
-    printf '%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\n' "$id" "$tmode" "$area" "$kind" \
-      "$severity" "$title" "$url" "$expected" "$result" "$outcome" "$comment" >>"$rows"
+    printf '%-4s %-8s %-6s %-3s %-5s %-12s %s%s\n' "$id" "${tmode:-–}" "$area" "$severity" "$result" "$outcome" \
+      "$comment" "${workaround_result:+ [workaround $workaround_result]}"
+    printf '%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\n' "$id" "$tmode" "$area" "$kind" \
+      "$severity" "$title" "$url" "$expected" "$result" "$outcome" "$comment" "$workaround_result" >>"$rows"
   done <<<"$tests"
 
   trap - EXIT
@@ -211,7 +214,8 @@ baseline=$(repo rev-parse --short "$BASELINE_TAG^{commit}")
 run_date=$(date '+%Y-%m-%d %H:%M')
 new=$(jq -Rn --arg date "$run_date" '[inputs | split("\u001f")
   | {id: .[0], mode: .[1], area: .[2], kind: .[3], severity: .[4], title: .[5], url: .[6],
-     expected: .[7], result: .[8], outcome: .[9], comment: .[10], date: $date}]' <"$rows")
+     expected: .[7], result: .[8], outcome: .[9], comment: .[10], workaround: (.[11] // ""),
+     date: $date}]' <"$rows")
 old='[]'
 if [[ $partial == true && -f $OUT_DIR/results.json ]]; then old=$(jq '.results' "$OUT_DIR/results.json"); fi
 jq -n --argjson old "$old" --argjson new "$new" --arg sqlcl "$SQLCL_RELEASE" \

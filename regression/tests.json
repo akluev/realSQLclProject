@@ -20,7 +20,8 @@
         "lastFailedIn": "26.3.0"
       },
       "apexlang": {
-        "introducedIn": "26.1.2"
+        "introducedIn": "26.1.2",
+        "lastFailedIn": "26.3.0"
       }
     }
   },
@@ -48,7 +49,8 @@
       "apexlang": {
         "introducedIn": null,
         "fixedIn": null,
-        "oracleStatus": "not reported (the readable-mode fix of 26.2.2 does not cover APEXlang mode)"
+        "oracleStatus": "not reported (the readable-mode fix of 26.2.2 does not cover APEXlang mode)",
+        "lastFailedIn": "26.3.0"
       }
     }
   },
@@ -63,7 +65,7 @@
     "forumUrl": null,
     "docRef": "docs/10.2.-sqlcl_project_enhancements.md#24-apex-application-export-should-delete-the-application-directory-before-export",
     "workaround": "Delete src/database/<schema>/apex_apps/f<id> before `project export`, or run `apex export -applicationid <id> -exptype APEXLANG -dir src/database/<schema>/apex_apps/f<id> -f` after it.",
-    "prompt": "Start from the baseline export. Install a copy of the APEXlang source without page 100 (`apex validate` + `apex import`) so the page is deleted in APEX, then run `project export -o APEX.<app_id>` WITHOUT removing the export folder. Check whether the page 100 file is still in the folder the export wrote pages into. Also check that `apex export ... -f` removes it. Finally re-import the baseline source to restore page 100.",
+    "prompt": "On an isolated branch: export the application into an empty apex_apps folder (this version's layout) and commit it, remove page APEX_SPARE_PAGE from the installed application (apex import of a copy without it), run `project export -o APEX.<app_id>` again over the committed folder, and check the page file is gone. The commit is needed because in APEXlang mode project export refuses to overwrite uncommitted changes (021). Only when the file is left behind, and in readable mode, the workaround `apex export -f` is checked and reported in the Workaround column. Re-import the baseline application afterwards.",
     "successCriteria": "After project export, the export folder contains no file for page 100 (p00100-*.apx).",
     "script": "issues/003/test.sh",
     "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain",
@@ -114,7 +116,8 @@
         "lastFailedIn": "26.3.0"
       },
       "apexlang": {
-        "introducedIn": "26.1.2"
+        "introducedIn": "26.1.2",
+        "lastFailedIn": "26.3.0"
       }
     }
   },
@@ -170,7 +173,8 @@
         "lastFailedIn": "26.3.0"
       },
       "apexlang": {
-        "introducedIn": "26.2"
+        "introducedIn": "26.2",
+        "lastFailedIn": "26.3.0"
       }
     }
   },
@@ -214,7 +218,7 @@
     "modes": {
       "apexlang": {
         "introducedIn": "26.2.2",
-        "lastFailedIn": "26.2.2"
+        "lastFailedIn": "26.3.0"
       }
     }
   },
@@ -332,7 +336,7 @@
     "active": true,
     "introducedIn": null,
     "fixedIn": "26.1.2",
-    "lastFailedIn": null,
+    "lastFailedIn": "26.3.0",
     "oracleStatus": "setting confirmed on the forum; to be exposed through project config as the fix of the logged bug",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-please-split-ddl-statements-in-a-file-into-lo-8780",
     "docRef": "docs/10.2.-sqlcl_project_enhancements.md#21-split-ddl-statements-in-a-file-into-logical-changesets",
@@ -410,7 +414,7 @@
     "testFrom": "26.1.2",
     "introducedIn": "26.3",
     "fixedIn": null,
-    "lastFailedIn": null,
+    "lastFailedIn": "26.3.0",
     "oracleStatus": "not reported",
     "forumUrl": null,
     "docRef": null,
@@ -419,5 +423,30 @@
     "prompt": "On a branch, add a column and a check constraint to EMP, `project export -o EMP`, commit. Then from that commit run `project stage` three times: with stage.change.changeStyle removed from project.config.json, set to single, and set to multiple. Each time check that stage completes and stage.changelog.xml includes emp.sql. SQLcl 26.3 writes emp.sql but leaves stage.changelog.xml empty and stops with the error. The comment reports, per setting, how many statements and changesets emp.sql has, which shows whether the setting still has any effect.",
     "successCriteria": "project stage completes and stage.changelog.xml includes the EMP changeset with every changeStyle setting.",
     "script": "issues/020/test.sh"
+  },
+  {
+    "id": "021",
+    "kind": "bug",
+    "severity": "P2",
+    "title": "A second project export of an APEX application, with nothing changed, fails in APEXlang mode",
+    "area": "export",
+    "active": true,
+    "oracleStatus": "not reported",
+    "forumUrl": null,
+    "docRef": null,
+    "articleUrl": null,
+    "workaround": "Commit the application folder after each export, before exporting again.",
+    "prompt": "Export the application into an empty apex_apps folder, then run `project export -o APEX.<app_id>` again straight away, without committing and without any change in APEX. Compare the files of both exports.",
+    "successCriteria": "The second export succeeds and writes the same files as the first.",
+    "script": "issues/021/test.sh",
+    "modes": {
+      "readable": {
+        "fixedIn": "26.1.2"
+      },
+      "apexlang": {
+        "introducedIn": null,
+        "fixedIn": null
+      }
+    }
   }
 ]

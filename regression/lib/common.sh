@@ -25,6 +25,12 @@ comment() { echo "$*"; [[ -z ${COMMENT_FILE:-} || -s $COMMENT_FILE ]] || echo "$
 pass()  { comment "$*"; exit 0; }
 fail()  { comment "$*"; exit 1; }
 error() { comment "$*"; exit 2; }
+# workaround <works|"does not work"> <detail>: the test's check of the issue's workaround. Reported
+# in its own column; the verdict comes only from the documented command.
+workaround() {
+  echo "workaround $1: $2"
+  [[ -z ${WORKAROUND_FILE:-} ]] || echo "$1: $2" >"$WORKAROUND_FILE"
+}
 # warn: add a note to the comment, e.g. from cleanup that runs after the verdict
 warn()  { echo "WARNING: $*" >&2; [[ -z ${COMMENT_FILE:-} ]] || echo "WARNING: $*" >>"$COMMENT_FILE"; }
 
@@ -290,13 +296,14 @@ write_results_md() {
     def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
     "# SQLcl \(.version) regression results", "",
     "- \(.sqlcl)", "- Last run: \(.date)", "- Baseline: `\(.baseline)`, test branch `\(.testBranch)`",
-    "- Mode: APEX export mode the test ran in (`readable`: apex.apexlang not set, `apexlang`: apex.apexlang=true, `–`: does not depend on it)", "",
-    "| ID | Mode | Severity | Area | Issue | Expected | Result | Outcome | Comment | Run |",
-    "|---|---|---|---|---|---|---|---|---|---|",
+    "- Mode: APEX export mode the test ran in (`readable`: apex.apexlang not set, `apexlang`: apex.apexlang=true, `–`: does not depend on it)",
+    "- Workaround: result of the workaround check, for tests that make one; it never changes the outcome", "",
+    "| ID | Mode | Severity | Area | Issue | Expected | Result | Outcome | Workaround | Comment | Run |",
+    "|---|---|---|---|---|---|---|---|---|---|---|",
     (.results[]
      | ((.title | esc) as $t | (.url // .forumUrl // "") as $u
         | if $u != "" then "[\($t)](\($u))" else $t end) as $issue
      | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind
-     | "| \(.id) | \(if (.mode // "") == "" then "–" else .mode end) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \(.comment | esc) | \(.date // "") |")
+     | "| \(.id) | \(if (.mode // "") == "" then "–" else .mode end) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \((.workaround // "") | if . == "" then "–" else esc end) | \(.comment | esc) | \(.date // "") |")
   ' "$1/results.json" >"$1/results.md"
 }

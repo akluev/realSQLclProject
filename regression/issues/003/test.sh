@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # 003: project export must remove files of APEX components deleted in APEX.
-# Exports the app (so the folder has this version's layout), removes a spare page from
-# the installed app (apex import of a copy without it), exports again over the existing
-# folder, and checks the page file is gone. Works in both APEX modes (any export layout).
+# On its own branch: exports the app (so the folder has this version's layout) and commits it,
+# removes a spare page from the installed app (apex import of a copy without it), exports again
+# over the committed folder, and checks the page file is gone. Works in both APEX modes.
+# The commit matters in APEXlang mode, where project export refuses to overwrite uncommitted
+# changes in the application folder (that is test 021, not this one).
 source "$(dirname "$0")/../../lib/common.sh"
 
 page=${APEX_SPARE_PAGE:-100}
@@ -10,19 +12,23 @@ page_glob=$(printf 'p%05d-*.apx' "$page")
 dir=$(apex_apps_dir)
 work="$RUN_DIR/003"
 
-# Always leave the baseline behind: export folder from git, page back in the app
-restore() {
-  restore_apex_app_dir
+# Always leave the baseline behind: back to the run's branch, page back in the app
+cleanup() {
+  leave_branch
+  rm -f "$RUN_DIR/apex-export.done"
   restore_apex_app "$work"
   [[ $(apex_page_count "$page") == 1 ]] || warn "page $page not back in the app after restore"
 }
 
 mkdir -p "$work"
-trap restore EXIT
+isolate_branch 003
+trap cleanup EXIT
 
-# 1. First export, with the page, in the layout of the version under test
+# 1. First export, with the page, in the layout of the version under test; committed
 fresh_apex_export "$work/first-export.log"
 [[ -n $(find "$dir" -name "$page_glob") ]] || error "first export has no page $page file"
+keep_only_apex_export
+commit_all "Application $APEX_APP_ID exported" || error "first export produced no change to commit"
 
 # 2. Delete the page in APEX
 remove_page_in_apex "$page" "$work"
@@ -35,25 +41,20 @@ echo "project export -o APEX.$APEX_APP_ID" | sqlcl_script "$work/export.log" \
 # 4. The folder this export wrote pages into must not hold the deleted page.
 # Found by write time, so a changed folder layout does not count as a stale file.
 written=$(find "$dir" -type f -path '*/pages/*' -newer "$work/before-export" | head -1)
-[[ -n $written ]] || error "project export wrote no page files, see $work/export.log"
+[[ -n $written ]] || error "project export wrote no page files: $(first_error "$work/export.log")"
 pages_dir=$(dirname "$written")
 stale=$(find "$pages_dir" -maxdepth 1 -name "$page_glob" | head -1)
+[[ -z $stale ]] && pass "page $page file removed by project export"
 
-# 5. Workaround check: apex export -f should remove it. Readable mode: into f<id>, as the
-# workaround in tests.json says; APEXlang mode: into the folder holding application.apx.
+# 5. Only when the bug is there: does the documented workaround (apex export -f into f<id>,
+# readable mode) remove the file? Reported in its own column, never as the verdict.
 if [[ ${APEX_MODE:-readable} == readable ]]; then
-  target=$(apex_app_path)
-else
-  target=$(exported_app_dir)
-  target=${target#"$TEST_REPO/"}
+  echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $(apex_app_path) -f" \
+    | sqlcl_script "$work/apex-export.log" || true
+  if [[ -n $(find "$dir" -name "$page_glob" | head -1) ]]; then
+    workaround "does not work" "apex export -f leaves the page file too"
+  else
+    workaround works "apex export -f removes the page file"
+  fi
 fi
-echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $target -f" \
-  | sqlcl_script "$work/apex-export.log" || true
-if [[ -n $(find "$dir" -name "$page_glob" | head -1) ]]; then
-  workaround="apex export -f does NOT remove it either"
-else
-  workaround="apex export -f removes it"
-fi
-
-[[ -n $stale ]] && fail "deleted page $page left behind: ${stale#"$TEST_REPO/"} ($workaround)"
-pass "page $page file removed by project export ($workaround)"
+fail "deleted page $page left behind: ${stale#"$TEST_REPO/"}"

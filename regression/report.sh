@@ -52,10 +52,10 @@ def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mo
   "**Errors** (test could not decide; check the logs):", "", items("ERROR")[], "",
   "## Open issues in SQLcl \($latest), by severity",
   "",
-  "| Severity | ID | Mode | Area | Issue | Since | Workaround |",
-  "|---|---|---|---|---|---|---|",
+  "| Severity | ID | Mode | Area | Issue | Since | Workaround | Workaround tested |",
+  "|---|---|---|---|---|---|---|---|",
   ($t[] | select($L[key].result == "FAIL")
-   | "| \(.severity) | \(.id) | \(if .mode == "" then "–" else .mode end) | \(.area) | \(link) | \(.introducedIn // "?") | \((.workaround // "") | esc) |"),
+   | "| \(.severity) | \(.id) | \(if .mode == "" then "–" else .mode end) | \(.area) | \(link) | \(.introducedIn // "?") | \((.workaround // "") | esc) | \(($L[key].workaround // "") | if . == "" then "–" else esc end) |"),
   "",
   "## Results by version",
   "",
