@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# 016: with stage.change.changeStyle=multiple (an undocumented setting), project stage must put
-# each generated statement in its own changeset. The default (single) keeps them in one.
+# 016: with stage.change.changeStyle=multiple (set in the baseline project.config.json; not
+# exposed by project config yet), project stage must put each generated statement in its own
+# changeset. The default (single) keeps them in one.
 source "$(dirname "$0")/../../lib/common.sh"
 
 schema=$(tr '[:lower:]' '[:upper:]' <<<"$APEX_SCHEMA")
@@ -20,8 +21,8 @@ printf 'alter table %s.dept add (reg_016_a number, reg_016_b varchar2(10));\nalt
   || error "could not change and export DEPT, see $work/export.log"
 commit_all "DEPT: two columns and a check constraint" || error "nothing to commit after export"
 
-echo "project config set -name stage.change.changeStyle -value multiple" | sqlcl_script "$work/config.log" \
-  || error "could not set stage.change.changeStyle, see $work/config.log"
+grep -q '"changeStyle" *: *"multiple"' "$TEST_REPO/.dbtools/project.config.json" \
+  || error "baseline project.config.json does not set stage.change.changeStyle to multiple"
 project_stage "$work/stage.log" || error "project stage failed: $(first_error "$work/stage.log")"
 
 file=$(find "$TEST_REPO/dist/releases/next/changes" -path "*$ISOLATED_BRANCH*" -name dept.sql | head -1)

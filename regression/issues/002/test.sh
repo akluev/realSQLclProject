@@ -21,8 +21,8 @@ while IFS= read -r path; do
     missing+=("$name")
     continue
   fi
-  want=$(git -C "$TEST_REPO" cat-file blob "$BASELINE_TAG:$path" | sha1sum | cut -d' ' -f1)
-  got=$(sha1sum <"$found" | cut -d' ' -f1)
+  want=$(git -C "$TEST_REPO" rev-parse "$BASELINE_TAG:$path")
+  got=$(git -C "$TEST_REPO" hash-object --no-filters "$found")
   if [[ $want != "$got" ]]; then
     size_want=$(git -C "$TEST_REPO" cat-file -s "$BASELINE_TAG:$path")
     size_got=$(wc -c <"$found" | tr -d ' ')

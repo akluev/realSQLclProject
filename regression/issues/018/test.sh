@@ -16,11 +16,14 @@ drop_rest() {
   printf "begin\n  for s in (select parsing_schema from ords_metadata.ords_schemas where parsing_schema in ('%s', '%s')) loop\n    ords_admin.drop_rest_for_schema(p_schema => s.parsing_schema);\n  end loop;\n  commit;\nend;\n/\n" \
     "$schema" "$deployer"
 }
-# Put the baseline state back: ORDS only in the schema, installed as the schema
+# Put the baseline state back: ORDS only in the schema, installed through ORDS_ADMIN by the
+# baseline's custom changeset (its ${<schema>} Liquibase parameter replaced here)
+baseline_ords="dist/releases/next/changes/ords/_custom/ords_$APEX_SCHEMA.sql"
 cleanup() {
-  { drop_rest; } | sqlcl_script "$work/cleanup-drop.log" || warn "could not drop ORDS, see $work/cleanup-drop.log"
-  echo "@$ords_file" | as_schema sqlcl_script "$work/cleanup-replay.log" \
-    || warn "could not reinstall ORDS as $schema, see $work/cleanup-replay.log"
+  {
+    drop_rest
+    sed "s/\${$APEX_SCHEMA}/$APEX_SCHEMA/g" "$TEST_REPO/$baseline_ords"
+  } | sqlcl_script "$work/cleanup.log" || warn "could not restore the baseline ORDS, see $work/cleanup.log"
 }
 trap cleanup EXIT
 

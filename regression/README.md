@@ -8,12 +8,13 @@ Latest results: [results/README.md](results/README.md).
 
 - [tests.json](tests.json) lists the issues: severity, area, the SQLcl versions where each was introduced and fixed, links to the forum post and documentation, the workaround, and how to test it.
 - `issues/<id>/test.sh` checks one issue using only documented SQLcl commands.
-- [run.sh](run.sh) resets a local test project and database to a tagged baseline, runs the tests in order (export, then stage), and writes `results/<version>/`.
+- [reset/](reset/) puts the test project back to its tagged baseline: git, then `drop_all.sql` and `install.sql`.
+- [run.sh](run.sh) resets the test project and database, runs the tests in order (export, then stage), and writes `results/<version>/`.
 - [report.sh](report.sh) combines all versions into [results/README.md](results/README.md).
 
 ## Running it
 
-You need bash (Git Bash on Windows), git, jq, SQLcl, a local database you may rebuild, and the test project (a SQLcl Project repository with an APEX application).
+You need bash (Git Bash on Windows), git, jq, SQLcl 26.1 or later, a local database you may rebuild, and the test project (a SQLcl Project repository with schema DEMO1, an APEX application and an ORDS module; its README explains the two saved connections it needs).
 
 ```shell
 cp regression/config.example.sh regression/config.sh   # then edit it

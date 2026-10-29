@@ -14,15 +14,18 @@ The suite checks known SQLcl Project bugs and enhancement requests against any i
 | `run.sh <version> [id ...]` | Resets the test project and database, runs the selected tests, writes `results/<full-version>/results.md` and `results.json`. |
 | `report.sh` | Builds the cross-version report `results/README.md`. |
 | `lib/common.sh` | Helpers shared by the runner and the tests. |
+| `reset/reset.sh [<version>]` | Puts the test project back to its baseline: git (`BASE_BRANCH` at `BASELINE_TAG`, local changes discarded), then `drop_all.sql` and `install.sql` (both take the connection, schema and workspace as parameters). |
+| `reset/baseline.sh [<commit>]` | Moves `BASELINE_TAG` (default: tip of `BASE_BRANCH`), then runs the reset. |
 | `config.example.sh` | Template for the local, gitignored `config.sh`. |
 
-Tests run against a separate **test project**: a SQLcl Project repository with an APEX application, installed into a local database. Its `rebuild` script (configured as `RESET_CMD`) puts both git and the database back to the `BASELINE_TAG` state.
+Tests run against a separate **test project** (shipped as a zip; its README describes it): a SQLcl Project repository with schema DEMO1, APEX application 106 and an ORDS module, installed into a local database you may rebuild. Each run starts with `reset/reset.sh`, or with `RESET_CMD` when a user configured their own reset.
 
 ## First-time setup
 
-1. Requirements: bash (Git Bash on Windows), git, jq, one or more SQLcl installs, a local database you may drop and rebuild objects in, and a saved SQLcl connection (`conn -save`) with rights to rebuild the test schema and APEX workspace.
-2. Unpack or clone the test project, run its reset once by hand to check it works, and confirm it is clean on its base branch.
-3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN` (deployer), `SCHEMA_CONN` (the project schema itself), `RESET_CMD`, the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
+1. Requirements: bash (Git Bash on Windows), git, jq, one or more SQLcl installs (26.1 or later), a local database you may drop and rebuild objects in, and two saved SQLcl connections (`conn -save`): an installer with rights to create the schema, the APEX workspace and ORDS definitions through `ORDS_ADMIN`, and the project schema itself.
+2. Unpack the test project outside any other git repository and confirm it is clean on `main` with tag `baseline`.
+3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN` (installer), `SCHEMA_CONN` (the project schema), the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
+4. Run `bash regression/reset/reset.sh <version>` once and check it ends with `Reset done`.
 
 If `config.sh` is missing or a setting is wrong, the runner stops with a message naming it; fix it with the user rather than guessing paths.
 
@@ -103,9 +106,11 @@ Helpers in `lib/common.sh`: `sqlcl_script`, `as_schema`, `sql_value`, `native_pa
 
 Some tests need something the baseline does not have yet (an ORDS module, a property, another object type). Change the test project, never only the database:
 
-1. In the test project, branch from the base branch, make the change in the database, then `project export`, commit, `project stage`, commit (or add a custom changeset with `project stage add-custom` when export cannot produce it).
-2. Merge into the base branch and move the tag: `git tag -f <BASELINE_TAG>`.
-3. Run the reset and check the database now contains the change, then re-run the whole suite on the version the baseline was built with to confirm nothing else moved.
+1. In the test project, branch from the base branch, make the change in the database, then `project export`, commit, `project stage`, commit (or add a custom changeset with `project stage add-custom` when export cannot produce it, or when installing it as the installer would go wrong, as for ORDS).
+2. Merge into the base branch, then `bash regression/reset/baseline.sh <version>`: it moves the tag and rebuilds from it. Check the output ends with `Reset done` and the database contains the change.
+3. Re-run the whole suite on the version the baseline was built with to confirm nothing else moved.
+
+Keep the two connection setups apart. The baseline is installed and tested through the installer (`SQLCL_CONN`), like most real deployments. Material that only a schema connection produces (the ORDS export in `src/database/demo1/ords/` and `dist/releases/ords/`) stays in the baseline for the schema-connection tests, but is not installed (commented out in `dist/releases/main.changelog.xml`).
 
 ## Reports
 

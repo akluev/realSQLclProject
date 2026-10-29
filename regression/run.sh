@@ -9,7 +9,7 @@ source "$(dirname "$0")/lib/common.sh"
 
 [[ $# -ge 1 ]] || die "usage: $0 <sqlcl-version> [issue-id ...]"
 label=$1; shift
-command -v jq >/dev/null || die "jq is required"
+require_tools
 load_config
 use_sqlcl "$label"
 
@@ -24,12 +24,18 @@ repo() { git -C "$TEST_REPO" "$@"; }
 
 [[ -z $(repo status --porcelain) ]] || die "test repo has uncommitted changes: $TEST_REPO"
 
-# 1. Pre-test state: base branch, then the repo's own reset (git + database)
-repo checkout -q "$BASE_BRANCH"
-echo "Resetting baseline: $RESET_CMD"
+# 1. Pre-test state: reset/reset.sh (git + database), or the project's own RESET_CMD,
+# run in the test project with the SQLcl version under test on PATH.
 # stdin is an empty pipe: SQLcl crashes at startup (yet exits 0) when stdin is the
 # Windows NUL device, as it is for many agents and schedulers.
-if ! : | (cd "$TEST_REPO" && eval "$RESET_CMD") 2>&1 | tee "$RUN_DIR/reset.log" | sed 's/^/  | /'; then
+if [[ -n ${RESET_CMD:-} ]]; then
+  repo checkout -q "$BASE_BRANCH"
+  reset=(eval "$RESET_CMD")
+else
+  reset=(bash "$REG_ROOT/reset/reset.sh")
+fi
+echo "Resetting baseline: ${RESET_CMD:-reset/reset.sh}"
+if ! : | (cd "$TEST_REPO" && "${reset[@]}") 2>&1 | tee "$RUN_DIR/reset.log" | sed 's/^/  | /'; then
   die "reset failed, see $RUN_DIR/reset.log"
 fi
 ! grep -q 'Exception' "$RUN_DIR/reset.log" || die "reset threw a Java exception, see $RUN_DIR/reset.log"
@@ -85,6 +91,7 @@ while IFS=$'\x1f' read -r id area kind severity test_from introduced fixed scrip
   elif [[ -z $script ]]; then
     result=MANUAL comment="no script: run the prompt in tests.json by hand"
   else
+    printf '%-4s %-6s %-3s running: %s\n' "$id" "$area" "$severity" "$title"
     rc=0
     export COMMENT_FILE="$RUN_DIR/$id.comment"
     rm -f "$COMMENT_FILE"
@@ -143,5 +150,16 @@ jq -r '
    | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind
    | "| \(.id) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \(.comment | esc) | \(.date // "") |")
 ' "$OUT_DIR/results.json" >"$OUT_DIR/results.md"
+
+# 5. lastFailedIn in tests.json: the newest version each test has failed on
+catalog="$REG_ROOT/tests.json"
+for id in $(jq -r '.[] | select(.result == "FAIL") | .id' <<<"$new"); do
+  last=$(jq -r --arg id "$id" '.[] | select(.id == $id) | .lastFailedIn // ""' "$catalog")
+  if [[ -z $last ]] || ver_ge "$SQLCL_VERSION" "$last"; then
+    jq --indent 2 --arg id "$id" --arg v "$SQLCL_VERSION" \
+      'map(if .id == $id then .lastFailedIn = $v else . end)' "$catalog" >"$catalog.tmp"
+    mv "$catalog.tmp" "$catalog"
+  fi
+done
 
 echo "Results: $OUT_DIR/results.md"

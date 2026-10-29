@@ -7,6 +7,19 @@ REG_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 die() { echo "ERROR: $*" >&2; exit 2; }
 
+# require_tools: stop at once when a command the suite relies on is missing
+require_tools() {
+  local tool missing=()
+  for tool in git jq sed awk grep find sort tar tr paste cut wc xargs; do
+    type -P "$tool" >/dev/null || missing+=("$tool")   # -P: executables only, not the jq wrapper
+  done
+  ((${#missing[@]} == 0)) || die "missing required command(s): ${missing[*]}"
+  printf '1.10\n1.9\n' | sort -V >/dev/null 2>&1 || die "sort does not support -V (version sort)"
+}
+
+# jq without the carriage returns that Windows builds put at the end of every line
+jq() { command jq "$@" | tr -d '\r'; }
+
 # The first verdict wins: a helper failing later in an EXIT trap must not replace it
 comment() { echo "$*"; [[ -z ${COMMENT_FILE:-} || -s $COMMENT_FILE ]] || echo "$*" >"$COMMENT_FILE"; }
 pass()  { comment "$*"; exit 0; }
@@ -21,11 +34,11 @@ load_config() {
   # shellcheck source=/dev/null
   source "$cfg"
   local v
-  for v in TEST_REPO BASE_BRANCH BASELINE_TAG SQLCL_CONN RESET_CMD APEX_SCHEMA APEX_WORKSPACE APEX_APP_ID; do
+  for v in TEST_REPO BASE_BRANCH BASELINE_TAG SQLCL_CONN APEX_SCHEMA APEX_WORKSPACE APEX_APP_ID; do
     [[ -n ${!v:-} ]] || die "$v is not set in $cfg"
     export "${v?}"
   done
-  for v in SCHEMA_CONN APEX_SPARE_PAGE; do
+  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD; do
     [[ -z ${!v:-} ]] || export "${v?}"
   done
 }

@@ -4,7 +4,7 @@
 # Usage: regression/report.sh
 set -euo pipefail
 source "$(dirname "$0")/lib/common.sh"
-command -v jq >/dev/null || die "jq is required"
+require_tools
 
 versions=$(find "$REG_ROOT/results" -mindepth 2 -maxdepth 2 -name results.json 2>/dev/null \
   | awk -F/ '{print $(NF-1)}' | sort -V)

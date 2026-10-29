@@ -277,12 +277,12 @@
     "introducedIn": null,
     "fixedIn": "26.1.2",
     "lastFailedIn": null,
-    "oracleStatus": "undocumented setting (pub=N in the settings template); default single",
+    "oracleStatus": "setting confirmed on the forum; to be exposed through project config as the fix of the logged bug",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-please-split-ddl-statements-in-a-file-into-lo-8780",
     "docRef": "docs/10.2.-sqlcl_project_enhancements.md#21-split-ddl-statements-in-a-file-into-logical-changesets",
     "articleUrl": null,
-    "workaround": "Set it with `project config set -name stage.change.changeStyle -value multiple`.",
-    "prompt": "On a branch, add two columns and a check constraint to DEPT, export DEPT, commit, set stage.change.changeStyle=multiple, run `project stage`, and compare the number of `-- changeset` lines with the number of statements in the staged dept.sql. With the default (single) all statements share one changeset, in 26.1 and 26.2. Drop the columns afterwards.",
+    "workaround": "Add \"change\": {\"changeStyle\": \"multiple\"} to the stage object in .dbtools/project.config.json.",
+    "prompt": "The baseline .dbtools/project.config.json sets stage.change.changeStyle to multiple (an Oracle-suggested setting that `project config set` does not expose yet; forum 8780). On a branch, add two columns and a check constraint to DEPT, export DEPT, commit, run `project stage`, and compare the number of `-- changeset` lines with the number of statements in the staged dept.sql. With the default (single) all statements share one changeset, in 26.1 and 26.2. Drop the columns afterwards.",
     "successCriteria": "Every statement in the staged dept.sql has its own changeset.",
     "script": "issues/016/test.sh"
   },
@@ -319,8 +319,8 @@
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
     "docRef": null,
     "articleUrl": null,
-    "workaround": "After deploying, remove the ORDS definitions from the deployer and run dist/releases/ords/<schema>/ords.sql connected as the schema (what the test project rebuild.sql does).",
-    "prompt": "As the deployer, drop the ORDS definitions of the schema and the deployer, delete the ORDS changeset row from DATABASECHANGELOG, and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards reinstall ORDS as the schema.",
+    "workaround": "Install ORDS through ORDS_ADMIN with p_schema in a custom changeset (as the test project does), or deploy the ORDS changeset connected as the schema.",
+    "prompt": "The baseline keeps the schema-connection ORDS export in dist/releases/ords/ but does not install it (commented out in main.changelog.xml). As the installer, drop the ORDS definitions of the schema and the installer and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards restore the baseline ORDS through the ORDS_ADMIN custom changeset.",
     "successCriteria": "After lb update as the deployer, the module belongs to the project schema.",
     "script": "issues/018/test.sh"
   }
