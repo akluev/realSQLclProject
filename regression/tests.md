@@ -31,7 +31,8 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 | [015](#t015) | apexlang | P1 | bug | stage | project stage fails with hash errors on APEX supporting object scripts | – | 26.2 | – | yes |
 | [016](#t016) | – | P2 | feature | stage | stage.change.changeStyle=multiple puts each staged statement in its own changeset | – | 26.1.2 | – | yes |
 | [017](#t017) | – | P2 | bug | stage | Staged changesets use backslashes in logicalFilePath on Windows | – | – | 26.2.2 | yes |
-| [018](#t018) | – | P1 | bug | stage | Staged ORDS changeset installs into the deploying user instead of the project schema | – | – | 26.3.0 | yes |
+| [018](#t018) | – | P1 | bug | stage | Staged ORDS changeset installs into the deploying user instead of the project schema | – | – | 26.3.0 | no |
+| [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export and stage pick up a changed ORDS module | – | 26.1.2 | – | yes |
 
 <a id="t001"></a>
 ## 001. project export lowercases APEXlang file and folder names
@@ -251,13 +252,26 @@ P2 bug, area `stage`.
 <a id="t018"></a>
 ## 018. Staged ORDS changeset installs into the deploying user instead of the project schema
 
-P1 bug, area `stage`.
+P1 bug, area `stage`; **inactive**.
 
 - **Versions:** Introduced: –; fixed: –; last failed: 26.3.0
 - **Oracle status:** not reported
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778)
 - **Workaround:** Install ORDS through ORDS_ADMIN with p_schema in a custom changeset (as the test project does), or deploy the ORDS changeset connected as the schema.
-- **How it is tested:** The baseline keeps the schema-connection ORDS export in dist/releases/ords/ but does not install it (commented out in main.changelog.xml). As the installer, drop the ORDS definitions of the schema and the installer and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards restore the baseline ORDS through the ORDS_ADMIN custom changeset.
+- **How it is tested:** Inactive: the suite does not deploy. ORDS is covered by 011 (export as the installer), 012 and 019 (export and stage as the schema). The baseline keeps the schema-connection ORDS export in dist/releases/ords/ but does not install it (commented out in main.changelog.xml). As the installer, drop the ORDS definitions of the schema and the installer and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards restore the baseline ORDS through the ORDS_ADMIN custom changeset.
 - **Passes when:** After lb update as the deployer, the module belongs to the project schema.
 - **Script:** [issues/018/test.sh](issues/018/test.sh)
+
+<a id="t019"></a>
+## 019. Connected as the schema, project export and stage pick up a changed ORDS module
+
+P1 feature, area `stage`.
+
+- **Versions:** Introduced: –; fixed: 26.1.2; last failed: –
+- **Oracle status:** works (the baseline ORDS release was staged this way with SQLcl 26.1.2)
+- **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778)
+- **Workaround:** Not needed when connected as the schema; as the installer ORDS is not exported at all (011).
+- **How it is tested:** On a branch, connected as the schema (SCHEMA_CONN): add template reg019/ with a GET handler to module regression.dept, run a full `project export`, check src/database/<schema>/ords changed, restore the application folder, commit, run `project stage`, and look for reg019/ in dist. Afterwards re-run the baseline ords.sql as the schema to remove the template. Nothing is deployed.
+- **Passes when:** The export writes the new template to src/database/<schema>/ords and project stage writes a changeset containing it.
+- **Script:** [issues/019/test.sh](issues/019/test.sh)
 

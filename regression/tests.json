@@ -363,7 +363,7 @@
     "severity": "P1",
     "title": "Staged ORDS changeset installs into the deploying user instead of the project schema",
     "area": "stage",
-    "active": true,
+    "active": false,
     "introducedIn": null,
     "fixedIn": null,
     "lastFailedIn": "26.3.0",
@@ -372,8 +372,27 @@
     "docRef": null,
     "articleUrl": null,
     "workaround": "Install ORDS through ORDS_ADMIN with p_schema in a custom changeset (as the test project does), or deploy the ORDS changeset connected as the schema.",
-    "prompt": "The baseline keeps the schema-connection ORDS export in dist/releases/ords/ but does not install it (commented out in main.changelog.xml). As the installer, drop the ORDS definitions of the schema and the installer and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards restore the baseline ORDS through the ORDS_ADMIN custom changeset.",
+    "prompt": "Inactive: the suite does not deploy. ORDS is covered by 011 (export as the installer), 012 and 019 (export and stage as the schema). The baseline keeps the schema-connection ORDS export in dist/releases/ords/ but does not install it (commented out in main.changelog.xml). As the installer, drop the ORDS definitions of the schema and the installer and run `lb update -changelog-file releases/ords/ords.changelog.xml` from dist. The changeset (author <SCHEMA>) calls ORDS.ENABLE_SCHEMA / DEFINE_MODULE, which act on the session current schema; check which schema owns module regression.dept. Afterwards restore the baseline ORDS through the ORDS_ADMIN custom changeset.",
     "successCriteria": "After lb update as the deployer, the module belongs to the project schema.",
     "script": "issues/018/test.sh"
+  },
+  {
+    "id": "019",
+    "kind": "feature",
+    "severity": "P1",
+    "title": "Connected as the schema, project export and stage pick up a changed ORDS module",
+    "area": "stage",
+    "active": true,
+    "introducedIn": null,
+    "fixedIn": "26.1.2",
+    "lastFailedIn": null,
+    "oracleStatus": "works (the baseline ORDS release was staged this way with SQLcl 26.1.2)",
+    "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
+    "docRef": null,
+    "articleUrl": null,
+    "workaround": "Not needed when connected as the schema; as the installer ORDS is not exported at all (011).",
+    "prompt": "On a branch, connected as the schema (SCHEMA_CONN): add template reg019/ with a GET handler to module regression.dept, run a full `project export`, check src/database/<schema>/ords changed, restore the application folder, commit, run `project stage`, and look for reg019/ in dist. Afterwards re-run the baseline ords.sql as the schema to remove the template. Nothing is deployed.",
+    "successCriteria": "The export writes the new template to src/database/<schema>/ords and project stage writes a changeset containing it.",
+    "script": "issues/019/test.sh"
   }
 ]
