@@ -38,7 +38,7 @@ load_config() {
     [[ -n ${!v:-} ]] || die "$v is not set in $cfg"
     export "${v?}"
   done
-  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD; do
+  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD KEEP_TEST_BRANCHES; do
     [[ -z ${!v:-} ]] || export "${v?}"
   done
 }

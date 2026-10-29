@@ -122,6 +122,14 @@ done <<<"$tests"
 trap - EXIT
 repo checkout -q "$BASE_BRANCH"
 
+# The test branches hold each test's evidence; delete them unless KEEP_TEST_BRANCHES=true
+branch_note=$TEST_BRANCH
+if [[ ${KEEP_TEST_BRANCHES:-false} != true ]]; then
+  repo branch --list "$TEST_BRANCH" "$TEST_BRANCH-*" --format='%(refname:short)' \
+    | xargs -r git -C "$TEST_REPO" branch -q -D
+  branch_note="$TEST_BRANCH (deleted after the run)"
+fi
+
 # 4. Results. A run of selected tests replaces only their rows in results.json.
 baseline=$(repo rev-parse --short "$BASELINE_TAG^{commit}")
 run_date=$(date '+%Y-%m-%d %H:%M')
@@ -132,7 +140,7 @@ old='[]'
 if (($#)) && [[ -f $OUT_DIR/results.json ]]; then old=$(jq '.results' "$OUT_DIR/results.json"); fi
 jq -n --argjson old "$old" --argjson new "$new" --arg sqlcl "$SQLCL_RELEASE" \
   --arg version "$SQLCL_VERSION" --arg date "$run_date" \
-  --arg baseline "$BASELINE_TAG ($baseline)" --arg branch "$TEST_BRANCH" '
+  --arg baseline "$BASELINE_TAG ($baseline)" --arg branch "$branch_note" '
   ($new | map(.id)) as $ids
   | { sqlcl: $sqlcl, version: $version, date: $date, baseline: $baseline, testBranch: $branch,
       results: ($old | map(select(.id as $i | $ids | index($i) | not))) + $new | sort_by(.id) }
@@ -161,5 +169,6 @@ for id in $(jq -r '.[] | select(.result == "FAIL") | .id' <<<"$new"); do
     mv "$catalog.tmp" "$catalog"
   fi
 done
+bash "$REG_ROOT/catalog.sh" >/dev/null
 
 echo "Results: $OUT_DIR/results.md"

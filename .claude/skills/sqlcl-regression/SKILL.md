@@ -10,6 +10,7 @@ The suite checks known SQLcl Project bugs and enhancement requests against any i
 | Path | What it is |
 |---|---|
 | `tests.json` | The catalogue: one record per issue (a forum post with two problems is two records). |
+| `tests.md` | Readable catalogue for people, generated from `tests.json` by `catalog.sh`. Never edit it by hand. |
 | `issues/<id>/test.sh` | Deterministic test script for an issue. |
 | `run.sh <version> [id ...]` | Resets the test project and database, runs the selected tests, writes `results/<full-version>/results.md` and `results.json`. |
 | `report.sh` | Builds the cross-version report `results/README.md`. |
@@ -38,7 +39,9 @@ If `config.sh` is missing or a setting is wrong, the runner stops with a message
 5. Interpret the results (next section), update `tests.json`, and show the user the table from `results/<version>/results.md`.
 6. Commit `results/<version>/results.md`, `results.json`, `results/README.md` and catalogue changes on the testing branch. The user merges and publishes; never push or merge yourself.
 
-`results/*/logs/` holds every SQLcl log of the run and is gitignored. In the test project, each run leaves a branch `regression/<version>-<timestamp>` with one evidence commit per test (and `...-<id>` branches for isolated tests); the next run of the same version replaces them.
+`results/*/logs/` holds every SQLcl log of the run and is gitignored. In the test project, each run commits every test's leftovers to a branch `regression/<version>-<timestamp>` (and `...-<id>` branches for isolated tests). They are deleted at the end of the run unless `KEEP_TEST_BRANCHES=true` in `config.sh`; when kept, the next run of the same version replaces them. Set it to `true` when a result needs investigating.
+
+`run.sh` updates `lastFailedIn` in `tests.json` and regenerates `tests.md`; commit both with the results.
 
 ## Which tests run
 
@@ -99,6 +102,7 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
    - Workarounds the test project needs in normal use (e.g. export filters) live in the project between `--TEST-<id> BEGIN` and `--TEST-<id> END`, so other tests are not disturbed by the bug. The test for that issue removes its block with `drop_workaround <id> <file>`, restores the file in its trap, and reports in the comment whether the workaround still works.
    - Some things only work connected as the schema owner (ORDS export): use `as_schema <helper>` with `SCHEMA_CONN`.
 5. Run the new test on a version that has the issue and on one that does not, if available: `bash regression/run.sh 26.1 <id>`. Both outcomes must come out right before the test counts as done.
+6. Keep `tests.md` in sync: after **any** change to `tests.json` (new test, changed fields, `fixedIn` agreed with the user, deactivation), run `bash regression/catalog.sh` and commit `tests.json` and `tests.md` together.
 
 Helpers in `lib/common.sh`: `sqlcl_script`, `as_schema`, `sql_value`, `native_path`, `apex_alias`, `drop_workaround`, `outside_apex_changes`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
 
