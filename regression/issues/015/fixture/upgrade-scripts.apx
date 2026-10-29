@@ -1,0 +1,9 @@
+upgradeScript supportingObjectScript (
+    execution {
+        sequence: 10
+    }
+    script {
+        contentFile: supportingobjectscript.sql
+    }
+)
+

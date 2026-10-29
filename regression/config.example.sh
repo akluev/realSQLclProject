@@ -6,8 +6,10 @@ TEST_REPO=/c/repo/tests/demo-linux
 BASE_BRANCH=perftest
 BASELINE_TAG=baseline-tag
 
-# Saved SQLcl connection used by the tests (conn -name ...)
+# Saved SQLcl connections (conn -name ...): the deployer used by most tests, and the
+# project schema itself (needed to export ORDS, see tests 011 and 012)
 SQLCL_CONN=proj_vm26
+SCHEMA_CONN=demo_vm26
 
 # Run inside TEST_REPO before the tests: restores git to BASELINE_TAG and
 # rebuilds the database objects. Runs with the SQLcl version under test.

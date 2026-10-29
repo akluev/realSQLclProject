@@ -1,20 +1,39 @@
 #!/usr/bin/env bash
-# 007: project export -o APEX.<id> must write only that application:
-# no users, table data or other objects outside the application folder.
+# 007: project export -o APEX.<id> must write only that application: no users, table data or
+# other objects. The test project's filters carry the workaround in a --TEST-007 block; the
+# verdict comes from an export without it, and the comment says whether the workaround works.
 source "$(dirname "$0")/../../lib/common.sh"
 
+filters=.dbtools/filters/project.filters
+cleanup() {
+  restore_from_baseline "$filters"
+  restore_from_baseline src
+  rm -f "$RUN_DIR/apex-export.done"
+}
+trap cleanup EXIT
+
+describe() {
+  local files=$1 count schemas
+  count=$(wc -l <<<"$files" | tr -d ' ')
+  schemas=$(awk -F/ '{print $3}' <<<"$files" | sort -u | paste -sd, - | sed 's/,/, /g')
+  echo "$count file(s) under $schemas"
+}
+
+# 1. With the workaround filters (as in the baseline)
 restore_from_baseline src
-rm -f "$RUN_DIR/apex-export.done"
-fresh_apex_export "$RUN_DIR/007-export.log"
+fresh_apex_export "$RUN_DIR/007-with-workaround.log"
+with=$(outside_apex_changes)
+if [[ -z $with ]]; then
+  workaround="the TEST-007 filters prevent it"
+else
+  workaround="the TEST-007 filters do NOT prevent it: $(describe "$with")"
+fi
 
-apps="src/database/$APEX_SCHEMA/apex_apps/"
-outside=$({
-  git -C "$TEST_REPO" diff --name-only "$BASELINE_TAG" -- src
-  git -C "$TEST_REPO" ls-files --others --exclude-standard -- src
-} | grep -v "^$apps" | sort -u)
+# 2. Without them
+drop_workaround 007 "$filters"
+restore_from_baseline src
+fresh_apex_export "$RUN_DIR/007-without-workaround.log"
+without=$(outside_apex_changes)
 
-[[ -z $outside ]] && pass "only $apps changed"
-count=$(wc -l <<<"$outside" | tr -d ' ')
-schemas=$(awk -F/ '{print $3}' <<<"$outside" | sort -u | paste -sd, - | sed 's/,/, /g')
-summary=$(sed -n 's/^\([A-Z_]*\) *\([0-9]*\)$/\1 \2/p' "$RUN_DIR/007-export.log" | paste -sd, - | sed 's/,/, /g')
-fail "$count file(s) written outside the application, under: $schemas (export summary: $summary)"
+[[ -z $without ]] && pass "only the application written, even without the workaround filters"
+fail "$(describe "$without") written outside the application ($workaround)"

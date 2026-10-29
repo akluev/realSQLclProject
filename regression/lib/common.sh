@@ -7,7 +7,8 @@ REG_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 die() { echo "ERROR: $*" >&2; exit 2; }
 
-comment() { echo "$*"; [[ -z ${COMMENT_FILE:-} ]] || echo "$*" >"$COMMENT_FILE"; }
+# The first verdict wins: a helper failing later in an EXIT trap must not replace it
+comment() { echo "$*"; [[ -z ${COMMENT_FILE:-} || -s $COMMENT_FILE ]] || echo "$*" >"$COMMENT_FILE"; }
 pass()  { comment "$*"; exit 0; }
 fail()  { comment "$*"; exit 1; }
 error() { comment "$*"; exit 2; }
@@ -23,6 +24,9 @@ load_config() {
   for v in TEST_REPO BASE_BRANCH BASELINE_TAG SQLCL_CONN RESET_CMD APEX_SCHEMA APEX_WORKSPACE APEX_APP_ID; do
     [[ -n ${!v:-} ]] || die "$v is not set in $cfg"
     export "${v?}"
+  done
+  for v in SCHEMA_CONN APEX_SPARE_PAGE; do
+    [[ -z ${!v:-} ]] || export "${v?}"
   done
 }
 
@@ -44,6 +48,7 @@ use_sqlcl() {
 ver_ge() { [[ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | head -1)" == "$2" ]]; }
 
 # sqlcl_script <log>: run SQLcl commands from stdin inside TEST_REPO, connected as SQLCL_CONN
+# (connect as the schema instead with: as_schema sqlcl_script <log>)
 sqlcl_script() {
   local log=$1
   { echo "whenever sqlerror exit failure"
@@ -54,7 +59,34 @@ sqlcl_script() {
   } | (cd "$TEST_REPO" && sql -S -nolog) >"$log" 2>&1
 }
 
+# as_schema <command...>: run a helper connected as SCHEMA_CONN instead of SQLCL_CONN
+as_schema() {
+  [[ -n ${SCHEMA_CONN:-} ]] || error "SCHEMA_CONN is not set in config.sh"
+  SQLCL_CONN=$SCHEMA_CONN "$@"
+}
+
+# drop_workaround <id> <repo-file>: remove the "--TEST-<id> BEGIN" ... "--TEST-<id> END" block
+# the test project keeps in a file (e.g. project.filters), to see the bug without its workaround
+drop_workaround() {
+  local file="$TEST_REPO/$2"
+  grep -q -- "--TEST-$1 BEGIN" "$file" || error "no --TEST-$1 block in $2"
+  sed "/--TEST-$1 BEGIN/,/--TEST-$1 END/d" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
+}
+
+# outside_apex_changes: src files changed or added since BASELINE_TAG outside apex_apps
+outside_apex_changes() {
+  {
+    git -C "$TEST_REPO" diff --name-only "$BASELINE_TAG" -- src
+    git -C "$TEST_REPO" ls-files --others --exclude-standard -- src
+  } | grep -v "^src/database/$APEX_SCHEMA/apex_apps/" | sort -u
+}
+
 apex_app_path() { echo "src/database/$APEX_SCHEMA/apex_apps/f$APEX_APP_ID"; }
+
+# apex_alias: the application alias in lower case, as used for export folders
+apex_alias() {
+  sql_value "select lower(alias) from apex_applications where application_id = $APEX_APP_ID"
+}
 
 # native_path <path>: path as SQLcl (Java) expects it; on Git Bash /c/x becomes C:/x
 native_path() {

@@ -22,7 +22,7 @@ Tests run against a separate **test project**: a SQLcl Project repository with a
 
 1. Requirements: bash (Git Bash on Windows), git, jq, one or more SQLcl installs, a local database you may drop and rebuild objects in, and a saved SQLcl connection (`conn -save`) with rights to rebuild the test schema and APEX workspace.
 2. Unpack or clone the test project, run its reset once by hand to check it works, and confirm it is clean on its base branch.
-3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN`, `RESET_CMD`, the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
+3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN` (deployer), `SCHEMA_CONN` (the project schema itself), `RESET_CMD`, the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
 
 If `config.sh` is missing or a setting is wrong, the runner stops with a message naming it; fix it with the user rather than guessing paths.
 
@@ -43,7 +43,8 @@ Only records with `"active": true`. For each one, the SQLcl version under test d
 
 | Condition | Expected | Why |
 |---|---|---|
-| version < `introducedIn` | not run (N/A) | The feature or bug did not exist yet; never test backwards. |
+| version < `introducedIn`, and `testFrom` set and reached | PASS | A regression: the behaviour existed and worked before `introducedIn`. |
+| version < `introducedIn` otherwise | not run (N/A) | The feature or bug did not exist yet; never test backwards. |
 | `fixedIn` set and version >= `fixedIn` | PASS | Fixed earlier; a FAIL is a regression. |
 | otherwise (`introducedIn` empty or reached, not fixed) | FAIL | Known open issue. |
 
@@ -64,12 +65,13 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
 | Field | Meaning |
 |---|---|
 | `id` | Three-digit number, also the folder `issues/<id>/`. Never reuse a number. |
-| `kind` | `bug` or `enhancement`. |
+| `kind` | `bug`, `enhancement` (requested behaviour), or `feature` (working behaviour guarded against regressions; `fixedIn` = first version that has it). |
 | `severity` | `P0` critical/blocker, `P1` high, `P2` medium, `P3` low (same scale as the docs). Reports sort by it. |
 | `title` | One line, the issue as a statement. |
 | `area` | `project`, `export`, `stage` or `apex`; tests run in this order. |
 | `active` | Whether to keep testing it. |
 | `introducedIn` / `fixedIn` / `lastFailedIn` | SQLcl versions, e.g. `26.2.2`; `null` when unknown or not yet. |
+| `testFrom` | Optional. For regressions: the oldest version to test, where the behaviour still worked (expected PASS below `introducedIn`). Nothing below 26.1 is tested. |
 | `oracleStatus` | Free text: not reported, reported, confirmed (who, when), fixed. |
 | `forumUrl`, `docRef`, `articleUrl` | Where the issue is described: forum post, section in `docs/`, blog post. |
 | `workaround` | How users get around it today (information only; tests never use it). |
@@ -91,9 +93,11 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
    - To give export or stage a real application change, use `remove_page_in_apex` and restore with `restore_apex_app` in the trap.
    - On Windows the file system ignores case: remove an export folder before exporting into it when names matter (`fresh_apex_export` does).
    - Use `warn` for problems during cleanup; it adds to the comment without changing the verdict.
+   - Workarounds the test project needs in normal use (e.g. export filters) live in the project between `--TEST-<id> BEGIN` and `--TEST-<id> END`, so other tests are not disturbed by the bug. The test for that issue removes its block with `drop_workaround <id> <file>`, restores the file in its trap, and reports in the comment whether the workaround still works.
+   - Some things only work connected as the schema owner (ORDS export): use `as_schema <helper>` with `SCHEMA_CONN`.
 5. Run the new test on a version that has the issue and on one that does not, if available: `bash regression/run.sh 26.1 <id>`. Both outcomes must come out right before the test counts as done.
 
-Helpers in `lib/common.sh`: `sqlcl_script`, `sql_value`, `native_path`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
+Helpers in `lib/common.sh`: `sqlcl_script`, `as_schema`, `sql_value`, `native_path`, `apex_alias`, `drop_workaround`, `outside_apex_changes`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
 
 ## Changing the baseline
 

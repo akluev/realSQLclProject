@@ -62,17 +62,18 @@ tests=$(jq -r --argjson ids "$ids" '
   def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4}[.area] // 9;
   map(select(.active and (($ids | length) == 0 or (.id as $i | $ids | index($i) != null))))
   | sort_by(rank, .id)[]
-  | [.id, .area, .kind // "bug", .severity // "", .introducedIn // "", .fixedIn // "",
-     .script // "", .title, .forumUrl // .articleUrl // ""] | join("\u001f")
+  | [.id, .area, .kind // "bug", .severity // "", .testFrom // "", .introducedIn // "",
+     .fixedIn // "", .script // "", .title, .forumUrl // .articleUrl // ""] | join("\u001f")
 ' "$REG_ROOT/tests.json")
 [[ -n $tests ]] || die "no matching active tests"
 
 # Fields are separated by \x1f: unlike tab, read keeps empty fields between non-blank separators
 rows="$RUN_DIR/rows.txt"
 : >"$rows"
-while IFS=$'\x1f' read -r id area kind severity introduced fixed script title url; do
+while IFS=$'\x1f' read -r id area kind severity test_from introduced fixed script title url; do
+  # Before introducedIn: not run, unless testFrom says the behaviour existed and worked then
   if [[ -n $introduced ]] && ! ver_ge "$SQLCL_VERSION" "$introduced"; then
-    expected=N/A
+    if [[ -n $test_from ]] && ver_ge "$SQLCL_VERSION" "$test_from"; then expected=PASS; else expected=N/A; fi
   elif [[ -n $fixed ]] && ver_ge "$SQLCL_VERSION" "$fixed"; then
     expected=PASS
   else

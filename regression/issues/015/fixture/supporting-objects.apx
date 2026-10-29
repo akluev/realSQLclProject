@@ -1,0 +1,6 @@
+supportingObject (
+    advanced {
+        includeInAppExport: true
+    }
+)
+
