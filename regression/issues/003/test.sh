@@ -2,12 +2,12 @@
 # 003: project export must remove files of APEX components deleted in APEX.
 # Exports the app (so the folder has this version's layout), removes a spare page from
 # the installed app (apex import of a copy without it), exports again over the existing
-# folder, and checks the page file is gone.
+# folder, and checks the page file is gone. Works in both APEX modes (any export layout).
 source "$(dirname "$0")/../../lib/common.sh"
 
 page=${APEX_SPARE_PAGE:-100}
 page_glob=$(printf 'p%05d-*.apx' "$page")
-dir="$TEST_REPO/$(apex_app_path)"
+dir=$(apex_apps_dir)
 work="$RUN_DIR/003"
 
 # Always leave the baseline behind: export folder from git, page back in the app
@@ -39,8 +39,15 @@ written=$(find "$dir" -type f -path '*/pages/*' -newer "$work/before-export" | h
 pages_dir=$(dirname "$written")
 stale=$(find "$pages_dir" -maxdepth 1 -name "$page_glob" | head -1)
 
-# 5. Workaround check: apex export -f should remove it
-echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $(apex_app_path) -f" \
+# 5. Workaround check: apex export -f should remove it. Readable mode: into f<id>, as the
+# workaround in tests.json says; APEXlang mode: into the folder holding application.apx.
+if [[ ${APEX_MODE:-readable} == readable ]]; then
+  target=$(apex_app_path)
+else
+  target=$(exported_app_dir)
+  target=${target#"$TEST_REPO/"}
+fi
+echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $target -f" \
   | sqlcl_script "$work/apex-export.log" || true
 if [[ -n $(find "$dir" -name "$page_glob" | head -1) ]]; then
   workaround="apex export -f does NOT remove it either"

@@ -57,6 +57,28 @@ use_sqlcl() {
   export SQLCL_RELEASE SQLCL_VERSION
 }
 
+# base_ref: the commit tests treat as the baseline. In APEXlang mode run.sh sets MODE_BASE to
+# a commit on BASELINE_TAG that only adds apex.apexlang=true; otherwise BASELINE_TAG.
+base_ref() { echo "${MODE_BASE:-$BASELINE_TAG}"; }
+
+# APEX export modes. Tests with "modes" in tests.json run once per mode (APEX_MODE):
+#   readable  apex.apexlang not set (the baseline)
+#   apexlang  apex.apexlang=true
+APEX_MODES="readable apexlang"
+
+# set_apex_mode <mode> <log>: configure the test project for an APEX mode; false when this
+# SQLcl does not support it (26.1 has no apex.apexlang setting)
+set_apex_mode() {
+  local cfg="$TEST_REPO/.dbtools/project.config.json"
+  case $1 in
+    readable) ! grep -q "\"apexlang\" *: *true" "$cfg" ;;
+    apexlang)
+      echo "project config set -name apex.apexlang -value true" | sqlcl_script "$2" || return 1
+      grep -q "\"apexlang\" *: *true" "$cfg" ;;
+    *) return 1 ;;
+  esac
+}
+
 # ver_ge <a> <b>: true when version a >= version b
 ver_ge() { [[ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | head -1)" == "$2" ]]; }
 
@@ -86,15 +108,27 @@ drop_workaround() {
   sed "/--TEST-$1 BEGIN/,/--TEST-$1 END/d" "$file" >"$file.tmp" && mv "$file.tmp" "$file"
 }
 
-# outside_apex_changes: src files changed or added since BASELINE_TAG outside apex_apps
+# outside_apex_changes: src files changed or added since base_ref outside apex_apps
 outside_apex_changes() {
   {
-    git -C "$TEST_REPO" diff --name-only "$BASELINE_TAG" -- src
+    git -C "$TEST_REPO" diff --name-only "$(base_ref)" -- src
     git -C "$TEST_REPO" ls-files --others --exclude-standard -- src
   } | grep -v "^src/database/$APEX_SCHEMA/apex_apps/" | sort -u
 }
 
+# apex_app_path: the application folder of the baseline export (readable mode)
 apex_app_path() { echo "src/database/$APEX_SCHEMA/apex_apps/f$APEX_APP_ID"; }
+
+# apex_apps_dir: absolute path of the apex_apps folder, where every mode exports to
+apex_apps_dir() { echo "$TEST_REPO/src/database/$APEX_SCHEMA/apex_apps"; }
+
+# exported_app_dir: absolute folder holding application.apx after an export; the layout
+# depends on the SQLcl version and the APEX mode
+exported_app_dir() {
+  local app
+  app=$(find "$(apex_apps_dir)" -name application.apx 2>/dev/null | head -1)
+  [[ -n $app ]] && dirname "$app"
+}
 
 # apex_alias: the application alias in lower case, as used for export folders
 apex_alias() {
@@ -148,15 +182,15 @@ export_apex_app() {
   touch "$marker"
 }
 
-# restore_from_baseline <path>: make a repo path exactly as it is at BASELINE_TAG
+# restore_from_baseline <path>: make a repo path exactly as it is at base_ref
 restore_from_baseline() {
   rm -rf "${TEST_REPO:?}/$1"
-  if git -C "$TEST_REPO" cat-file -e "$BASELINE_TAG:$1" 2>/dev/null; then
-    git -C "$TEST_REPO" checkout -q "$BASELINE_TAG" -- "$1"
+  if git -C "$TEST_REPO" cat-file -e "$(base_ref):$1" 2>/dev/null; then
+    git -C "$TEST_REPO" checkout -q "$(base_ref)" -- "$1"
   fi
 }
 
-# restore_apex_app_dir: app export folder back to BASELINE_TAG; later tests export again
+# restore_apex_app_dir: app export folder back to base_ref; later tests export again
 restore_apex_app_dir() {
   restore_from_baseline "src/database/$APEX_SCHEMA/apex_apps"
   rm -f "$RUN_DIR/apex-export.done"
@@ -173,14 +207,14 @@ keep_only_apex_export() {
   mv "$keep" "$TEST_REPO/$apps"
 }
 
-# isolate_branch <id>: continue the test on its own branch from BASELINE_TAG, so its
+# isolate_branch <id>: continue the test on its own branch from base_ref, so its
 # commits and stage output do not leak into later tests. leave_branch (run it from an
 # EXIT trap) commits what is left there as evidence and returns to the previous branch.
 isolate_branch() {
   ISOLATED_FROM=$(git -C "$TEST_REPO" branch --show-current)
   ISOLATED_BRANCH="${TEST_BRANCH:-regression/manual}-$1"
   git -C "$TEST_REPO" branch -q -D "$ISOLATED_BRANCH" 2>/dev/null || true
-  git -C "$TEST_REPO" checkout -q -b "$ISOLATED_BRANCH" "$BASELINE_TAG"
+  git -C "$TEST_REPO" checkout -q -b "$ISOLATED_BRANCH" "$(base_ref)"
 }
 leave_branch() {
   [[ -n ${ISOLATED_BRANCH:-} ]] || return 0
@@ -245,4 +279,21 @@ restore_apex_app() {
   baseline_apexlang_copy "$work/baseline-app" \
     && apex_import "$work/baseline-app" "$work/restore.log" \
     || warn "re-import of the baseline app failed, see $work/restore.log"
+}
+
+# write_results_md <out-dir>: results.md of one version from its results.json
+write_results_md() {
+  jq -r '
+    def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
+    "# SQLcl \(.version) regression results", "",
+    "- \(.sqlcl)", "- Last run: \(.date)", "- Baseline: `\(.baseline)`, test branch `\(.testBranch)`",
+    "- Mode: APEX export mode the test ran in (`readable`: apex.apexlang not set, `apexlang`: apex.apexlang=true, `–`: does not depend on it)", "",
+    "| ID | Mode | Severity | Area | Issue | Expected | Result | Outcome | Comment | Run |",
+    "|---|---|---|---|---|---|---|---|---|---|",
+    (.results[]
+     | ((.title | esc) as $t | (.url // .forumUrl // "") as $u
+        | if $u != "" then "[\($t)](\($u))" else $t end) as $issue
+     | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind
+     | "| \(.id) | \(if (.mode // "") == "" then "–" else .mode end) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \(.comment | esc) | \(.date // "") |")
+  ' "$1/results.json" >"$1/results.md"
 }

@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # 001: project export must keep the case of APEXlang file and folder names.
-# Every mixed-case name in the baseline export must come back with the same case.
+# Every mixed-case name in the baseline export must come back with the same case, wherever
+# the export puts it (the folder layout depends on the version and the APEX mode).
 source "$(dirname "$0")/../../lib/common.sh"
 
 export_apex_app
 
-dir="$TEST_REPO/$(apex_app_path)"
+dir=$(apex_apps_dir)
 names=$(baseline_app_files | sed "s|^$(apex_app_path)/||" | tr '/' '\n' | grep '[A-Z]' | sort -u)
 [[ -n $names ]] || error "baseline has no mixed-case names to check"
 

@@ -11,6 +11,10 @@ def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
 def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4}[.area] // 9;
 def v: . // "–";
 def link($text; $url): if $url then "[\($text)](\($url))" else empty end;
+# one entry per test and APEX mode, with the mode fields applied ("" = mode-independent)
+def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mode: .key}
+              else . + {mode: ""} end;
+def versions: "Introduced: \(.introducedIn | v); fixed: \(.fixedIn | v); last failed: \(.lastFailedIn | v)\(if .testFrom then "; tested from \(.testFrom)" else "" end)";
 sort_by(rank, .id) as $t
 | [
   "# SQLcl Regression Tests",
@@ -19,18 +23,27 @@ sort_by(rank, .id) as $t
   "",
   "Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQLcl versions where the issue appeared and was fixed; a fixed issue keeps being tested to catch regressions. **Last failed** is the newest version the test failed on. Inactive tests are not run.",
   "",
-  "| ID | Severity | Kind | Area | Issue | Introduced | Fixed | Last failed | Active |",
-  "|---|---|---|---|---|---|---|---|---|",
-  ($t[] | "| [\(.id)](#t\(.id)) | \(.severity // "") | \(.kind // "bug") | \(.area) | \(.title | esc) | \(.introducedIn | v) | \(.fixedIn | v) | \(.lastFailedIn | v) | \(if .active then "yes" else "no" end) |"),
+  "**Mode** is the APEX export mode: tests that depend on it run once per mode, with their own versions. `readable`: apex.apexlang not set (the baseline); `apexlang`: apex.apexlang=true (SQLcl 26.2 and later); `–`: does not depend on it.",
+  "",
+  "| ID | Mode | Severity | Kind | Area | Issue | Introduced | Fixed | Last failed | Active |",
+  "|---|---|---|---|---|---|---|---|---|---|",
+  ($t[] | variants
+   | "| [\(.id)](#t\(.id)) | \(if .mode == "" then "–" else .mode end) | \(.severity // "") | \(.kind // "bug") | \(.area) | \(.title | esc) | \(.introducedIn | v) | \(.fixedIn | v) | \(.lastFailedIn | v) | \(if .active then "yes" else "no" end) |"),
   "",
   ($t[] |
     "<a id=\"t\(.id)\"></a>",
     "## \(.id). \(.title | esc)",
     "",
-    "\(.severity) \(.kind // "bug"), area `\(.area)`. Introduced: \(.introducedIn | v); fixed: \(.fixedIn | v); last failed: \(.lastFailedIn | v)\(if .testFrom then "; tested from \(.testFrom)" else "" end)\(if .active then "" else "; **inactive**" end).",
+    "\(.severity) \(.kind // "bug"), area `\(.area)`\(if .active then "" else "; **inactive**" end).",
     "",
+    (if .modes then
+       (.modes | to_entries[]
+        | "- **\(.key) mode:** \(.value | versions)\(if .value.oracleStatus then ". Oracle status: \(.value.oracleStatus)" else "" end)\(if .value.workaround then ". Workaround: \(.value.workaround)" else "" end)")
+     else "- **Versions:** \(versions)" end),
     "- **Oracle status:** \(.oracleStatus // "–")",
-    ([link("Forum post"; .forumUrl), link("Article"; .articleUrl), link("Documentation"; (if .docRef then "../" + .docRef else null end))] | if length > 0 then "- **Sources:** " + join(", ") else empty end),
+    ([link("Forum post"; .forumUrl), link("Article"; .articleUrl), link("Documentation"; (if .docRef then "../" + .docRef else null end))]
+     + [.modes // {} | to_entries[] | link("Article (\(.key) mode)"; .value.articleUrl)]
+     | if length > 0 then "- **Sources:** " + join(", ") else empty end),
     "- **Workaround:** \(.workaround // "–")",
     "- **How it is tested:** \(.prompt)",
     "- **Passes when:** \(.successCriteria)",

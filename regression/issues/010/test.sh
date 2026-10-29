@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 010: after switching the project to APEXlang mode (apex.apexlang=true), project stage
+# 010: after switching the project to APEXlang mode (apex.apexlang=true, set by run.sh for the
+# apexlang pass, on top of the readable-mode baseline and its dist), project stage
 # must not leave the legacy SQL controller (f<id>/f<id>.xml) active beside the APEXlang one.
 source "$(dirname "$0")/../../lib/common.sh"
 
@@ -8,8 +9,7 @@ mkdir -p "$work"
 isolate_branch 010
 trap leave_branch EXIT
 
-echo "project config set -name apex.apexlang -value true" | sqlcl_script "$work/config.log" \
-  || error "could not set apex.apexlang, see $work/config.log"
+[[ ${APEX_MODE:-} == apexlang ]] || error "runs in APEXlang mode only (run.sh sets it)"
 fresh_apex_export "$work/export.log"
 keep_only_apex_export
 commit_all "APEXlang mode, application $APEX_APP_ID exported" \

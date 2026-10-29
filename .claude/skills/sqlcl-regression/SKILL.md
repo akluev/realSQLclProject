@@ -12,7 +12,7 @@ The suite checks known SQLcl Project bugs and enhancement requests against any i
 | `tests.json` | The catalogue: one record per issue (a forum post with two problems is two records). |
 | `tests.md` | Readable catalogue for people, generated from `tests.json` by `catalog.sh`. Never edit it by hand. |
 | `issues/<id>/test.sh` | Deterministic test script for an issue. |
-| `run.sh <version> [id ...]` | Resets the test project and database, runs the selected tests, writes `results/<full-version>/results.md` and `results.json`. |
+| `run.sh <version> [--mode readable\|apexlang] [id ...]` | Runs the selected tests once per APEX mode (each pass from a fresh reset), writes `results/<full-version>/results.md` and `results.json`. |
 | `report.sh` | Builds the cross-version report `results/README.md`. |
 | `lib/common.sh` | Helpers shared by the runner and the tests. |
 | `reset/reset.sh [<version>]` | Puts the test project back to its baseline: git (`BASE_BRANCH` at `BASELINE_TAG`, local changes discarded), then `drop_all.sql` and `install.sql` (both take the connection, schema and workspace as parameters). |
@@ -39,13 +39,24 @@ If `config.sh` is missing or a setting is wrong, the runner stops with a message
 5. Interpret the results (next section), update `tests.json`, and show the user the table from `results/<version>/results.md`.
 6. Commit `results/<version>/results.md`, `results.json`, `results/README.md` and catalogue changes on the testing branch. The user merges and publishes; never push or merge yourself.
 
-`results/*/logs/` holds every SQLcl log of the run and is gitignored. In the test project, each run commits every test's leftovers to a branch `regression/<version>-<timestamp>` (and `...-<id>` branches for isolated tests). They are deleted at the end of the run unless `KEEP_TEST_BRANCHES=true` in `config.sh`; when kept, the next run of the same version replaces them. Set it to `true` when a result needs investigating.
+`results/*/logs/<mode>/` holds every SQLcl log of the run and is gitignored. In the test project, each run commits every test's leftovers to a branch `regression/<version>-<timestamp>` (readable pass), `...-apexlang` (APEXlang pass), and `...-<id>` branches for isolated tests. They are deleted at the end of the run unless `KEEP_TEST_BRANCHES=true` in `config.sh`; when kept, the next run of the same version replaces them. Set it to `true` when a result needs investigating.
 
 `run.sh` updates `lastFailedIn` in `tests.json` and regenerates `tests.md`; commit both with the results.
 
+## APEX export modes
+
+SQLcl exports an APEX application differently depending on `apex.apexlang` in `project.config.json`, and the bugs differ too (e.g. binary files survive a readable-mode export but not an APEXlang-mode one). A test that depends on it has a `modes` object and runs once per mode under the same id:
+
+| Mode | Setting | Pass |
+|---|---|---|
+| `readable` | `apex.apexlang` not set: the baseline as it is | First: also runs every test without `modes` (shown as `–`). |
+| `apexlang` | `apex.apexlang=true` | Second, from a fresh reset. `run.sh` commits the setting on top of `BASELINE_TAG` and uses that commit as the tests' baseline (`MODE_BASE`), so `restore_from_baseline` and `isolate_branch` keep the mode. On a SQLcl without the setting (26.1) the pass reports N/A. |
+
+`--mode <mode>` runs only that pass. Tests see the mode in `APEX_MODE`. Tests with `modes` must not assume a folder layout: search `apex_apps_dir`, or use `exported_app_dir` (the folder holding `application.apx`). Results, `lastFailedIn` and the reports are kept per test and mode.
+
 ## Which tests run
 
-Only records with `"active": true`. For each one, the SQLcl version under test decides the expected result:
+Only records with `"active": true`, in every mode they list (or the readable pass when they have no `modes`). For each one, the SQLcl version under test decides the expected result:
 
 | Condition | Expected | Why |
 |---|---|---|
@@ -84,6 +95,9 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
 | `prompt` | How to test it, in words; enough for an agent to run it without the script. |
 | `successCriteria` | What PASS means, checkable from files, output or the database. |
 | `script` | `issues/<id>/test.sh`, or `null` for a prompt-only (MANUAL) test. |
+| `modes` | Optional, for tests that depend on the APEX export mode: `{"readable": {...}, "apexlang": {...}}`, only the modes the test applies to. Each mode object holds that mode's `testFrom`, `introducedIn`, `fixedIn` and `lastFailedIn` (not at the top level then), and may override any other field, such as `oracleStatus`, `workaround` or `articleUrl`. |
+
+When a bug turns out to differ between modes, add `modes` to its record rather than a new test. A mode-specific bug, like 010 (only in APEXlang mode), lists only that mode.
 
 ## Writing a new test
 
@@ -101,10 +115,10 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
    - Use `warn` for problems during cleanup; it adds to the comment without changing the verdict.
    - Workarounds the test project needs in normal use (e.g. export filters) live in the project between `--TEST-<id> BEGIN` and `--TEST-<id> END`, so other tests are not disturbed by the bug. The test for that issue removes its block with `drop_workaround <id> <file>`, restores the file in its trap, and reports in the comment whether the workaround still works.
    - Some things only work connected as the schema owner (ORDS export): use `as_schema <helper>` with `SCHEMA_CONN`.
-5. Run the new test on a version that has the issue and on one that does not, if available: `bash regression/run.sh 26.1 <id>`. Both outcomes must come out right before the test counts as done.
+5. Run the new test on a version that has the issue and on one that does not, if available, in each of its modes: `bash regression/run.sh 26.1 <id>`. Both outcomes must come out right before the test counts as done.
 6. Keep `tests.md` in sync: after **any** change to `tests.json` (new test, changed fields, `fixedIn` agreed with the user, deactivation), run `bash regression/catalog.sh` and commit `tests.json` and `tests.md` together.
 
-Helpers in `lib/common.sh`: `sqlcl_script`, `as_schema`, `sql_value`, `native_path`, `apex_alias`, `drop_workaround`, `outside_apex_changes`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
+Helpers in `lib/common.sh`: `base_ref`, `apex_apps_dir`, `exported_app_dir`, `set_apex_mode`, `sqlcl_script`, `as_schema`, `sql_value`, `native_path`, `apex_alias`, `drop_workaround`, `outside_apex_changes`, `fresh_apex_export`, `export_apex_app` (shared, once per run), `keep_only_apex_export`, `restore_from_baseline`, `restore_apex_app_dir`, `apex_import`, `apex_page_count`, `remove_page_in_apex`, `restore_apex_app`, `baseline_apexlang_copy`, `isolate_branch` / `leave_branch`, `commit_all`, `project_stage`, `first_error`, `ver_ge`.
 
 ## Changing the baseline
 

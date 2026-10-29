@@ -6,9 +6,6 @@
     "title": "project export lowercases APEXlang file and folder names",
     "area": "export",
     "active": true,
-    "introducedIn": "26.1.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "not confirmed",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs",
@@ -16,7 +13,16 @@
     "prompt": "Remove the exported application folder, run `project export -o APEX.<app_id>` in the test repo, and compare every mixed-case file or folder name of the baseline export with the exported names.",
     "successCriteria": "Every mixed-case name in the baseline export (for example static-files/img/mixedCaseImageName.webp) is exported with the same case.",
     "script": "issues/001/test.sh",
-    "articleUrl": null
+    "articleUrl": null,
+    "modes": {
+      "readable": {
+        "introducedIn": "26.1.2",
+        "lastFailedIn": "26.3.0"
+      },
+      "apexlang": {
+        "introducedIn": "26.1.2"
+      }
+    }
   },
   {
     "id": "002",
@@ -25,9 +31,6 @@
     "title": "project export corrupts binary APEX static files",
     "area": "export",
     "active": true,
-    "introducedIn": "26.1.2",
-    "fixedIn": "26.2.2",
-    "lastFailedIn": "26.1.2",
     "oracleStatus": "fixed (thatJeffSmith-Oracle, Neil Fernandez-Oracle)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-corrupts-apex-static-files-during-export-apexlang-7800",
     "docRef": "docs/16.-APEX-26.1-and-SQLcl-26.1-Upgrade-Guide.md#33-binary-file-corruption-during-apexlang-export",
@@ -35,7 +38,19 @@
     "prompt": "Remove the exported application folder, run `project export -o APEX.<app_id>` in the test repo, and compare each binary file of the baseline export (static-files icons and images) byte for byte with the exported file.",
     "successCriteria": "Every binary file is byte-identical to the baseline (same SHA-1).",
     "script": "issues/002/test.sh",
-    "articleUrl": null
+    "articleUrl": null,
+    "modes": {
+      "readable": {
+        "introducedIn": "26.1.2",
+        "fixedIn": "26.2.2",
+        "lastFailedIn": "26.1.2"
+      },
+      "apexlang": {
+        "introducedIn": null,
+        "fixedIn": null,
+        "oracleStatus": "not reported (the readable-mode fix of 26.2.2 does not cover APEXlang mode)"
+      }
+    }
   },
   {
     "id": "003",
@@ -44,9 +59,6 @@
     "title": "project export keeps files of APEX components deleted in APEX",
     "area": "export",
     "active": true,
-    "introducedIn": null,
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "not reported",
     "forumUrl": null,
     "docRef": "docs/10.2.-sqlcl_project_enhancements.md#24-apex-application-export-should-delete-the-application-directory-before-export",
@@ -54,7 +66,13 @@
     "prompt": "Start from the baseline export. Install a copy of the APEXlang source without page 100 (`apex validate` + `apex import`) so the page is deleted in APEX, then run `project export -o APEX.<app_id>` WITHOUT removing the export folder. Check whether the page 100 file is still in the folder the export wrote pages into. Also check that `apex export ... -f` removes it. Finally re-import the baseline source to restore page 100.",
     "successCriteria": "After project export, the export folder contains no file for page 100 (p00100-*.apx).",
     "script": "issues/003/test.sh",
-    "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain"
+    "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain",
+    "modes": {
+      "readable": {
+        "lastFailedIn": "26.3.0"
+      },
+      "apexlang": {}
+    }
   },
   {
     "id": "004",
@@ -82,9 +100,6 @@
     "title": "APEXlang source written by project export fails apex validate",
     "area": "export",
     "active": true,
-    "introducedIn": "26.1.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "not reported separately (consequence of the lowercasing bug, 001)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571",
     "docRef": null,
@@ -92,27 +107,46 @@
     "workaround": "Run `apex export -applicationid <id> -exptype APEXLANG -dir src/database/<schema>/apex_apps/f<id> -f` after `project export`.",
     "prompt": "Export the application with `project export -o APEX.<app_id>` into an empty apex_apps folder and run `apex validate -input <folder with application.apx>`. The lowercased static file name no longer matches the reference in static-files.apx, so APEXlang compilation reports REFERENCE_NOT_FOUND.",
     "successCriteria": "`apex validate` on the exported APEXlang folder prints `Validation successful`.",
-    "script": "issues/005/test.sh"
+    "script": "issues/005/test.sh",
+    "modes": {
+      "readable": {
+        "introducedIn": "26.1.2",
+        "lastFailedIn": "26.3.0"
+      },
+      "apexlang": {
+        "introducedIn": "26.1.2"
+      }
+    }
   },
   {
     "id": "006",
     "kind": "bug",
     "severity": "P1",
-    "title": "Readable-mode project export does not use the documented f<app_id>/<app-alias>/ folder",
+    "title": "project export does not use the documented f<app_id>/<app-alias>/ folder",
     "area": "export",
     "active": true,
-    "introducedIn": "26.2.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "confirmed regression (skutz-Oracle, Neil Fernandez-Oracle, Sep 2026)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-262-bugs",
     "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-hybrid-source-layout-replaces-the-documented-structure",
     "workaround": "None; stay on SQLcl 26.1.",
-    "prompt": "With apex.apexlang not set (readable mode), export the application into an empty apex_apps folder and find application.apx. The documented location is f<app_id>/<app-alias>/ (alias in lower case), beside f<app_id>.sql. SQLcl 26.1 writes it there; 26.2.2 flattens it into f<app_id>/.",
+    "prompt": "Export the application into an empty apex_apps folder and find application.apx. The documented location is f<app_id>/<app-alias>/ (alias in lower case), beside f<app_id>.sql. Readable mode: SQLcl 26.1 writes it there; 26.2.2 flattens it into f<app_id>/. APEXlang mode: 26.2.2 writes it to apex_apps/<app-alias>/.",
     "successCriteria": "application.apx is in src/database/<schema>/apex_apps/f<app_id>/<app-alias>/.",
     "script": "issues/006/test.sh",
-    "testFrom": "26.1.2"
+    "modes": {
+      "readable": {
+        "testFrom": "26.1.2",
+        "introducedIn": "26.2.2",
+        "lastFailedIn": "26.3.0"
+      },
+      "apexlang": {
+        "introducedIn": "26.2.2",
+        "lastFailedIn": "26.3.0",
+        "oracleStatus": "intended by Oracle (Neil Fernandez-Oracle, Sep 2026), but contradicts the documentation",
+        "workaround": "None; do not enable apex.apexlang.",
+        "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source"
+      }
+    }
   },
   {
     "id": "007",
@@ -121,9 +155,6 @@
     "title": "project export -o APEX.<id> exports users and data that were not requested",
     "area": "export",
     "active": true,
-    "introducedIn": "26.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "reported",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/apex-app-project-export-is-exporting-application-dml-data-a-4157",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-262-bugs",
@@ -131,7 +162,16 @@
     "workaround": "Add `export_type != 'TABLES_DML'` and `export_type != 'ALL_USERS'` to .dbtools/filters/project.filters (the test project keeps them between --TEST-007 BEGIN and --TEST-007 END).",
     "prompt": "The baseline filters hold the workaround between `--TEST-007 BEGIN` and `--TEST-007 END`. Restore src, export with `project export -o APEX.<app_id>` and list src files changed outside the application folder: with the workaround there should be none. Then remove the block, restore src, export again and list them again: that second list decides the result. Seen with any -o export in SQLcl 26.2.2 (e.g. -o <package> also exported 14 users), not only APEX applications.",
     "successCriteria": "Without the TEST-007 filters, nothing outside src/database/<schema>/apex_apps/ changes.",
-    "script": "issues/007/test.sh"
+    "script": "issues/007/test.sh",
+    "modes": {
+      "readable": {
+        "introducedIn": "26.2",
+        "lastFailedIn": "26.3.0"
+      },
+      "apexlang": {
+        "introducedIn": "26.2"
+      }
+    }
   },
   {
     "id": "008",
@@ -140,9 +180,6 @@
     "title": "project stage refuses the APEX controller generated by an earlier SQLcl version",
     "area": "stage",
     "active": true,
-    "introducedIn": "26.2.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "not reported",
     "forumUrl": null,
     "docRef": null,
@@ -150,7 +187,13 @@
     "workaround": "Delete dist/releases/apex/f<id>/f<id>.xml before `project stage`.",
     "prompt": "On a branch from the baseline (staged by SQLcl 26.1), delete a page in APEX, export the application, commit, and run `project stage`. Stage must regenerate dist/releases/apex/f<app_id>/f<app_id>.xml instead of stopping with \"has been edited and stage will not overwrite it automatically\".",
     "successCriteria": "`project stage` prints `Stage processing completed`.",
-    "script": "issues/008/test.sh"
+    "script": "issues/008/test.sh",
+    "modes": {
+      "readable": {
+        "introducedIn": "26.2.2",
+        "lastFailedIn": "26.3.0"
+      }
+    }
   },
   {
     "id": "010",
@@ -159,17 +202,20 @@
     "title": "Switching to APEXlang mode leaves the legacy SQL controller in apex.changelog.xml",
     "area": "stage",
     "active": true,
-    "introducedIn": "26.2.2",
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "not reported",
     "forumUrl": null,
     "docRef": null,
     "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#apexlang-mode-export-and-stage-deep-dive",
     "workaround": "Remove the legacy dist/releases/apex/f<id> folder and its <include> from apex.changelog.xml by hand.",
-    "prompt": "On a branch from the baseline, run `project config set -name apex.apexlang -value true`, export the application into an empty apex_apps folder, commit, run `project stage`, and read the <include> entries of dist/releases/apex/apex.changelog.xml.",
+    "prompt": "In APEXlang mode (the runner has set apex.apexlang=true on top of the baseline), export the application into an empty apex_apps folder, commit, run `project stage`, and read the <include> entries of dist/releases/apex/apex.changelog.xml.",
     "successCriteria": "apex.changelog.xml no longer includes f<app_id>/f<app_id>.xml once the APEXlang controller is added.",
-    "script": "issues/010/test.sh"
+    "script": "issues/010/test.sh",
+    "modes": {
+      "apexlang": {
+        "introducedIn": "26.2.2",
+        "lastFailedIn": "26.2.2"
+      }
+    }
   },
   {
     "id": "011",
@@ -180,7 +226,7 @@
     "active": true,
     "introducedIn": "26.1.2",
     "fixedIn": null,
-    "lastFailedIn": "26.2.2",
+    "lastFailedIn": "26.3.0",
     "oracleStatus": "confirmed (Oussama Assouar-Oracle, Sep 1 2026)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs",
@@ -234,17 +280,17 @@
     "severity": "P1",
     "title": "APEXlang mode (apex.apexlang=true) does not use the documented f<app_id>/<app-alias>/ folder",
     "area": "export",
-    "active": true,
+    "active": false,
     "testFrom": "26.1.2",
     "introducedIn": "26.2.2",
     "fixedIn": null,
-    "lastFailedIn": "26.2.2",
+    "lastFailedIn": "26.3.0",
     "oracleStatus": "intended by Oracle (Neil Fernandez-Oracle, Sep 2026), but contradicts the documentation",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777",
     "docRef": null,
     "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source",
     "workaround": "None; do not enable apex.apexlang.",
-    "prompt": "Run `project config set -name apex.apexlang -value true` (SQLcl 26.1 has no such setting; the export must then simply be unchanged), export the application into an empty apex_apps folder and find application.apx. Restore project.config.json afterwards.",
+    "prompt": "Merged into 006, which now runs in both modes (006 in APEXlang mode is this test). Kept so the number is not reused. Run `project config set -name apex.apexlang -value true` (SQLcl 26.1 has no such setting; the export must then simply be unchanged), export the application into an empty apex_apps folder and find application.apx. Restore project.config.json afterwards.",
     "successCriteria": "application.apx is in src/database/<schema>/apex_apps/f<app_id>/<app-alias>/.",
     "script": "issues/014/test.sh"
   },
@@ -255,9 +301,6 @@
     "title": "project stage fails with hash errors on APEX supporting object scripts",
     "area": "stage",
     "active": true,
-    "introducedIn": null,
-    "fixedIn": "26.2",
-    "lastFailedIn": "26.2.2",
     "oracleStatus": "fix verified in SQLcl 26.2",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/export-to-apexlang-ignores-p-with-supporting-objects-and-al-9749",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs",
@@ -265,7 +308,16 @@
     "workaround": "None in 26.1; upgrade to 26.2.",
     "prompt": "On a branch, add a supporting object with an upgrade script (fixture/ in the test folder) to the application through apex import, export the application, commit, and run `project stage`. SQLcl 26.1 stops with \"The hash value of the file supportingobjectscript.sql is incorrect and can not be automatically adjusted (hard object)\" and \"Unrecoverable hash issues present\". The test removes dist/releases/apex/f<id>/f<id>.xml first so that issue 008 does not interfere.",
     "successCriteria": "project stage prints `Stage processing completed`.",
-    "script": "issues/015/test.sh"
+    "script": "issues/015/test.sh",
+    "modes": {
+      "readable": {
+        "fixedIn": "26.2",
+        "lastFailedIn": "26.2.2"
+      },
+      "apexlang": {
+        "fixedIn": "26.2"
+      }
+    }
   },
   {
     "id": "016",
@@ -314,7 +366,7 @@
     "active": true,
     "introducedIn": null,
     "fixedIn": null,
-    "lastFailedIn": "26.2.2",
+    "lastFailedIn": "26.3.0",
     "oracleStatus": "not reported",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
     "docRef": null,

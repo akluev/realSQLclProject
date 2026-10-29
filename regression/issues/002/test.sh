@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # 002: project export must not corrupt binary APEX static files.
-# Every binary file in the baseline export must come back byte-identical.
+# Every binary file in the baseline export must come back byte-identical, wherever the export
+# puts it (the folder layout depends on the version and the APEX mode).
 source "$(dirname "$0")/../../lib/common.sh"
 
 export_apex_app
 
-dir="$TEST_REPO/$(apex_app_path)"
+dir=$(apex_apps_dir)
 empty_tree=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 # git numstat shows "-" line counts for binary files
 binaries=$(git -C "$TEST_REPO" diff --numstat "$empty_tree" "$BASELINE_TAG" -- "$(apex_app_path)" \
