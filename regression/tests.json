@@ -39,7 +39,7 @@
   },
   {
     "id": "003",
-    "kind": "enhancement",
+    "kind": "bug",
     "severity": "P2",
     "title": "project export keeps files of APEX components deleted in APEX",
     "area": "export",

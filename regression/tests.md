@@ -8,7 +8,7 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 |---|---|---|---|---|---|---|---|---|
 | [001](#t001) | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | – | 26.2.2 | yes |
 | [002](#t002) | P0 | bug | export | project export corrupts binary APEX static files | 26.1.2 | 26.2.2 | 26.1.2 | yes |
-| [003](#t003) | P2 | enhancement | export | project export keeps files of APEX components deleted in APEX | – | – | 26.2.2 | yes |
+| [003](#t003) | P2 | bug | export | project export keeps files of APEX components deleted in APEX | – | – | 26.2.2 | yes |
 | [004](#t004) | P2 | bug | export | project export -o does not export synonyms | – | – | 26.2.2 | yes |
 | [005](#t005) | P1 | bug | export | APEXlang source written by project export fails apex validate | 26.1.2 | – | 26.2.2 | yes |
 | [006](#t006) | P1 | bug | export | Readable-mode project export does not use the documented f&lt;app_id>/&lt;app-alias>/ folder | 26.2.2 | – | 26.2.2 | yes |
@@ -51,7 +51,7 @@ P0 bug, area `export`. Introduced: 26.1.2; fixed: 26.2.2; last failed: 26.1.2.
 <a id="t003"></a>
 ## 003. project export keeps files of APEX components deleted in APEX
 
-P2 enhancement, area `export`. Introduced: –; fixed: –; last failed: 26.2.2.
+P2 bug, area `export`. Introduced: –; fixed: –; last failed: 26.2.2.
 
 - **Oracle status:** not reported
 - **Sources:** [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain), [Documentation](../docs/10.2.-sqlcl_project_enhancements.md#24-apex-application-export-should-delete-the-application-directory-before-export)
