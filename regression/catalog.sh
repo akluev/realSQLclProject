@@ -41,7 +41,7 @@ sort_by(rank, .id) as $t
         | "- **\(.key) mode:** \(.value | versions)\(if .value.oracleStatus then ". Oracle status: \(.value.oracleStatus)" else "" end)\(if .value.workaround then ". Workaround: \(.value.workaround)" else "" end)")
      else "- **Versions:** \(versions)" end),
     "- **Oracle status:** \(.oracleStatus // "–")",
-    ([link("Forum post"; .forumUrl), link("Article"; .articleUrl), link("Documentation"; (if .docRef then "../" + .docRef else null end))]
+    ([link("Forum post"; .forumUrl), link("Article"; .articleUrl), link("Oracle documentation"; .oracleDocUrl), link("Documentation"; (if .docRef then "../" + .docRef else null end))]
      + [.modes // {} | to_entries[] | link("Article (\(.key) mode)"; .value.articleUrl)]
      | if length > 0 then "- **Sources:** " + join(", ") else empty end),
     "- **Workaround:** \(.workaround // "–")",

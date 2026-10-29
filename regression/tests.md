@@ -32,7 +32,8 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 | [016](#t016) | – | P2 | feature | stage | stage.change.changeStyle=multiple puts each staged statement in its own changeset | – | 26.1.2 | – | yes |
 | [017](#t017) | – | P2 | bug | stage | Staged changesets use backslashes in logicalFilePath on Windows | – | – | 26.2.2 | yes |
 | [018](#t018) | – | P1 | bug | stage | Staged ORDS changeset installs into the deploying user instead of the project schema | – | – | 26.3.0 | no |
-| [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export and stage pick up a changed ORDS module | – | 26.1.2 | – | yes |
+| [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone | – | 26.1.2 | – | yes |
+| [020](#t020) | – | P0 | bug | stage | project stage fails with "Unable to save changelog, changelog is empty" for a change of more than one statement | 26.3 | – | – | yes |
 
 <a id="t001"></a>
 ## 001. project export lowercases APEXlang file and folder names
@@ -111,7 +112,7 @@ P1 bug, area `export`.
 - **readable mode:** Introduced: 26.2.2; fixed: –; last failed: 26.3.0; tested from 26.1.2
 - **apexlang mode:** Introduced: 26.2.2; fixed: –; last failed: 26.3.0. Oracle status: intended by Oracle (Neil Fernandez-Oracle, Sep 2026), but contradicts the documentation. Workaround: None; do not enable apex.apexlang.
 - **Oracle status:** confirmed regression (skutz-Oracle, Neil Fernandez-Oracle, Sep 2026)
-- **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777), [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-hybrid-source-layout-replaces-the-documented-structure), [Documentation](../docs/10.1-sqlcl_project_bugs.md#new-sqlcl-262-bugs), [Article (apexlang mode)](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source)
+- **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777), [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-hybrid-source-layout-replaces-the-documented-structure), [Oracle documentation](https://docs.oracle.com/en/database/oracle/sql-developer-command-line/26.3/sqcug/apexlang-project-structure-apexlang.html#GUID-101A04E5-6154-4BD9-8DDE-8E9CBF4882DF), [Documentation](../docs/10.1-sqlcl_project_bugs.md#new-sqlcl-262-bugs), [Article (apexlang mode)](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source)
 - **Workaround:** None; stay on SQLcl 26.1.
 - **How it is tested:** Export the application into an empty apex_apps folder and find application.apx. The documented location is f<app_id>/<app-alias>/ (alias in lower case), beside f<app_id>.sql. Readable mode: SQLcl 26.1 writes it there; 26.2.2 flattens it into f<app_id>/. APEXlang mode: 26.2.2 writes it to apex_apps/<app-alias>/.
 - **Passes when:** application.apx is in src/database/<schema>/apex_apps/f<app_id>/<app-alias>/.
@@ -164,7 +165,7 @@ P1 bug, area `export`; **inactive**.
 
 - **Versions:** Introduced: 26.2.2; fixed: –; last failed: 26.3.0; tested from 26.1.2
 - **Oracle status:** intended by Oracle (Neil Fernandez-Oracle, Sep 2026), but contradicts the documentation
-- **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777), [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source)
+- **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777), [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source), [Oracle documentation](https://docs.oracle.com/en/database/oracle/sql-developer-command-line/26.3/sqcug/apexlang-project-structure-apexlang.html#GUID-101A04E5-6154-4BD9-8DDE-8E9CBF4882DF)
 - **Workaround:** None; do not enable apex.apexlang.
 - **How it is tested:** Merged into 006, which now runs in both modes (006 in APEXlang mode is this test). Kept so the number is not reused. Run `project config set -name apex.apexlang -value true` (SQLcl 26.1 has no such setting; the export must then simply be unchanged), export the application into an empty apex_apps folder and find application.apx. Restore project.config.json afterwards.
 - **Passes when:** application.apx is in src/database/<schema>/apex_apps/f<app_id>/<app-alias>/.
@@ -263,15 +264,27 @@ P1 bug, area `stage`; **inactive**.
 - **Script:** [issues/018/test.sh](issues/018/test.sh)
 
 <a id="t019"></a>
-## 019. Connected as the schema, project export and stage pick up a changed ORDS module
+## 019. Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone
 
 P1 feature, area `stage`.
 
 - **Versions:** Introduced: –; fixed: 26.1.2; last failed: –
-- **Oracle status:** works (the baseline ORDS release was staged this way with SQLcl 26.1.2)
+- **Oracle status:** works (the baseline ORDS was exported and staged this way with SQLcl 26.1.2)
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778)
 - **Workaround:** Not needed when connected as the schema; as the installer ORDS is not exported at all (011).
-- **How it is tested:** On a branch, connected as the schema (SCHEMA_CONN): add template reg019/ with a GET handler to module regression.dept, run a full `project export`, check src/database/<schema>/ords changed, restore the application folder, commit, run `project stage`, and look for reg019/ in dist. Afterwards re-run the baseline ords.sql as the schema to remove the template. Nothing is deployed.
-- **Passes when:** The export writes the new template to src/database/<schema>/ords and project stage writes a changeset containing it.
+- **How it is tested:** On a branch, connected as the schema (SCHEMA_CONN), without changing ORDS: remove src/database/<schema>/ords, run a full `project export`, and compare the ords folder with the baseline. Restore the application folder, commit whatever else changed, run `project stage`, and list dist files with ORDS in their path. Nothing is deployed.
+- **Passes when:** The ords folder is exported and identical to the baseline, and project stage writes no ORDS files.
 - **Script:** [issues/019/test.sh](issues/019/test.sh)
+
+<a id="t020"></a>
+## 020. project stage fails with "Unable to save changelog, changelog is empty" for a change of more than one statement
+
+P0 bug, area `stage`.
+
+- **Versions:** Introduced: 26.3; fixed: –; last failed: –; tested from 26.1.2
+- **Oracle status:** not reported
+- **Workaround:** None found: changeStyle single, multiple or not set all fail the same way.
+- **How it is tested:** On a branch, add a column and a check constraint to EMP, `project export -o EMP`, commit. Then from that commit run `project stage` three times: with stage.change.changeStyle removed from project.config.json, set to single, and set to multiple. Each time check that stage completes and stage.changelog.xml includes emp.sql. SQLcl 26.3 writes emp.sql but leaves stage.changelog.xml empty and stops with the error. The comment reports, per setting, how many statements and changesets emp.sql has, which shows whether the setting still has any effect.
+- **Passes when:** project stage completes and stage.changelog.xml includes the EMP changeset with every changeStyle setting.
+- **Script:** [issues/020/test.sh](issues/020/test.sh)
 

@@ -236,9 +236,12 @@ project_stage() {
   grep -q 'Stage processing completed' "$1"
 }
 
-# first_error <log>: first ERROR / Error / ORA- line of a log, for comments
+# first_error <log>: first ERROR / Error / ORA- line of a log with the two lines after it
+# (SQLcl puts the reason there, after "An error has occurred processing your request:"), for comments
 first_error() {
-  sed 's/\x1b\[[0-9;]*m//g' "$1" | grep -m1 -E 'ERROR|Error|ORA-' | tr -d '\r' | cut -c1-200
+  sed 's/\x1b\[[0-9;]*m//g' "$1" | tr -d '\r' \
+    | awk '/ERROR|Error|ORA-/ && !n { n = 3 } n && NF { printf "%s%s", (s++ ? " " : ""), $0; n-- } END { print "" }' \
+    | sed 's/An error has occurred processing your request: *//' | cut -c1-300
 }
 
 # baseline_apexlang_dir: repo-relative folder holding application.apx at BASELINE_TAG

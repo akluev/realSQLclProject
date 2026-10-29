@@ -23,7 +23,11 @@ commit_all "DEPT: two columns and a check constraint" || error "nothing to commi
 
 grep -q '"changeStyle" *: *"multiple"' "$TEST_REPO/.dbtools/project.config.json" \
   || error "baseline project.config.json does not set stage.change.changeStyle to multiple"
-project_stage "$work/stage.log" || error "project stage failed: $(first_error "$work/stage.log")"
+if ! project_stage "$work/stage.log"; then
+  grep -q 'changelog is empty' "$work/stage.log" \
+    && fail "project stage cannot stage the change at all: 'Unable to save changelog, changelog is empty' (see 020)"
+  error "project stage failed: $(first_error "$work/stage.log")"
+fi
 
 file=$(find "$TEST_REPO/dist/releases/next/changes" -path "*$ISOLATED_BRANCH*" -name dept.sql | head -1)
 [[ -n $file ]] || error "stage wrote no dept.sql changeset, see $work/stage.log"

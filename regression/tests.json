@@ -146,7 +146,8 @@
         "workaround": "None; do not enable apex.apexlang.",
         "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source"
       }
-    }
+    },
+    "oracleDocUrl": "https://docs.oracle.com/en/database/oracle/sql-developer-command-line/26.3/sqcug/apexlang-project-structure-apexlang.html#GUID-101A04E5-6154-4BD9-8DDE-8E9CBF4882DF"
   },
   {
     "id": "007",
@@ -234,7 +235,8 @@
     "workaround": "Export ORDS while connected as the schema itself (SCHEMA_CONN). The undocumented setting export.ords.ordsAdmin=true does not help: no code reads it in 26.1 or 26.2.",
     "prompt": "The baseline REST-enables the project schema with module regression.dept. Restore src, remove src/database/<schema>/ords, run `project export -debug` with the deployer connection, and look for the module in the re-exported ords folder. The debug log shows `ORA-20012: Schema not REST enabled : <deployer>` from ords_export.export_schema() called without a schema.",
     "successCriteria": "src/database/<schema>/ords/ is exported again and contains the module regression.dept.",
-    "script": "issues/011/test.sh"
+    "script": "issues/011/test.sh",
+    "resetBefore": true
   },
   {
     "id": "012",
@@ -253,7 +255,8 @@
     "workaround": "Discard the regenerated ORDS files before committing.",
     "prompt": "On a branch, connected as the schema (SCHEMA_CONN): create table REG_012_T, run a full `project export` (ORDS is re-exported unchanged), restore the application folder, commit, run `project stage`, and list dist files with ORDS in their path. Drop the table afterwards.",
     "successCriteria": "project stage writes no ORDS files when ORDS did not change.",
-    "script": "issues/012/test.sh"
+    "script": "issues/012/test.sh",
+    "resetBefore": true
   },
   {
     "id": "013",
@@ -292,7 +295,8 @@
     "workaround": "None; do not enable apex.apexlang.",
     "prompt": "Merged into 006, which now runs in both modes (006 in APEXlang mode is this test). Kept so the number is not reused. Run `project config set -name apex.apexlang -value true` (SQLcl 26.1 has no such setting; the export must then simply be unchanged), export the application into an empty apex_apps folder and find application.apx. Restore project.config.json afterwards.",
     "successCriteria": "application.apx is in src/database/<schema>/apex_apps/f<app_id>/<app-alias>/.",
-    "script": "issues/014/test.sh"
+    "script": "issues/014/test.sh",
+    "oracleDocUrl": "https://docs.oracle.com/en/database/oracle/sql-developer-command-line/26.3/sqcug/apexlang-project-structure-apexlang.html#GUID-101A04E5-6154-4BD9-8DDE-8E9CBF4882DF"
   },
   {
     "id": "015",
@@ -380,19 +384,40 @@
     "id": "019",
     "kind": "feature",
     "severity": "P1",
-    "title": "Connected as the schema, project export and stage pick up a changed ORDS module",
+    "title": "Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone",
     "area": "stage",
     "active": true,
     "introducedIn": null,
     "fixedIn": "26.1.2",
     "lastFailedIn": null,
-    "oracleStatus": "works (the baseline ORDS release was staged this way with SQLcl 26.1.2)",
+    "oracleStatus": "works (the baseline ORDS was exported and staged this way with SQLcl 26.1.2)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
     "docRef": null,
     "articleUrl": null,
     "workaround": "Not needed when connected as the schema; as the installer ORDS is not exported at all (011).",
-    "prompt": "On a branch, connected as the schema (SCHEMA_CONN): add template reg019/ with a GET handler to module regression.dept, run a full `project export`, check src/database/<schema>/ords changed, restore the application folder, commit, run `project stage`, and look for reg019/ in dist. Afterwards re-run the baseline ords.sql as the schema to remove the template. Nothing is deployed.",
-    "successCriteria": "The export writes the new template to src/database/<schema>/ords and project stage writes a changeset containing it.",
-    "script": "issues/019/test.sh"
+    "prompt": "On a branch, connected as the schema (SCHEMA_CONN), without changing ORDS: remove src/database/<schema>/ords, run a full `project export`, and compare the ords folder with the baseline. Restore the application folder, commit whatever else changed, run `project stage`, and list dist files with ORDS in their path. Nothing is deployed.",
+    "successCriteria": "The ords folder is exported and identical to the baseline, and project stage writes no ORDS files.",
+    "script": "issues/019/test.sh",
+    "resetBefore": true
+  },
+  {
+    "id": "020",
+    "kind": "bug",
+    "severity": "P0",
+    "title": "project stage fails with \"Unable to save changelog, changelog is empty\" for a change of more than one statement",
+    "area": "stage",
+    "active": true,
+    "testFrom": "26.1.2",
+    "introducedIn": "26.3",
+    "fixedIn": null,
+    "lastFailedIn": null,
+    "oracleStatus": "not reported",
+    "forumUrl": null,
+    "docRef": null,
+    "articleUrl": null,
+    "workaround": "None found: changeStyle single, multiple or not set all fail the same way.",
+    "prompt": "On a branch, add a column and a check constraint to EMP, `project export -o EMP`, commit. Then from that commit run `project stage` three times: with stage.change.changeStyle removed from project.config.json, set to single, and set to multiple. Each time check that stage completes and stage.changelog.xml includes emp.sql. SQLcl 26.3 writes emp.sql but leaves stage.changelog.xml empty and stops with the error. The comment reports, per setting, how many statements and changesets emp.sql has, which shows whether the setting still has any effect.",
+    "successCriteria": "project stage completes and stage.changelog.xml includes the EMP changeset with every changeStyle setting.",
+    "script": "issues/020/test.sh"
   }
 ]

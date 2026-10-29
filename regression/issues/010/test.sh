@@ -14,6 +14,8 @@ fresh_apex_export "$work/export.log"
 keep_only_apex_export
 commit_all "APEXlang mode, application $APEX_APP_ID exported" \
   || error "export produced no change to commit"
+# Separate issue (008): let stage regenerate a controller written by an earlier version
+rm -f "$TEST_REPO/dist/releases/apex/f$APEX_APP_ID/f$APEX_APP_ID.xml"
 project_stage "$work/stage.log" || error "project stage failed: $(first_error "$work/stage.log")"
 
 changelog="$TEST_REPO/dist/releases/apex/apex.changelog.xml"

@@ -50,7 +50,7 @@ SQLcl exports an APEX application differently depending on `apex.apexlang` in `p
 | Mode | Setting | Pass |
 |---|---|---|
 | `readable` | `apex.apexlang` not set: the baseline as it is | First: also runs every test without `modes` (shown as `–`). |
-| `apexlang` | `apex.apexlang=true` | Second, from a fresh reset. `run.sh` commits the setting on top of `BASELINE_TAG` and uses that commit as the tests' baseline (`MODE_BASE`), so `restore_from_baseline` and `isolate_branch` keep the mode. On a SQLcl without the setting (26.1) the pass reports N/A. |
+| `apexlang` | `apex.apexlang=true` | Second, on its own branch from `BASELINE_TAG` (no database reset in between). `run.sh` commits the setting on top of `BASELINE_TAG` and uses that commit as the tests' baseline (`MODE_BASE`), so `restore_from_baseline` and `isolate_branch` keep the mode. On a SQLcl without the setting (26.1) the pass reports N/A. |
 
 `--mode <mode>` runs only that pass. Tests see the mode in `APEX_MODE`. Tests with `modes` must not assume a folder layout: search `apex_apps_dir`, or use `exported_app_dir` (the folder holding `application.apx`). Results, `lastFailedIn` and the reports are kept per test and mode.
 
@@ -90,7 +90,8 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
 | `introducedIn` / `fixedIn` / `lastFailedIn` | SQLcl versions, e.g. `26.2.2`; `null` when unknown or not yet. |
 | `testFrom` | Optional. For regressions: the oldest version to test, where the behaviour still worked (expected PASS below `introducedIn`). Nothing below 26.1 is tested. |
 | `oracleStatus` | Free text: not reported, reported, confirmed (who, when), fixed. |
-| `forumUrl`, `docRef`, `articleUrl` | Where the issue is described: forum post, section in `docs/`, blog post. |
+| `forumUrl`, `docRef`, `articleUrl`, `oracleDocUrl` | Where the issue is described: forum post, section in `docs/`, blog post, Oracle's own documentation (e.g. the documented layout the export contradicts). |
+| `resetBefore` | Optional, `true` for tests that need the database exactly at the baseline, such as a full schema export (011, 012, 019). The runner resets before them if any test ran since the last reset. |
 | `workaround` | How users get around it today (information only; tests never use it). |
 | `prompt` | How to test it, in words; enough for an agent to run it without the script. |
 | `successCriteria` | What PASS means, checkable from files, output or the database. |
