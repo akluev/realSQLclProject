@@ -49,13 +49,21 @@ load_config() {
   done
 }
 
+# SQL: the SQLcl launcher. On Windows (Git Bash, MSYS, Cygwin) the native sql.exe, as Windows
+# users run it; the bash launcher bin/sql has Git Bash quirks of its own (e.g. a winpty bridge
+# that refuses piped stdin).
+SQL=sql
+case $(uname) in
+  MINGW* | MSYS* | CYGWIN*) SQL=sql.exe ;;
+esac
+
 # use_sqlcl <version-label>: put that SQLcl first on PATH and set SQLCL_VERSION (e.g. 26.1.2)
 use_sqlcl() {
   local var="SQLCL_HOME_${1//./_}"
   local home="${!var:-}"
-  [[ -n $home && -x $home/bin/sql ]] || die "no SQLcl for $1: set $var in config.sh"
+  [[ -n $home && -x $home/bin/$SQL ]] || die "no SQLcl for $1: set $var in config.sh ($home/bin/$SQL)"
   export PATH="$home/bin:$PATH"
-  SQLCL_RELEASE="$(sql -V | tr -d '\r')"
+  SQLCL_RELEASE="$("$SQL" -V | tr -d '\r')"
   SQLCL_VERSION="$(sed -n 's/.*Release \([0-9.]*\).*/\1/p' <<<"$SQLCL_RELEASE")"
   SQLCL_VERSION="${SQLCL_VERSION%.0}"
   [[ $SQLCL_VERSION == "$1" || $SQLCL_VERSION == "$1".* ]] \
@@ -101,9 +109,9 @@ sqlcl_script() {
     echo "exit"
   } | if [[ ${SHOW_SQLCL_OUTPUT:-false} == true ]]; then
     # shown on stderr, so callers that capture stdout (sql_value) are not affected
-    (set -o pipefail; cd "$TEST_REPO" && sql -S -nolog 2>&1 | tee "$log" | sed -u 's/^/  sqlcl> /' >&2)
+    (set -o pipefail; cd "$TEST_REPO" && "$SQL" -S -nolog 2>&1 | tee "$log" | sed -u 's/^/  sqlcl> /' >&2)
   else
-    (cd "$TEST_REPO" && sql -S -nolog) >"$log" 2>&1
+    (cd "$TEST_REPO" && "$SQL" -S -nolog) >"$log" 2>&1
   fi
 }
 
