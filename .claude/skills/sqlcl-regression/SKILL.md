@@ -91,7 +91,7 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
 | `testFrom` | Optional. For regressions: the oldest version to test, where the behaviour still worked (expected PASS below `introducedIn`). Nothing below 26.1 is tested. |
 | `oracleStatus` | Free text: not reported, reported, confirmed (who, when), fixed. |
 | `forumUrl`, `docRef`, `articleUrl`, `oracleDocUrl` | Where the issue is described: forum post, section in `docs/`, blog post, Oracle's own documentation (e.g. the documented layout the export contradicts). |
-| `resetBefore`, `resetAfter` | Optional; `resetAfter: true` for a test that deploys (rebuild right after it). `resetBefore`:, `true` for tests that need the database exactly at the baseline, such as a full schema export (011, 012, 019). The runner resets before them if any test ran since the last reset. |
+| `resetBefore`, `resetAfter` | Optional; `resetAfter: true` for a test that deploys (rebuild right after it). `resetBefore: true` for tests that need the database exactly at the baseline, such as a full schema export (011, 012, 019). The runner resets before them if any test ran since the last reset. |
 | `workaround` | How users get around it today (information only; tests never use it). |
 | `prompt` | How to test it, in words; enough for an agent to run it without the script. |
 | `successCriteria` | What PASS means, checkable from files, output or the database. |
