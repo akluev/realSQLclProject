@@ -34,7 +34,8 @@ commit_all "Deploy only $controller" || true
 # (whether the APEX changeset of the controller was run)
 deploy() {
   local log="$work/deploy-$1.log" text
-  printf 'cd dist\n@install.sql\ncd ..\n' | sqlcl_script "$log" || true
+  # the project's documented install, no personal aliases: cd dist; @install; cd ..
+  printf 'cd dist\n@install\ncd ..\n' | sqlcl_script "$log" || true
   text=$(sed 's/\x1b\[[0-9;]*m//g' "$log" | tr -d '\r')
   problem=$(grep -m1 -E 'Multiple workspaces available|ERROR|Error|ORA-|Failed to' <<<"$text" | cut -c1-200 || true)
   grep -qE "Running Changeset: .*$controller::INSTALL_" <<<"$text" && ran=yes || ran=no
