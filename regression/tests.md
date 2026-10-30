@@ -1,6 +1,6 @@
 # SQLcl Regression Tests
 
-Generated 2026-10-29 from [tests.json](tests.json); do not edit by hand, run `regression/catalog.sh`.
+Generated 2026-10-30 from [tests.json](tests.json); do not edit by hand, run `regression/catalog.sh`.
 
 Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQLcl versions where the issue appeared and was fixed; a fixed issue keeps being tested to catch regressions. **Last failed** is the newest version the test failed on. Inactive tests are not run.
 
@@ -36,6 +36,8 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 | [018](#t018) | – | P1 | bug | stage | Staged ORDS changeset installs into the deploying user instead of the project schema | – | – | 26.3.0 | no |
 | [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone | – | 26.1.2 | – | yes |
 | [020](#t020) | – | P0 | bug | stage | project stage fails with "Unable to save changelog, changelog is empty" for a change of more than one statement | 26.3 | – | 26.3.0 | yes |
+| [022](#t022) | apexlang | P1 | bug | stage | After the documented move to APEXlang deployment, project stage still regenerates the legacy f&lt;app_id> controller | – | – | – | yes |
+| [023](#t023) | apexlang | P0 | bug | deploy | APEXlang deployment fails when the schema has more than one workspace, and the failed changeset is recorded as run | – | – | – | yes |
 
 <a id="t017"></a>
 ## 017. Deployed APEX changesets are recorded with different filename separators in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS on Windows, so they redeploy every time
@@ -302,4 +304,28 @@ P0 bug, area `stage`.
 - **How it is tested:** On a branch, add a column and a check constraint to EMP, `project export -o EMP`, commit. Then from that commit run `project stage` three times: with stage.change.changeStyle removed from project.config.json, set to single, and set to multiple. Each time check that stage completes and stage.changelog.xml includes emp.sql. SQLcl 26.3 writes emp.sql but leaves stage.changelog.xml empty and stops with the error. The comment reports, per setting, how many statements and changesets emp.sql has, which shows whether the setting still has any effect.
 - **Passes when:** project stage completes and stage.changelog.xml includes the EMP changeset with every changeStyle setting.
 - **Script:** [issues/020/test.sh](issues/020/test.sh)
+
+<a id="t022"></a>
+## 022. After the documented move to APEXlang deployment, project stage still regenerates the legacy f&lt;app_id> controller
+
+P1 bug, area `stage`.
+
+- **apexlang mode:** Introduced: –; fixed: –; last failed: –
+- **Oracle status:** not reported
+- **Workaround:** Comment out the legacy f<app_id> entries in apex.changelog.xml after every stage.
+- **How it is tested:** On a branch in APEXlang mode (apex.apexlang=true): remove src/database/<schema>/apex_apps/f<app_id>, dist/releases/apex/f<app_id> and the f<app_id> include of dist/releases/apex/apex.changelog.xml, commit; `project export -o APEX.<app_id>` (writes apex_apps/<alias>), commit; `project stage`. Read the includes of apex.changelog.xml and list dist/releases/apex/f<app_id>.
+- **Passes when:** apex.changelog.xml has exactly one include, the APEXlang controller (<alias>/<alias>.xml), and no dist/releases/apex/f<app_id> files are generated.
+- **Script:** [issues/022/test.sh](issues/022/test.sh)
+
+<a id="t023"></a>
+## 023. APEXlang deployment fails when the schema has more than one workspace, and the failed changeset is recorded as run
+
+P0 bug, area `deploy`.
+
+- **apexlang mode:** Introduced: –; fixed: –; last failed: –
+- **Oracle status:** not reported
+- **Workaround:** None known for the generated APEXlang install.
+- **How it is tested:** Needs the baseline schema mapped to two or more APEX workspaces. Prepare the APEXlang deployment as in 022, comment out the legacy f<app_id> includes stage adds back, commit, and deploy with dist/install.sql as the installer. The generated APEXlang install does not pass the workspace, so it stops with "Multiple workspaces available, use the workspaceId or the workspace option", and Liquibase still records the INSTALL changeset in DATABASECHANGELOG. The database is reset after the test.
+- **Passes when:** The deploy reports no error and the APEXlang INSTALL changeset is recorded; with an error, the changeset must not be recorded as run.
+- **Script:** [issues/023/test.sh](issues/023/test.sh)
 

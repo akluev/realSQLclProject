@@ -8,7 +8,7 @@ require_tools
 
 jq -r --arg date "$(date '+%Y-%m-%d')" '
 def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
-def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4}[.area] // 9;
+def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4, "deploy": 5}[.area] // 9;
 def v: . // "–";
 def link($text; $url): if $url then "[\($text)](\($url))" else empty end;
 # one entry per test and APEX mode, with the mode fields applied ("" = mode-independent)

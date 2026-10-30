@@ -96,7 +96,7 @@ reset_baseline "$LOG_ROOT/reset.log"
 for mode in $modes; do
   # Tests of this pass, in area order; a test with modes gets that mode's fields
   tests=$(jq -r --argjson ids "$ids" --arg mode "$mode" '
-    def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4}[.area] // 9;
+    def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4, "deploy": 5}[.area] // 9;
     map(select(.active and (($ids | length) == 0 or (.id as $i | $ids | index($i) != null))))
     | map(if .modes then (if .modes[$mode] then . + .modes[$mode] + {mode: $mode} else empty end)
           elif $mode == "readable" then . + {mode: ""}
@@ -104,7 +104,7 @@ for mode in $modes; do
     | sort_by(rank, .id)[]
     | [.id, .mode, .area, .kind // "bug", .severity // "", .testFrom // "", .introducedIn // "",
        .fixedIn // "", .script // "", .title, .forumUrl // .articleUrl // "",
-       (.resetBefore // false | tostring)] | join("\u001f")
+       (.resetBefore // false | tostring), (.resetAfter // false | tostring)] | join("\u001f")
   ' "$REG_ROOT/tests.json")
   [[ -n $tests ]] || continue
 
@@ -136,7 +136,7 @@ for mode in $modes; do
   fi
 
   # Fields are separated by \x1f: unlike tab, read keeps empty fields between non-blank separators
-  while IFS=$'\x1f' read -r id tmode area kind severity test_from introduced fixed script title url reset_before; do
+  while IFS=$'\x1f' read -r id tmode area kind severity test_from introduced fixed script title url reset_before reset_after; do
     workaround_result=
     # Before introducedIn: not run, unless testFrom says the behaviour existed and worked then
     if [[ -n $introduced ]] && ! ver_ge "$SQLCL_VERSION" "$introduced"; then
@@ -177,7 +177,12 @@ for mode in $modes; do
       case $rc in 0) result=PASS ;; 1) result=FAIL ;; *) result=ERROR ;; esac
       commit_evidence "Test $id${tmode:+ ($tmode)}: $result"
       dirty=true
-      if [[ -n $tmode ]] && ! app_intact; then
+      # A test that deploys ("resetAfter": true) leaves the database changed: reset straight away
+      if [[ $reset_after == true ]]; then
+        echo "     reset after $id (resetAfter)"
+        reset_baseline "$RUN_DIR/reset-after-$id.log"
+        repo checkout -q -f "$TEST_BRANCH"
+      elif [[ -n $tmode ]] && ! app_intact; then
         comment+="; WARNING: application $APEX_APP_ID not as in the baseline after the test (page ${APEX_SPARE_PAGE:-100} missing), database reset"
         reset_baseline "$RUN_DIR/reset-after-$id.log"
         repo checkout -q -f "$TEST_BRANCH"

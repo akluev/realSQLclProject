@@ -449,5 +449,50 @@
         "lastFailedIn": "26.3.0"
       }
     }
+  },
+  {
+    "id": "022",
+    "kind": "bug",
+    "severity": "P1",
+    "title": "After the documented move to APEXlang deployment, project stage still regenerates the legacy f<app_id> controller",
+    "area": "stage",
+    "active": true,
+    "oracleStatus": "not reported",
+    "forumUrl": null,
+    "docRef": null,
+    "articleUrl": null,
+    "workaround": "Comment out the legacy f<app_id> entries in apex.changelog.xml after every stage.",
+    "prompt": "On a branch in APEXlang mode (apex.apexlang=true): remove src/database/<schema>/apex_apps/f<app_id>, dist/releases/apex/f<app_id> and the f<app_id> include of dist/releases/apex/apex.changelog.xml, commit; `project export -o APEX.<app_id>` (writes apex_apps/<alias>), commit; `project stage`. Read the includes of apex.changelog.xml and list dist/releases/apex/f<app_id>.",
+    "successCriteria": "apex.changelog.xml has exactly one include, the APEXlang controller (<alias>/<alias>.xml), and no dist/releases/apex/f<app_id> files are generated.",
+    "script": "issues/022/test.sh",
+    "modes": {
+      "apexlang": {
+        "introducedIn": null,
+        "fixedIn": null
+      }
+    }
+  },
+  {
+    "id": "023",
+    "kind": "bug",
+    "severity": "P0",
+    "title": "APEXlang deployment fails when the schema has more than one workspace, and the failed changeset is recorded as run",
+    "area": "deploy",
+    "active": true,
+    "resetAfter": true,
+    "oracleStatus": "not reported",
+    "forumUrl": null,
+    "docRef": null,
+    "articleUrl": null,
+    "workaround": "None known for the generated APEXlang install.",
+    "prompt": "Needs the baseline schema mapped to two or more APEX workspaces. Prepare the APEXlang deployment as in 022, comment out the legacy f<app_id> includes stage adds back, commit, and deploy with dist/install.sql as the installer. The generated APEXlang install does not pass the workspace, so it stops with \"Multiple workspaces available, use the workspaceId or the workspace option\", and Liquibase still records the INSTALL changeset in DATABASECHANGELOG. The database is reset after the test.",
+    "successCriteria": "The deploy reports no error and the APEXlang INSTALL changeset is recorded; with an error, the changeset must not be recorded as run.",
+    "script": "issues/023/test.sh",
+    "modes": {
+      "apexlang": {
+        "introducedIn": null,
+        "fixedIn": null
+      }
+    }
   }
 ]

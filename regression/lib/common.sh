@@ -265,6 +265,32 @@ first_error() {
     | sed 's/An error has occurred processing your request: *//' | cut -c1-300
 }
 
+# apex_includes: the include entries of dist/releases/apex/apex.changelog.xml, comma separated
+apex_includes() {
+  sed -n 's/^[[:space:]]*<include file="\([^"]*\)".*/\1/p' "$TEST_REPO/dist/releases/apex/apex.changelog.xml" \
+    | paste -sd, - | sed 's/,/, /g'
+}
+
+# apexlang_migration <workdir>: move the application to APEXlang deployment the way Oracle
+# documents it, on the current (isolated) branch with apex.apexlang=true: remove the legacy
+# f<id> source and dist folders and its apex.changelog.xml entry, commit, project export the
+# application, commit, project stage. Stage output is left uncommitted for the caller to inspect.
+apexlang_migration() {
+  local work=$1 changelog="$TEST_REPO/dist/releases/apex/apex.changelog.xml"
+  [[ ${APEX_MODE:-} == apexlang ]] || error "runs in APEXlang mode only (run.sh sets it)"
+  rm -rf "${TEST_REPO:?}/$(apex_app_path)" "${TEST_REPO:?}/$(apex_app_path).sql" \
+    "${TEST_REPO:?}/dist/releases/apex/f$APEX_APP_ID"
+  grep -v "<include file=\"f$APEX_APP_ID/" "$changelog" >"$changelog.tmp" && mv "$changelog.tmp" "$changelog"
+  commit_all "Prepare APEXlang deployment: legacy f$APEX_APP_ID removed" \
+    || error "nothing removed: the baseline has no legacy f$APEX_APP_ID"
+  echo "project export -o APEX.$APEX_APP_ID" | sqlcl_script "$work/export.log" \
+    || error "project export failed, see $work/export.log"
+  [[ -n $(exported_app_dir) ]] || error "project export wrote no application.apx: $(first_error "$work/export.log")"
+  keep_only_apex_export
+  commit_all "Application $APEX_APP_ID exported in APEXlang" || error "export produced no change to commit"
+  project_stage "$work/stage.log" || error "project stage failed: $(first_error "$work/stage.log")"
+}
+
 # baseline_apexlang_dir: repo-relative folder holding application.apx at BASELINE_TAG
 baseline_apexlang_dir() {
   local app

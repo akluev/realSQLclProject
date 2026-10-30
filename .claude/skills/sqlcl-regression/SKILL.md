@@ -85,13 +85,13 @@ Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open)
 | `kind` | `bug`, `enhancement` (requested behaviour), or `feature` (working behaviour guarded against regressions; `fixedIn` = first version that has it). |
 | `severity` | `P0` critical/blocker, `P1` high, `P2` medium, `P3` low (same scale as the docs). Reports sort by it. |
 | `title` | One line, the issue as a statement. |
-| `area` | `project`, `export`, `stage` or `apex`; tests run in this order. |
+| `area` | `project`, `export`, `stage`, `apex` or `deploy`; tests run in this order. |
 | `active` | Whether to keep testing it. |
 | `introducedIn` / `fixedIn` / `lastFailedIn` | SQLcl versions, e.g. `26.2.2`; `null` when unknown or not yet. |
 | `testFrom` | Optional. For regressions: the oldest version to test, where the behaviour still worked (expected PASS below `introducedIn`). Nothing below 26.1 is tested. |
 | `oracleStatus` | Free text: not reported, reported, confirmed (who, when), fixed. |
 | `forumUrl`, `docRef`, `articleUrl`, `oracleDocUrl` | Where the issue is described: forum post, section in `docs/`, blog post, Oracle's own documentation (e.g. the documented layout the export contradicts). |
-| `resetBefore` | Optional, `true` for tests that need the database exactly at the baseline, such as a full schema export (011, 012, 019). The runner resets before them if any test ran since the last reset. |
+| `resetBefore`, `resetAfter` | Optional; `resetAfter: true` for a test that deploys (rebuild right after it). `resetBefore`:, `true` for tests that need the database exactly at the baseline, such as a full schema export (011, 012, 019). The runner resets before them if any test ran since the last reset. |
 | `workaround` | How users get around it today (information only; tests never use it). |
 | `prompt` | How to test it, in words; enough for an agent to run it without the script. |
 | `successCriteria` | What PASS means, checkable from files, output or the database. |
@@ -107,7 +107,7 @@ When a bug turns out to differ between modes, add `modes` to its record rather t
 3. End with `pass "<comment>"`, `fail "<comment>"` or `error "<comment>"` (exit 0/1/2). The comment goes into the results table: say what was observed, with names and numbers.
 4. Rules:
    - Use only documented SQLcl commands, as a user would. Never the user's personal aliases or scripts.
-   - Never deploy (`lb update`, `project deploy`): the suite tests export and stage. Changes a test needs are made directly in the database and undone in its trap.
+   - Do not deploy (`lb update`, `project deploy`, `dist/install.sql`): the suite tests export and stage, and changes a test needs are made directly in the database and undone in its trap. The exception is a test whose subject is the deployment itself (023): area `deploy` (runs last), `"resetAfter": true` so the runner rebuilds the database right after it. Reading what the reset's own install recorded (017) is not deploying.
    - SQLcl often exits 0 on failure: decide from files, query results or output text (`Validation successful`, `Import successful`, `Stage processing completed`).
    - Pass paths to SQLcl through `native_path` (Git Bash paths are not Windows paths). SQLcl runs with the test project as its working directory, so repo-relative paths also work.
    - Name database objects `REG_<id>_*`, and drop them in an `EXIT` trap. Restore files with `restore_from_baseline <path>`.

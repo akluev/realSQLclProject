@@ -17,9 +17,12 @@ define workspace_name  = "&3"
 
 conn -name &connection_name
 
-prompt "Dropping workspace &workspace_name"
+-- The baseline maps the schema to more than one workspace (test 023): drop all of them
+prompt "Dropping workspace &workspace_name and every other workspace of &schema_name"
 begin
-  for rec in (select workspace from apex_workspaces where workspace = upper('&workspace_name')) loop
+  for rec in (select workspace from apex_workspaces where workspace = upper('&workspace_name')
+              union
+              select workspace_name from apex_workspace_schemas where schema = upper('&schema_name')) loop
     apex_instance_admin.remove_workspace(rec.workspace, 'Y', 'N');
     dbms_output.put_line('Workspace dropped ' || rec.workspace);
   end loop;
@@ -42,6 +45,9 @@ end;
 
 prompt "Dropping the Liquibase changelog"
 drop table if exists databasechangelog;
+
+prompt "Dropping the Liquibase changelog actions"
+drop table if exists databasechangelog_actions;
 
 prompt "Dropping user &schema_name"
 drop user if exists &schema_name cascade;
