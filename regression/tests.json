@@ -350,19 +350,19 @@
     "id": "017",
     "kind": "bug",
     "severity": "P2",
-    "title": "Staged changesets use backslashes in logicalFilePath on Windows",
-    "area": "stage",
+    "title": "Deployed APEX changesets are recorded with different filename separators in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS on Windows, so they redeploy every time",
+    "area": "project",
     "active": true,
-    "introducedIn": null,
-    "fixedIn": null,
-    "lastFailedIn": "26.2.2",
-    "oracleStatus": "the APEX controller case was fixed in 26.2.0 (Omar Bakhir-Oracle, Mar 30 2026); other changesets still use \\",
+    "introducedIn": "25.4.1",
+    "fixedIn": "26.2",
+    "lastFailedIn": null,
+    "oracleStatus": "fixed in 26.2.0 according to Oracle (Omar Bakhir-Oracle, Mar 30 2026)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-25-4-1-project-windows-apex-changesets-redeployed-eve-3997",
     "docRef": null,
     "articleUrl": null,
-    "workaround": "Stage on one OS only, or fix the paths in dist before committing.",
-    "prompt": "On a branch, create table REG_017_T, export it, commit, run `project stage`, and read logicalFilePath in the staged changesets. On Windows they contain backslashes (e.g. regression\\26.2.2-...\\demo1\\tables\\reg_017_t.sql); staged on Linux the same changeset gets slashes, a different identity, so Liquibase runs it again. Only meaningful on Windows.",
-    "successCriteria": "No staged logicalFilePath contains a backslash.",
+    "workaround": "Windows-only teams: update DATABASECHANGELOG.filename to the backslash form, e.g. update databasechangelog set filename = 'releases\\apex\\f100\\f100.xml' where id = 'INSTALL_100'. No workaround for mixed Windows/macOS/Linux teams.",
+    "prompt": "Nothing extra is deployed: the reset at the start of the run installs the baseline from dist (dist/install.sql, lb update) with the SQLcl under test. Connected as the installer, compare id, author and filename of the APEX changesets (id INSTALL%) in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS: select filename, id, author from databasechangelog where id like 'INSTALL%'; select filename, id, author, status from databasechangelog_actions where id like 'INSTALL%'. Then, from dist, run `lb status -changelog-file releases/main.changelog.xml -search-path \".\" -def env/test.properties` and look for INSTALL_ changesets listed as not deployed. On Windows with the bug, the changelog has releases/apex/f<id>/f<id>.xml and the actions releases\\apex\\f<id>\\f<id>.xml, so Liquibase, matching on (id, author, filename), never sees the changeset as run. Only meaningful on Windows.",
+    "successCriteria": "Every INSTALL% row of DATABASECHANGELOG has a DATABASECHANGELOG_ACTIONS row with the same id, author and filename, and lb status lists no INSTALL_ changeset as not deployed.",
     "script": "issues/017/test.sh"
   },
   {
@@ -445,7 +445,8 @@
       },
       "apexlang": {
         "introducedIn": null,
-        "fixedIn": null
+        "fixedIn": null,
+        "lastFailedIn": "26.3.0"
       }
     }
   }
