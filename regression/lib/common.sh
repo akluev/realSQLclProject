@@ -271,23 +271,34 @@ apex_includes() {
     | paste -sd, - | sed 's/,/, /g'
 }
 
-# apexlang_migration <workdir>: move the application to APEXlang deployment the way Oracle
-# documents it, on the current (isolated) branch with apex.apexlang=true: remove the legacy
-# f<id> source and dist folders and its apex.changelog.xml entry, commit, project export the
-# application, commit, project stage. Stage output is left uncommitted for the caller to inspect.
-apexlang_migration() {
+# apex_controller: the apex.changelog.xml include stage should write for the application in the
+# current APEX mode: f<id>/f<id>.xml (readable), <alias>/<alias>.xml (APEXlang)
+apex_controller() {
+  if [[ ${APEX_MODE:-readable} == apexlang ]]; then
+    local alias
+    alias=$(apex_alias)
+    echo "$alias/$alias.xml"
+  else
+    echo "f$APEX_APP_ID/f$APEX_APP_ID.xml"
+  fi
+}
+
+# apex_restage <workdir>: regenerate the application's deployment from scratch, the way Oracle
+# documents the move to APEXlang, in the current APEX mode on the current (isolated) branch:
+# remove the f<id> source and dist folders and its apex.changelog.xml entry, commit, project
+# export the application, commit, project stage. Stage output is left uncommitted.
+apex_restage() {
   local work=$1 changelog="$TEST_REPO/dist/releases/apex/apex.changelog.xml"
-  [[ ${APEX_MODE:-} == apexlang ]] || error "runs in APEXlang mode only (run.sh sets it)"
   rm -rf "${TEST_REPO:?}/$(apex_app_path)" "${TEST_REPO:?}/$(apex_app_path).sql" \
     "${TEST_REPO:?}/dist/releases/apex/f$APEX_APP_ID"
   grep -v "<include file=\"f$APEX_APP_ID/" "$changelog" >"$changelog.tmp" && mv "$changelog.tmp" "$changelog"
-  commit_all "Prepare APEXlang deployment: legacy f$APEX_APP_ID removed" \
-    || error "nothing removed: the baseline has no legacy f$APEX_APP_ID"
+  commit_all "Remove f$APEX_APP_ID from source and dist (${APEX_MODE:-readable} mode)" \
+    || error "nothing removed: the baseline has no f$APEX_APP_ID"
   echo "project export -o APEX.$APEX_APP_ID" | sqlcl_script "$work/export.log" \
     || error "project export failed, see $work/export.log"
   [[ -n $(exported_app_dir) ]] || error "project export wrote no application.apx: $(first_error "$work/export.log")"
   keep_only_apex_export
-  commit_all "Application $APEX_APP_ID exported in APEXlang" || error "export produced no change to commit"
+  commit_all "Application $APEX_APP_ID exported (${APEX_MODE:-readable} mode)" || error "export produced no change to commit"
   project_stage "$work/stage.log" || error "project stage failed: $(first_error "$work/stage.log")"
 }
 

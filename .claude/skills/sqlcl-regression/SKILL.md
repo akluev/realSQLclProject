@@ -107,7 +107,7 @@ When a bug turns out to differ between modes, add `modes` to its record rather t
 3. End with `pass "<comment>"`, `fail "<comment>"` or `error "<comment>"` (exit 0/1/2). The comment goes into the results table: say what was observed, with names and numbers.
 4. Rules:
    - Use only documented SQLcl commands, as a user would. Never the user's personal aliases or scripts.
-   - Do not deploy (`lb update`, `project deploy`, `dist/install.sql`): the suite tests export and stage, and changes a test needs are made directly in the database and undone in its trap. The exception is a test whose subject is the deployment itself (023): area `deploy` (runs last), `"resetAfter": true` so the runner rebuilds the database right after it. Reading what the reset's own install recorded (017) is not deploying.
+   - Do not deploy (`lb update`, `project deploy`, `dist/install.sql`): the suite tests export and stage, and changes a test needs are made directly in the database and undone in its trap. The exception is a test whose subject is the deployment itself (023): area `deploy` (runs last), `"resetBefore"` and `"resetAfter": true` so the runner rebuilds the database right after it. Reading what the reset's own install recorded (017) is not deploying.
    - SQLcl often exits 0 on failure: decide from files, query results or output text (`Validation successful`, `Import successful`, `Stage processing completed`).
    - Pass paths to SQLcl through `native_path` (Git Bash paths are not Windows paths). SQLcl runs with the test project as its working directory, so repo-relative paths also work.
    - Name database objects `REG_<id>_*`, and drop them in an `EXIT` trap. Restore files with `restore_from_baseline <path>`.

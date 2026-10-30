@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# 023: an application moved to APEXlang deployment (as in 022) must deploy through its APEXlang
-# controller, however many workspaces the schema belongs to, and a failed APEX changeset must
-# not be recorded as run. SQLcl's generated install does not pass the workspace, so with more
-# than one workspace it stops with "Multiple workspaces available, use the workspaceId or the
-# workspace option", and Liquibase still records the changeset in DATABASECHANGELOG.
-# Deploys into the database: run.sh resets after this test ("resetAfter": true).
+# 023: with the schema in more than one workspace, an application whose deployment was
+# regenerated from scratch (as in 022) must deploy through the controller of the current APEX
+# mode, and a second deploy straight after must not run the APEX changeset again.
+#   readable  f<id>/f<id>.xml deploys, and is skipped the second time.
+#   apexlang  <alias>/<alias>.xml: the generated install does not pass the workspace, so it stops
+#             with "Multiple workspaces available, use the workspaceId or the workspace option",
+#             and Liquibase still records the changeset as run.
+# Deploys into the database: run.sh resets before and after this test.
 source "$(dirname "$0")/../../lib/common.sh"
 
 work="$RUN_DIR/023"
@@ -17,27 +19,37 @@ workspaces=$(sql_value "select count(*) from apex_workspace_schemas where schema
 [[ $workspaces -ge 2 ]] \
   || error "the baseline maps $schema to $workspaces workspace(s); this test needs 2 or more"
 
-apexlang_migration "$work"
+apex_restage "$work"
 
-# Only the APEXlang controller is deployed: legacy entries stage added back (022) are commented out
+# Deploy only the controller of this mode: other entries stage wrote (022) are commented out
+controller=$(apex_controller)
 changelog="$TEST_REPO/dist/releases/apex/apex.changelog.xml"
-sed -E "s#^([[:space:]]*)(<include file=\"f$APEX_APP_ID/[^>]*>)#\1<!-- \2 -->#" "$changelog" >"$changelog.tmp" \
-  && mv "$changelog.tmp" "$changelog"
-controller=$(apex_includes)
-[[ -n $controller ]] || error "no APEXlang controller in apex.changelog.xml after stage, see $work/stage.log"
-commit_all "Deploy only the APEXlang controller: $controller" || true
+grep -q "<include file=\"$controller\"" "$changelog" \
+  || error "stage did not include $controller in apex.changelog.xml: $(apex_includes)"
+awk -v c="$controller" '/^[[:space:]]*<include / && index($0, "\"" c "\"") == 0 { sub(/<include[^>]*>/, "<!-- & -->") } { print }' \
+  "$changelog" >"$changelog.tmp" && mv "$changelog.tmp" "$changelog"
+commit_all "Deploy only $controller" || true
 
-# Deploy as an installer does: dist/install.sql
-printf 'cd dist\n@install.sql\ncd ..\n' | sqlcl_script "$work/deploy.log" || true
-log=$(sed 's/\x1b\[[0-9;]*m//g' "$work/deploy.log" | tr -d '\r')
-problem=$(grep -m1 -E 'Multiple workspaces available|ERROR|Error|ORA-|Failed to' <<<"$log" | cut -c1-200)
+# deploy <n>: dist/install.sql as an installer runs it; sets problem (first error) and ran
+# (whether the APEX changeset of the controller was run)
+deploy() {
+  local log="$work/deploy-$1.log" text
+  printf 'cd dist\n@install.sql\ncd ..\n' | sqlcl_script "$log" || true
+  text=$(sed 's/\x1b\[[0-9;]*m//g' "$log" | tr -d '\r')
+  problem=$(grep -m1 -E 'Multiple workspaces available|ERROR|Error|ORA-|Failed to' <<<"$text" | cut -c1-200 || true)
+  grep -qE "Running Changeset: .*$controller::INSTALL_" <<<"$text" && ran=yes || ran=no
+}
 
-# What Liquibase recorded for the APEXlang changeset
-recorded=$(sql_value "select count(*) from databasechangelog where id like 'INSTALL%' and filename not like '%f$APEX_APP_ID%'")
-
-[[ -z $problem && $recorded -ge 1 ]] && pass "deployed through $controller ($workspaces workspaces for $schema)"
-[[ -n $problem ]] || fail "deploy reported no error, but no APEXlang INSTALL changeset is recorded in DATABASECHANGELOG"
-if [[ $recorded -ge 1 ]]; then
-  fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem; yet DATABASECHANGELOG records the changeset as run"
+deploy 1
+if [[ -n $problem ]]; then
+  recorded=$(sql_value "select count(*) from databasechangelog where id like 'INSTALL%' and filename like '%$controller'")
+  ((recorded >= 1)) \
+    && fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem; yet DATABASECHANGELOG records the changeset as run"
+  fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem"
 fi
-fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem"
+[[ $ran == yes ]] || fail "deploy reported no error but did not run the APEX changeset of $controller, see $work/deploy-1.log"
+
+deploy 2
+[[ -z $problem ]] || fail "first deploy of $controller succeeded; the second, with nothing changed, failed: $problem"
+[[ $ran == no ]] || fail "first deploy of $controller succeeded; the second, with nothing changed, ran the APEX changeset again"
+pass "deployed through $controller ($workspaces workspaces for $schema); a second deploy skipped it"
