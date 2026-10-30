@@ -8,7 +8,7 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 
 | ID | Mode | Severity | Kind | Area | Issue | Introduced | Fixed | Last failed | Active |
 |---|---|---|---|---|---|---|---|---|---|
-| [017](#t017) | – | P2 | bug | project | Deployed APEX changesets are recorded with different filename separators in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS on Windows, so they redeploy every time | 25.4.1 | 26.2 | – | yes |
+| [017](#t017) | – | P2 | bug | project | Deployed APEX changesets are recorded with different filename separators in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS on Windows, so they redeploy every time | 25.4.1 | 26.1 | – | yes |
 | [001](#t001) | readable | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | – | 26.3.0 | yes |
 | [001](#t001) | apexlang | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | – | 26.3.0 | yes |
 | [002](#t002) | readable | P0 | bug | export | project export corrupts binary APEX static files | 26.1.2 | 26.2.2 | 26.1.2 | yes |
@@ -42,12 +42,12 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 
 P2 bug, area `project`.
 
-- **Versions:** Introduced: 25.4.1; fixed: 26.2; last failed: –
-- **Oracle status:** fixed in 26.2.0 according to Oracle (Omar Bakhir-Oracle, Mar 30 2026)
+- **Versions:** Introduced: 25.4.1; fixed: 26.1; last failed: –
+- **Oracle status:** fixed in SQLcl 26.1
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-25-4-1-project-windows-apex-changesets-redeployed-eve-3997)
 - **Workaround:** Windows-only teams: update DATABASECHANGELOG.filename to the backslash form, e.g. update databasechangelog set filename = 'releases\apex\f100\f100.xml' where id = 'INSTALL_100'. No workaround for mixed Windows/macOS/Linux teams.
-- **How it is tested:** Nothing extra is deployed: the reset at the start of the run installs the baseline from dist (dist/install.sql, lb update) with the SQLcl under test. Connected as the installer, compare id, author and filename of the APEX changesets (id INSTALL%) in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS: select filename, id, author from databasechangelog where id like 'INSTALL%'; select filename, id, author, status from databasechangelog_actions where id like 'INSTALL%'. Then, from dist, run `lb status -changelog-file releases/main.changelog.xml -search-path "." -def env/test.properties` and look for INSTALL_ changesets listed as not deployed. On Windows with the bug, the changelog has releases/apex/f<id>/f<id>.xml and the actions releases\apex\f<id>\f<id>.xml, so Liquibase, matching on (id, author, filename), never sees the changeset as run. Only meaningful on Windows.
-- **Passes when:** Every INSTALL% row of DATABASECHANGELOG has a DATABASECHANGELOG_ACTIONS row with the same id, author and filename, and lb status lists no INSTALL_ changeset as not deployed.
+- **How it is tested:** Nothing extra is deployed: the reset at the start of the run installs the baseline from dist (dist/install.sql, lb update) with the SQLcl under test. Connected as the installer, compare id, author and filename of the APEX changesets (id INSTALL%) in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS: select filename, id, author from databasechangelog where id like 'INSTALL%'; select filename, id, author, status from databasechangelog_actions where id like 'INSTALL%'. Then, from dist, run the lb update command of dist/install.sql with update replaced by status (same -def properties, so ${...} substitutions give the same checksums; e.g. `lb status -changelog-file releases/main.changelog.xml -def env/test.properties`) and look for INSTALL_ changesets listed as not deployed. On Windows with the bug, the changelog has releases/apex/f<id>/f<id>.xml and the actions releases\apex\f<id>\f<id>.xml, so Liquibase, matching on (id, author, filename), never sees the changeset as run. Only meaningful on Windows.
+- **Passes when:** Every INSTALL% row of DATABASECHANGELOG has a DATABASECHANGELOG_ACTIONS row with the same id, author and filename, and lb status lists neither f<app_id>.xml nor INSTALL_<app_id>.
 - **Script:** [issues/017/test.sh](issues/017/test.sh)
 
 <a id="t001"></a>

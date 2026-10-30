@@ -32,10 +32,17 @@ while IFS='|' read -r _ id author file actions matching; do
   [[ $matching -gt 0 ]] || mismatches+=("$id: DATABASECHANGELOG $file, DATABASECHANGELOG_ACTIONS ${actions:-none}")
 done <<<"$rows"
 
-# 2. lb status right after the install must list no APEX changeset as still to deploy
-printf 'cd dist\nlb status -changelog-file releases/main.changelog.xml -search-path "." -def env/test.properties\n' \
-  | sqlcl_script "$work/lb-status.log" || error "lb status failed: $(first_error "$work/lb-status.log")"
-pending=$(sed 's/\x1b\[[0-9;]*m//g' "$work/lb-status.log" | tr -d '\r' | grep -oE 'INSTALL_[0-9]+' | sort -u | paste -sd, - | sed 's/,/, /g')
+# 2. lb status right after the install must not list the APEX changeset as still to deploy.
+# It must use the install's own parameters (-def properties): with other values, every changeset
+# with ${...} substitutions gets another checksum. So the lb update line of dist/install.sql is
+# reused with update -> status (and without -log, an update option).
+update=$(tr -d '\r' <"$TEST_REPO/dist/install.sql" | grep -m1 -E '^[[:space:]]*lb update ')
+[[ -n $update ]] || error "no lb update line in dist/install.sql"
+status=$(sed -E 's/^[[:space:]]*lb update /lb status /; s/ -log( |$)/ /' <<<"$update")
+printf 'cd dist\n%s\n' "$status" | sqlcl_script "$work/lb-status.log" \
+  || error "$status failed: $(first_error "$work/lb-status.log")"
+pending=$(sed 's/\x1b\[[0-9;]*m//g' "$work/lb-status.log" | tr -d '\r' \
+  | grep -oE "INSTALL_$APEX_APP_ID|f$APEX_APP_ID\.xml" | sort -u | paste -sd, - | sed 's/,/, /g')
 
 checked=$(wc -l <<<"$rows" | tr -d ' ')
 problems=()
