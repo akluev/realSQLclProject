@@ -21,9 +21,11 @@ repo checkout -q -f "$BASE_BRANCH"
 repo reset -q --hard "$BASELINE_TAG"
 repo clean -fdq
 
-# stdin is an empty pipe: SQLcl crashes at startup (yet exits 0) on the Windows NUL device
+# stdin is an empty pipe: SQLcl crashes at startup (yet exits 0) on the Windows NUL device.
+# stdout goes through cat: with a terminal as stdout, the Git Bash launcher of SQLcl 26.2+
+# re-runs itself through winpty, which refuses a piped stdin ("stdin is not a tty").
 echo "Dropping the database objects"
-: | (cd "$TEST_REPO" && sql -nolog "@$dir/drop_all.sql" "$SQLCL_CONN" "$APEX_SCHEMA" "$APEX_WORKSPACE")
+: | (cd "$TEST_REPO" && sql -nolog "@$dir/drop_all.sql" "$SQLCL_CONN" "$APEX_SCHEMA" "$APEX_WORKSPACE") | cat
 echo "Installing the baseline"
-: | (cd "$TEST_REPO" && sql -nolog "@$dir/install.sql" "$SQLCL_CONN")
+: | (cd "$TEST_REPO" && sql -nolog "@$dir/install.sql" "$SQLCL_CONN") | cat
 echo "Reset done"
