@@ -1,6 +1,6 @@
 # SQLcl Regression Tests
 
-Generated 2026-10-30 from [tests.json](tests.json); do not edit by hand, run `regression/catalog.sh`.
+Generated 2026-11-03 from [tests.json](tests.json); do not edit by hand, run `regression/catalog.sh`.
 
 Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQLcl versions where the issue appeared and was fixed; a fixed issue keeps being tested to catch regressions. **Last failed** is the newest version the test failed on. Inactive tests are not run.
 
@@ -37,9 +37,9 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 | [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone | – | 26.1.2 | – | yes |
 | [020](#t020) | – | P0 | bug | stage | project stage fails with "Unable to save changelog, changelog is empty" for a change of more than one statement | 26.3 | – | 26.3.0 | yes |
 | [022](#t022) | readable | P1 | bug | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | – | 26.1.2 | – | yes |
-| [022](#t022) | apexlang | P1 | bug | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | – | – | – | yes |
+| [022](#t022) | apexlang | P1 | bug | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | – | – | 26.3.0 | yes |
 | [023](#t023) | readable | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | – | 26.1.2 | – | yes |
-| [023](#t023) | apexlang | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | – | – | – | yes |
+| [023](#t023) | apexlang | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | – | – | 26.3.0 | yes |
 
 <a id="t017"></a>
 ## 017. Deployed APEX changesets are recorded with different filename separators in DATABASECHANGELOG and DATABASECHANGELOG_ACTIONS on Windows, so they redeploy every time
@@ -313,7 +313,7 @@ P0 bug, area `stage`.
 P1 bug, area `stage`.
 
 - **readable mode:** Introduced: –; fixed: 26.1.2; last failed: –
-- **apexlang mode:** Introduced: –; fixed: –; last failed: –
+- **apexlang mode:** Introduced: –; fixed: –; last failed: 26.3.0
 - **Oracle status:** not reported
 - **Workaround:** APEXlang mode: comment out the legacy f<app_id> entries in apex.changelog.xml after every stage.
 - **How it is tested:** On a branch, in the APEX mode under test: remove src/database/<schema>/apex_apps/f<app_id>, dist/releases/apex/f<app_id> and the f<app_id> include of dist/releases/apex/apex.changelog.xml, commit; `project export -o APEX.<app_id>`, commit; `project stage`. Read the includes of apex.changelog.xml and list dist/releases/apex/f<app_id>. Readable mode (the control case): stage puts f<app_id>/f<app_id>.xml back and a regenerated f<app_id>.sql where the old one was. APEXlang mode: stage should add only <alias>/<alias>.xml, but also writes f<app_id> entries and files.
@@ -326,7 +326,7 @@ P1 bug, area `stage`.
 P0 bug, area `deploy`.
 
 - **readable mode:** Introduced: –; fixed: 26.1.2; last failed: –
-- **apexlang mode:** Introduced: –; fixed: –; last failed: –
+- **apexlang mode:** Introduced: –; fixed: –; last failed: 26.3.0
 - **Oracle status:** not reported
 - **Workaround:** None known for the generated APEXlang install.
 - **How it is tested:** Needs the baseline schema mapped to two or more APEX workspaces. Regenerate the deployment as in 022, comment out every apex.changelog.xml include except the controller of the mode, commit, deploy with dist/install.sql as the installer, then deploy again. Readable mode (the control case): the first deploy runs INSTALL_<app_id> without errors, the second skips it. APEXlang mode: the generated install does not pass the workspace, so it stops with "Multiple workspaces available, use the workspaceId or the workspace option", and Liquibase still records the INSTALL changeset in DATABASECHANGELOG. The database is reset before and after the test.

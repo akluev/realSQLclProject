@@ -471,7 +471,8 @@
       },
       "apexlang": {
         "introducedIn": null,
-        "fixedIn": null
+        "fixedIn": null,
+        "lastFailedIn": "26.3.0"
       }
     },
     "resetBefore": true
@@ -498,7 +499,8 @@
       },
       "apexlang": {
         "introducedIn": null,
-        "fixedIn": null
+        "fixedIn": null,
+        "lastFailedIn": "26.3.0"
       }
     },
     "resetBefore": true
