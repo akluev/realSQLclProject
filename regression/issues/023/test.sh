@@ -38,12 +38,13 @@ deploy() {
   printf 'cd dist\n@install\ncd ..\n' | sqlcl_script "$log" || true
   text=$(sed 's/\x1b\[[0-9;]*m//g' "$log" | tr -d '\r')
   problem=$(grep -m1 -E 'Multiple workspaces available|ERROR|Error|ORA-|Failed to' <<<"$text" | cut -c1-200 || true)
-  grep -qE "Running Changeset: .*$controller::INSTALL_" <<<"$text" && ran=yes || ran=no
+  # file name only: on Windows SQLcl prints the path with backslashes (releases\apex\f106\f106.xml)
+  grep -qF "${controller##*/}::INSTALL_$APEX_APP_ID::SQLCL-Generated" <<<"$text" && ran=yes || ran=no
 }
 
 deploy 1
 if [[ -n $problem ]]; then
-  recorded=$(sql_value "select count(*) from databasechangelog where id like 'INSTALL%' and filename like '%$controller'")
+  recorded=$(sql_value "select count(*) from databasechangelog where id like 'INSTALL%' and filename like '%${controller##*/}'")
   ((recorded >= 1)) \
     && fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem; yet DATABASECHANGELOG records the changeset as run"
   fail "deploy of $controller failed ($workspaces workspaces for $schema): $problem"
