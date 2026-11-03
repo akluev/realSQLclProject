@@ -18,10 +18,11 @@ All tests at a glance: [tests.md](tests.md).
 
 ## Running it
 
-You need bash (Git Bash on Windows), git, jq, SQLcl 26.1 or later, a local database you may rebuild, and the test project (a SQLcl Project repository with schema DEMO1, an APEX application and an ORDS module; its README explains the two saved connections it needs).
+You need bash (Git Bash on Windows), git, jq, SQLcl 26.1 or later, a local database you may rebuild, and the test project: [sqlcl-regression-demo.zip](sqlcl-regression-demo.zip), a SQLcl Project repository with schema DEMO1, an APEX application and an ORDS module (one commit on `main`, tagged `baseline`; its README explains the two saved connections it needs). Unpack it outside any other git repository.
 
 ```shell
-cp regression/config.example.sh regression/config.sh   # then edit it
+unzip regression/sqlcl-regression-demo.zip -d /c/repo/tests   # creates sqlcl-regression-demo/
+cp regression/config.example.sh regression/config.sh   # then edit it (TEST_REPO and the connections)
 bash regression/run.sh 26.2          # all active tests against SQLcl 26.2
 bash regression/run.sh 26.2 004 007  # selected tests
 bash regression/run.sh 26.3 --mode apexlang   # only the APEXlang-mode pass

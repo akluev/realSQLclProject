@@ -1,6 +1,7 @@
 tmp/
 
 *.zip
+!regression/sqlcl-regression-demo.zip
 *.tar.gz
 *.rar
 *.7z

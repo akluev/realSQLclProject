@@ -24,7 +24,7 @@ Tests run against a separate **test project** (shipped as a zip; its README desc
 ## First-time setup
 
 1. Requirements: bash (Git Bash on Windows), git, jq, one or more SQLcl installs (26.1 or later), a local database you may drop and rebuild objects in, and two saved SQLcl connections (`conn -save`): an installer with rights to create the schema, the APEX workspace and ORDS definitions through `ORDS_ADMIN`, and the project schema itself.
-2. Unpack the test project outside any other git repository and confirm it is clean on `main` with tag `baseline`.
+2. Unpack the test project, `regression/sqlcl-regression-demo.zip`, outside any other git repository and confirm it is clean on `main` with tag `baseline`. The zip holds one commit on `main` (no other branches); rebuild it only when the user asks, after a baseline change: a clone of `main` squashed to one commit with the baseline tree, tagged `baseline`, no remote, gc'ed, zipped with forward-slash paths and directory entries (Windows `Compress-Archive` drops `.git` and writes backslashes).
 3. `cp regression/config.example.sh regression/config.sh` and set `TEST_REPO`, `BASE_BRANCH`, `BASELINE_TAG`, `SQLCL_CONN` (installer), `SCHEMA_CONN` (the project schema), the APEX settings and one `SQLCL_HOME_<version>` per install (`SQLCL_HOME_26_3` for `run.sh 26.3`).
 4. Run `bash regression/reset/reset.sh <version>` once and check it ends with `Reset done`.
 
