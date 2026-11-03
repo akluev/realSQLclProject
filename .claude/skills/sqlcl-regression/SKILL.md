@@ -56,24 +56,31 @@ SQLcl exports an APEX application differently depending on `apex.apexlang` in `p
 
 ## Which tests run
 
-Only records with `"active": true`, in every mode they list (or the readable pass when they have no `modes`). For each one, the SQLcl version under test decides the expected result:
-
-| Condition | Expected | Why |
-|---|---|---|
-| version < `introducedIn`, and `testFrom` set and reached | PASS | A regression: the behaviour existed and worked before `introducedIn`. |
-| version < `introducedIn` otherwise | not run (N/A) | The feature or bug did not exist yet; never test backwards. |
-| `fixedIn` set and version >= `fixedIn` | PASS | Fixed earlier; a FAIL is a regression. |
-| otherwise (`introducedIn` empty or reached, not fixed) | FAIL | Known open issue. |
+Only records with `"active": true`, in every mode they list (or the readable pass when they have no `modes`). A test is not run (N/A) on a version below its `introducedIn`, unless `testFrom` is set and reached (a regression: the behaviour worked before `introducedIn`); never test backwards.
 
 A fixed issue stays active and keeps being tested in every later version; that is what catches regressions. Set `"active": false` only when the user says an issue or the versions it applies to are no longer of interest.
 
-Outcomes: **OK** (as expected, fixed), **KNOWN ISSUE** (as expected, still open), **REGRESSION** (fixed before, failing again), **NEWLY FIXED** (expected to fail, passed), **ERROR** (the test could not decide), **MANUAL** (no script; run the prompt by hand), **N/A**.
+## Outcomes: compared with the prior version
+
+The outcome compares the result with the **prior version**: the newest `results/<version>/` below the version under test (26.2.2 compares with 26.1.2). The results table shows that result in its Prior column, empty when the test did not run there (no prior version, or N/A, MANUAL or ERROR there). 26.1 is the first version tested: it has no prior, so every failure there is a NEW ISSUE. `fixedIn` and `introducedIn` document the issue; they do not decide the outcome. Run versions in ascending order (26.1, then 26.2, then 26.3): a re-run of an older version changes the prior of the next one, so re-run the later versions after it.
+
+| Prior | Result | Outcome |
+|---|---|---|
+| none | PASS | **OK** |
+| none | FAIL | **NEW ISSUE** |
+| PASS | PASS | **OK** |
+| PASS | FAIL | **REGRESSION** |
+| FAIL | FAIL | **STILL FAILING** |
+| FAIL | PASS | **FIXED** |
+
+Also **ERROR** (the test could not decide), **MANUAL** (no script; run the prompt by hand), **N/A** (not run). `results.md` starts with a summary: passed, failed (new / regression / still failing), fixed, errors, N/A, and how many workarounds work and do not; it shows each test's time and the run's total.
 
 ## Interpreting results and updating the catalogue
 
 - **REGRESSION**: read `logs/<id>.log` and the SQLcl logs it names, confirm it is the product and not the environment, and report it prominently. Do not change `fixedIn`.
-- **NEWLY FIXED**: verify by reading the logs and, if useful, repeating the check by hand. Then propose `fixedIn: "<version>"` to the user; change it only after they agree.
-- **KNOWN ISSUE**: set `lastFailedIn` to the version.
+- **FIXED**: verify by reading the logs and, if useful, repeating the check by hand. Then propose `fixedIn: "<version>"` to the user; change it only after they agree.
+- **NEW ISSUE**: check it is the product, not the test or the environment, then propose `introducedIn: "<version>"` (unless it is 26.1, where the issue may be older) and check the record's `docRef`/`forumUrl`.
+- **STILL FAILING**: nothing to do; `run.sh` sets `lastFailedIn`.
 - **ERROR**: usually environment or setup (database down, ORA-00257, connection, baseline drift). Fix the cause or report it; do not record it as a product result.
 - **MANUAL**: follow the record's `prompt` in the test project with SQLcl, judge against `successCriteria`, and add the result to the run's `results.md` by hand with a comment saying it was manual.
 

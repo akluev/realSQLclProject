@@ -31,6 +31,14 @@ workaround() {
   echo "workaround $1: $2"
   [[ -z ${WORKAROUND_FILE:-} ]] || echo "$1: $2" >"$WORKAROUND_FILE"
 }
+# apex_export_workaround <log>: the documented workaround for the APEX export bugs (001-003):
+# apex export -f into f<id> after project export. It overwrites the shared export
+# (export_apex_app), so the next test that needs it exports again.
+apex_export_workaround() {
+  rm -f "$RUN_DIR/apex-export.done"
+  echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $(apex_app_path) -f" \
+    | sqlcl_script "$1"
+}
 # warn: add a note to the comment, e.g. from cleanup that runs after the verdict
 warn()  { echo "WARNING: $*" >&2; [[ -z ${COMMENT_FILE:-} ]] || echo "WARNING: $*" >>"$COMMENT_FILE"; }
 
@@ -347,16 +355,28 @@ restore_apex_app() {
 write_results_md() {
   jq -r '
     def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
-    "# SQLcl \(.version) regression results", "",
-    "- \(.sqlcl)", "- Last run: \(.date)", "- Baseline: `\(.baseline)`, test branch `\(.testBranch)`",
+    def mmss: if . == null then "–" else "\(. / 60 | floor):\(. % 60 | tostring | if length < 2 then "0" + . else . end)" end;
+    def count(f): [.results[] | select(f)] | length;
+    (if (.priorVersion // "") == "" then "none (first version tested)" else .priorVersion end) as $prior
+    | "# SQLcl \(.version) regression results", "",
+    "- \(.sqlcl)", "- Last run: \(.date), \(.runSeconds | mmss)\(if .partialRun then " (selected tests only)" else "" end); test time of all rows: \([.results[].seconds // 0] | add | mmss)",
+    "- Prior version: \($prior)", "- Baseline: `\(.baseline)`, test branch `\(.testBranch)`", "",
+    "## Summary", "",
+    "| Passed | Failed | New issues | Regressions | Still failing | Fixed | Errors | N/A | Workaround works | Workaround does not work |",
+    "|---|---|---|---|---|---|---|---|---|---|",
+    "| \(count(.result == "PASS")) | \(count(.result == "FAIL")) | \(count(.outcome == "NEW ISSUE")) | \(count(.outcome == "REGRESSION")) | \(count(.outcome == "STILL FAILING")) | \(count(.outcome == "FIXED")) | \(count(.result == "ERROR")) | \(count(.outcome == "N/A")) | \(count((.workaround // "") | startswith("works"))) | \(count((.workaround // "") | startswith("does not work"))) |",
+    "",
+    "- Prior: result of the same test (and mode) in the prior version; empty when it was not run there",
+    "- Outcome: OK (passed), NEW ISSUE (failed, no prior result), REGRESSION (passed in the prior version), STILL FAILING (failed there too), FIXED (failed there, passes now)",
     "- Mode: APEX export mode the test ran in (`readable`: apex.apexlang not set, `apexlang`: apex.apexlang=true, `–`: does not depend on it)",
-    "- Workaround: result of the workaround check, for tests that make one; it never changes the outcome", "",
-    "| ID | Mode | Severity | Area | Issue | Expected | Result | Outcome | Workaround | Comment | Run |",
-    "|---|---|---|---|---|---|---|---|---|---|---|",
+    "- Workaround: result of the workaround check, for tests that make one; it never changes the outcome",
+    "- Time: the test script, m:ss (resets not included)", "",
+    "| ID | Mode | Severity | Area | Issue | Prior | Result | Outcome | Workaround | Comment | Time | Run |",
+    "|---|---|---|---|---|---|---|---|---|---|---|---|",
     (.results[]
      | ((.title | esc) as $t | (.url // .forumUrl // "") as $u
         | if $u != "" then "[\($t)](\($u))" else $t end) as $issue
      | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind
-     | "| \(.id) | \(if (.mode // "") == "" then "–" else .mode end) | \(.severity) | \(.area) | \($issue)\($kind) | \(.expected) | \(.result) | **\(.outcome)** | \((.workaround // "") | if . == "" then "–" else esc end) | \(.comment | esc) | \(.date // "") |")
+     | "| \(.id) | \(if (.mode // "") == "" then "–" else .mode end) | \(.severity) | \(.area) | \($issue)\($kind) | \(.prior // "") | \(.result) | **\(.outcome)** | \((.workaround // "") | if . == "" then "–" else esc end) | \(.comment | esc) | \(.seconds | mmss) | \(.date // "") |")
   ' "$1/results.json" >"$1/results.md"
 }

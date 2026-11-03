@@ -31,6 +31,19 @@ LOG_ROOT="$OUT_DIR/logs"
 [[ $partial == true ]] || rm -rf "$LOG_ROOT"
 mkdir -p "$LOG_ROOT"
 echo "SQLcl $SQLCL_VERSION, test repo $TEST_REPO, APEX modes: $modes"
+run_start=$SECONDS
+
+# Prior version: the newest results/<version> below this one. Each test's outcome compares
+# its result with the result the same test (and mode) had there; none for the first version.
+prior_version=$(find "$REG_ROOT/results" -mindepth 2 -maxdepth 2 -name results.json 2>/dev/null \
+  | awk -F/ '{print $(NF-1)}' | { cat; echo "$SQLCL_VERSION"; } | sort -uV \
+  | awk -v v="$SQLCL_VERSION" '$0 == v { print p; exit } { p = $0 }')
+prior_results='{}'
+if [[ -n $prior_version ]]; then
+  prior_results=$(jq -c 'reduce .results[] as $r ({}; .["\($r.id)/\($r.mode // "")"] = $r.result)' \
+    "$REG_ROOT/results/$prior_version/results.json")
+  echo "Prior version: $prior_version"
+fi
 
 repo() { git -C "$TEST_REPO" "$@"; }
 
@@ -137,19 +150,17 @@ for mode in $modes; do
 
   # Fields are separated by \x1f: unlike tab, read keeps empty fields between non-blank separators
   while IFS=$'\x1f' read -r id tmode area kind severity test_from introduced fixed script title url reset_before reset_after; do
-    workaround_result=
+    workaround_result= seconds=
     # Before introducedIn: not run, unless testFrom says the behaviour existed and worked then
+    applies=true
     if [[ -n $introduced ]] && ! ver_ge "$SQLCL_VERSION" "$introduced"; then
-      if [[ -n $test_from ]] && ver_ge "$SQLCL_VERSION" "$test_from"; then expected=PASS; else expected=N/A; fi
-    elif [[ -n $fixed ]] && ver_ge "$SQLCL_VERSION" "$fixed"; then
-      expected=PASS
-    else
-      expected=FAIL
+      [[ -n $test_from ]] && ver_ge "$SQLCL_VERSION" "$test_from" || applies=false
     fi
+    prior=$(jq -r --arg k "$id/$tmode" '.[$k] // ""' <<<"$prior_results")
 
     if [[ -n $mode_note ]]; then
       result=SKIP comment=$mode_note
-    elif [[ $expected == N/A ]]; then
+    elif [[ $applies == false ]]; then
       result=SKIP comment="introduced in $introduced"
     elif [[ -z $script ]]; then
       result=MANUAL comment="no script: run the prompt in tests.json by hand"
@@ -165,8 +176,10 @@ for mode in $modes; do
       rm -f "$COMMENT_FILE" "$WORKAROUND_FILE"
       # The test's output goes to its log and, indented, to the screen while it runs
       set +e
+      test_start=$SECONDS
       bash "$REG_ROOT/$script" 2>&1 </dev/null | tee "$RUN_DIR/$id.log" | sed -u 's/^/     | /'
       rc=${PIPESTATUS[0]}
+      seconds=$((SECONDS - test_start))
       set -e
       [[ ! -s $WORKAROUND_FILE ]] || workaround_result=$(tr -d '\r' <"$WORKAROUND_FILE" | head -1)
       if [[ -s $COMMENT_FILE ]]; then
@@ -189,19 +202,22 @@ for mode in $modes; do
       fi
     fi
 
-    case "$expected/$result" in
+    # Outcome from the prior version's result; a prior SKIP, MANUAL or ERROR counts as none
+    case "$prior/$result" in
       */SKIP)      outcome="N/A" ;;
       */MANUAL)    outcome="MANUAL" ;;
       */ERROR)     outcome="ERROR" ;;
       PASS/PASS)   outcome="OK" ;;
       PASS/FAIL)   outcome="REGRESSION" ;;
-      FAIL/FAIL)   outcome="KNOWN ISSUE" ;;
-      FAIL/PASS)   outcome="NEWLY FIXED" ;;
+      FAIL/FAIL)   outcome="STILL FAILING" ;;
+      FAIL/PASS)   outcome="FIXED" ;;
+      */PASS)      outcome="OK" ;;
+      */FAIL)      outcome="NEW ISSUE" ;;
     esac
-    printf '%-4s %-8s %-6s %-3s %-5s %-12s %s%s\n' "$id" "${tmode:-–}" "$area" "$severity" "$result" "$outcome" \
-      "$comment" "${workaround_result:+ [workaround $workaround_result]}"
-    printf '%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\n' "$id" "$tmode" "$area" "$kind" \
-      "$severity" "$title" "$url" "$expected" "$result" "$outcome" "$comment" "$workaround_result" >>"$rows"
+    printf '%-4s %-8s %-6s %-3s %-5s %-13s %5s %s%s\n' "$id" "${tmode:-–}" "$area" "$severity" "$result" "$outcome" \
+      "${seconds:+${seconds}s}" "$comment" "${workaround_result:+ [workaround $workaround_result]}"
+    printf '%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\x1f%s\n' "$id" "$tmode" "$area" "$kind" \
+      "$severity" "$title" "$url" "$prior" "$result" "$outcome" "$comment" "$workaround_result" "$seconds" >>"$rows"
   done <<<"$tests"
 
   trap - EXIT
@@ -222,16 +238,18 @@ baseline=$(repo rev-parse --short "$BASELINE_TAG^{commit}")
 run_date=$(date '+%Y-%m-%d %H:%M')
 new=$(jq -Rn --arg date "$run_date" '[inputs | split("\u001f")
   | {id: .[0], mode: .[1], area: .[2], kind: .[3], severity: .[4], title: .[5], url: .[6],
-     expected: .[7], result: .[8], outcome: .[9], comment: .[10], workaround: (.[11] // ""),
-     date: $date}]' <"$rows")
+     prior: .[7], result: .[8], outcome: .[9], comment: .[10], workaround: (.[11] // ""),
+     seconds: (.[12] // "" | if . == "" then null else tonumber end), date: $date}]' <"$rows")
 old='[]'
 if [[ $partial == true && -f $OUT_DIR/results.json ]]; then old=$(jq '.results' "$OUT_DIR/results.json"); fi
 jq -n --argjson old "$old" --argjson new "$new" --arg sqlcl "$SQLCL_RELEASE" \
-  --arg version "$SQLCL_VERSION" --arg date "$run_date" \
+  --arg version "$SQLCL_VERSION" --arg date "$run_date" --arg prior "$prior_version" \
+  --argjson seconds $((SECONDS - run_start)) --arg partial "$partial" \
   --arg baseline "$BASELINE_TAG ($baseline)" --arg branch "$branch_note" '
   def key: "\(.id)/\(.mode // "")";
   ($new | map(key)) as $keys
-  | { sqlcl: $sqlcl, version: $version, date: $date, baseline: $baseline, testBranch: $branch,
+  | { sqlcl: $sqlcl, version: $version, date: $date, priorVersion: $prior,
+      runSeconds: $seconds, partialRun: ($partial == "true"), baseline: $baseline, testBranch: $branch,
       results: ($old | map(select(key as $k | $keys | index($k) | not))) + $new
                | sort_by(.id, ({"": 0, "readable": 1, "apexlang": 2}[.mode // ""] // 9)) }
 ' >"$OUT_DIR/results.json"

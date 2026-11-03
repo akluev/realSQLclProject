@@ -17,8 +17,9 @@ latest=$(tail -1 <<<"$versions")
 jq -rn --slurpfile tests "$REG_ROOT/tests.json" --arg versions "$(paste -sd' ' - <<<"$versions")" \
   --arg latest "$latest" --arg date "$(date '+%Y-%m-%d')" '
 def sevrank: {"P0": 0, "P1": 1, "P2": 2, "P3": 3}[.] // 9;
-def cell: {"OK": "PASS", "KNOWN ISSUE": "FAIL", "REGRESSION": "**FAIL: regression**",
-           "NEWLY FIXED": "**PASS: newly fixed**", "N/A": "n/a", "ERROR": "ERROR"}[.] // .;
+def cell: {"OK": "PASS", "STILL FAILING": "FAIL", "NEW ISSUE": "**FAIL: new**",
+           "REGRESSION": "**FAIL: regression**", "FIXED": "**PASS: fixed**",
+           "N/A": "n/a", "ERROR": "ERROR"}[.] // .;
 def esc: gsub("\\|"; "\\|") | gsub("<"; "&lt;");
 def key: "\(.id)/\(.mode // "")";
 def name: if .mode == "" then .id else "\(.id) (\(.mode))" end;
@@ -47,8 +48,9 @@ def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mo
   "",
   "## SQLcl \($latest): what needs attention",
   "",
-  "**Regressions** (fixed earlier, failing again):", "", items("REGRESSION")[], "",
-  "**Newly fixed** (expected to fail, passed; check and set `fixedIn`):", "", items("NEWLY FIXED")[], "",
+  "**Regressions** (passed in the prior version, failing now):", "", items("REGRESSION")[], "",
+  "**New issues** (failing, not tested in the prior version):", "", items("NEW ISSUE")[], "",
+  "**Fixed** (failed in the prior version, passes now; check and set `fixedIn`):", "", items("FIXED")[], "",
   "**Errors** (test could not decide; check the logs):", "", items("ERROR")[], "",
   "## Open issues in SQLcl \($latest), by severity",
   "",

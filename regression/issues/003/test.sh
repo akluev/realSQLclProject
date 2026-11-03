@@ -46,15 +46,12 @@ pages_dir=$(dirname "$written")
 stale=$(find "$pages_dir" -maxdepth 1 -name "$page_glob" | head -1)
 [[ -z $stale ]] && pass "page $page file removed by project export"
 
-# 5. Only when the bug is there: does the documented workaround (apex export -f into f<id>,
-# readable mode) remove the file? Reported in its own column, never as the verdict.
-if [[ ${APEX_MODE:-readable} == readable ]]; then
-  echo "apex export -applicationid $APEX_APP_ID -exptype APEXLANG -dir $(apex_app_path) -f" \
-    | sqlcl_script "$work/apex-export.log" || true
-  if [[ -n $(find "$dir" -name "$page_glob" | head -1) ]]; then
-    workaround "does not work" "apex export -f leaves the page file too"
-  else
-    workaround works "apex export -f removes the page file"
-  fi
+# 5. Only when the bug is there: does the documented workaround (apex export -f into f<id>)
+# remove the file? Reported in its own column, never as the verdict.
+apex_export_workaround "$work/apex-export.log" || true
+if [[ -n $(find "$dir" -name "$page_glob" | head -1) ]]; then
+  workaround "does not work" "apex export -f leaves the page file too"
+else
+  workaround works "apex export -f removes the page file"
 fi
 fail "deleted page $page left behind: ${stale#"$TEST_REPO/"}"
