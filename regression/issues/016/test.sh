@@ -31,6 +31,8 @@ fi
 
 file=$(find "$TEST_REPO/dist/releases/next/changes" -path "*$ISOLATED_BRANCH*" -name dept.sql | head -1)
 [[ -n $file ]] || error "stage wrote no dept.sql changeset, see $work/stage.log"
+grep -q 'dept\.sql' "$(dirname "$(dirname "$(dirname "$file")")")/stage.changelog.xml" 2>/dev/null \
+  || error "stage wrote dept.sql but stage.changelog.xml does not include it, see $work/stage.log"
 changesets=$(grep -c '^-- changeset' "$file")
 statements=$(grep -c -E '^(alter|create|drop) ' "$file")
 ((changesets == statements)) && pass "$statements statement(s) in $changesets changeset(s)"

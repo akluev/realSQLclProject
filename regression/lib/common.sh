@@ -233,7 +233,7 @@ keep_only_apex_export() {
 # EXIT trap) commits what is left there as evidence and returns to the previous branch.
 isolate_branch() {
   ISOLATED_FROM=$(git -C "$TEST_REPO" branch --show-current)
-  ISOLATED_BRANCH="${TEST_BRANCH:-regression/manual}-$1"
+  ISOLATED_BRANCH="${TEST_BRANCH:-regression-manual}-$1"
   git -C "$TEST_REPO" branch -q -D "$ISOLATED_BRANCH" 2>/dev/null || true
   git -C "$TEST_REPO" checkout -q -b "$ISOLATED_BRANCH" "$(base_ref)"
 }
@@ -251,10 +251,11 @@ commit_all() {
   git -C "$TEST_REPO" commit -q -m "$1" >/dev/null
 }
 
-# project_stage <log>: run project stage; true when it completed
+# project_stage <log>: run project stage; true when it completed without an ERROR (SQLcl
+# 26.1 prints "Stage processing completed" also after files it could not stage)
 project_stage() {
   echo "project stage" | sqlcl_script "$1" || return 1
-  grep -q 'Stage processing completed' "$1"
+  grep -q 'Stage processing completed' "$1" && ! grep -q 'ERROR' "$1"
 }
 
 # first_error <log>: first ERROR / Error / ORA- line of a log with the two lines after it

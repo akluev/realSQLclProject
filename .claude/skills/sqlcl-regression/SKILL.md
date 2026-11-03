@@ -39,7 +39,7 @@ If `config.sh` is missing or a setting is wrong, the runner stops with a message
 5. Interpret the results (next section), update `tests.json`, and show the user the table from `results/<version>/results.md`.
 6. Commit `results/<version>/results.md`, `results.json`, `results/README.md` and catalogue changes on the testing branch. The user merges and publishes; never push or merge yourself.
 
-`results/*/logs/<mode>/` holds every SQLcl log of the run and is gitignored. In the test project, each run commits every test's leftovers to a branch `regression/<version>-<timestamp>` (readable pass), `...-apexlang` (APEXlang pass), and `...-<id>` branches for isolated tests. They are deleted at the end of the run unless `KEEP_TEST_BRANCHES=true` in `config.sh`; when kept, the next run of the same version replaces them. Set it to `true` when a result needs investigating.
+`results/*/logs/<mode>/` holds every SQLcl log of the run and is gitignored. In the test project, each run commits every test's leftovers to a branch `regression-<version>-<timestamp>` (readable pass), `...-apexlang` (APEXlang pass), and `...-<id>` branches for isolated tests. They are deleted at the end of the run unless `KEEP_TEST_BRANCHES=true` in `config.sh`; when kept, the next run of the same version replaces them. Set it to `true` when a result needs investigating.
 
 `run.sh` updates `lastFailedIn` in `tests.json` and regenerates `tests.md`; commit both with the results.
 

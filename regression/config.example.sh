@@ -15,7 +15,7 @@ SCHEMA_CONN=demo_vm26
 # It must put BASE_BRANCH on BASELINE_TAG and rebuild the database objects.
 # RESET_CMD='sql -nolog @scripts/sql/rebuild.sql'
 
-# Each run commits every test's leftovers to branches regression/<version>-<timestamp>[-<id>]
+# Each run commits every test's leftovers to branches regression-<version>-<timestamp>[-<id>]
 # in TEST_REPO. true keeps them for inspection (the next run of that version replaces them);
 # false (default) deletes them when the run finishes.
 KEEP_TEST_BRANCHES=false

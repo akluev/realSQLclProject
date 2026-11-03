@@ -73,9 +73,9 @@ app_intact() {
 
 # Test branches. Only the latest run of a version keeps its branches.
 # After each test, what it left behind is committed there as evidence.
-repo branch --list "regression/$SQLCL_VERSION-*" --format='%(refname:short)' \
+repo branch --list "regression-$SQLCL_VERSION-*" --format='%(refname:short)' \
   | xargs -r git -C "$TEST_REPO" branch -q -D
-RUN_BRANCH="regression/$SQLCL_VERSION-$(date +%Y%m%d-%H%M%S)"
+RUN_BRANCH="regression-$SQLCL_VERSION-$(date +%Y%m%d-%H%M%S)"
 commit_evidence() {
   [[ $(repo branch --show-current) == "$TEST_BRANCH" ]] || repo checkout -q -f "$TEST_BRANCH"
   repo add -A

@@ -18,7 +18,7 @@ drop_rest() {
 }
 # Put the baseline state back: ORDS only in the schema, installed through ORDS_ADMIN by the
 # baseline's custom changeset (its ${<schema>} Liquibase parameter replaced here)
-baseline_ords="dist/releases/next/changes/ords/_custom/ords_$APEX_SCHEMA.sql"
+baseline_ords="dist/releases/1.0/changes/ords/_custom/ords_$APEX_SCHEMA.sql"
 cleanup() {
   {
     drop_rest
