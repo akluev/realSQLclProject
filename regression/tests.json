@@ -17,7 +17,7 @@
     "modes": {
       "readable": {
         "introducedIn": "26.1.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       },
       "apexlang": {
         "introducedIn": "26.1.2",
@@ -71,7 +71,7 @@
     "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain",
     "modes": {
       "readable": {
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       },
       "apexlang": {}
     }
@@ -113,7 +113,7 @@
     "modes": {
       "readable": {
         "introducedIn": "26.1.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       },
       "apexlang": {
         "introducedIn": "26.1.2",
@@ -140,11 +140,11 @@
       "readable": {
         "testFrom": "26.1.2",
         "introducedIn": "26.2.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       },
       "apexlang": {
         "introducedIn": "26.2.2",
-        "lastFailedIn": "26.3.0",
+        "lastFailedIn": "26.3.1",
         "oracleStatus": "intended by Oracle (Neil Fernandez-Oracle, Sep 2026), but contradicts the documentation",
         "workaround": "None; do not enable apex.apexlang.",
         "articleUrl": "https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#a-useful-deployment-option-also-reorganises-the-source"
@@ -170,11 +170,11 @@
     "modes": {
       "readable": {
         "introducedIn": "26.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       },
       "apexlang": {
         "introducedIn": "26.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     }
   },
@@ -196,7 +196,7 @@
     "modes": {
       "readable": {
         "introducedIn": "26.2.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     }
   },
@@ -218,7 +218,7 @@
     "modes": {
       "apexlang": {
         "introducedIn": "26.2.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     }
   },
@@ -231,7 +231,7 @@
     "active": true,
     "introducedIn": "26.1.2",
     "fixedIn": null,
-    "lastFailedIn": "26.3.0",
+    "lastFailedIn": "26.3.1",
     "oracleStatus": "confirmed (Oussama Assouar-Oracle, Sep 1 2026)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778",
     "docRef": "docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs",
@@ -446,7 +446,7 @@
       "apexlang": {
         "introducedIn": null,
         "fixedIn": null,
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     }
   },
@@ -472,7 +472,7 @@
       "apexlang": {
         "introducedIn": null,
         "fixedIn": null,
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     },
     "resetBefore": true
@@ -500,7 +500,7 @@
       "apexlang": {
         "introducedIn": null,
         "fixedIn": null,
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.1"
       }
     },
     "resetBefore": true

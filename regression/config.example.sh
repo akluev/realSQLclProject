@@ -35,4 +35,6 @@ APEX_SPARE_PAGE=100
 SQLCL_HOME_26_1=/c/Install/sqlcl-26.1/sqlcl
 SQLCL_HOME_26_2=/c/Install/sqlcl-26.2/sqlcl
 SQLCL_HOME_26_3=/c/Install/sqlcl-26.3/sqlcl
+SQLCL_HOME_26_3_1=/c/Install/sqlcl-26.3.1/sqlcl
+
 
