@@ -12,10 +12,10 @@ def rank: {"project": 1, "export": 2, "stage": 3, "apex": 4, "deploy": 5}[.area]
 def v: . // "–";
 def link($text; $url): if $url then "[\($text)](\($url))" else empty end;
 # one entry per test and APEX mode, with the mode fields applied ("" = mode-independent)
-def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mode: .key}
+def variants: if .modes then . as $t | .modes | to_entries | sort_by(.key)[] | $t + .value + {mode: .key}
               else . + {mode: ""} end;
 def versions: "Introduced: \(.introducedIn | v); fixed: \(.fixedIn | v); last failed: \(.lastFailedIn | v)\(if .testFrom then "; tested from \(.testFrom)" else "" end)";
-sort_by(rank, .id) as $t
+sort_by(.id) as $t
 | [
   "# SQLcl Regression Tests",
   "",
@@ -37,12 +37,12 @@ sort_by(rank, .id) as $t
     "\(.severity) \(.kind // "bug"), area `\(.area)`\(if .active then "" else "; **inactive**" end).",
     "",
     (if .modes then
-       (.modes | to_entries[]
+       (.modes | to_entries | sort_by(.key)[]
         | "- **\(.key) mode:** \(.value | versions)\(if .value.oracleStatus then ". Oracle status: \(.value.oracleStatus)" else "" end)\(if .value.workaround then ". Workaround: \(.value.workaround)" else "" end)")
      else "- **Versions:** \(versions)" end),
     "- **Oracle status:** \(.oracleStatus // "–")",
     ([link("Forum post"; .forumUrl), link("Article"; .articleUrl), link("Oracle documentation"; .oracleDocUrl), link("Documentation"; (if .docRef then "../" + .docRef else null end))]
-     + [.modes // {} | to_entries[] | link("Article (\(.key) mode)"; .value.articleUrl)]
+     + [.modes // {} | to_entries | sort_by(.key)[] | link("Article (\(.key) mode)"; .value.articleUrl)]
      | if length > 0 then "- **Sources:** " + join(", ") else empty end),
     "- **Workaround:** \(.workaround // "–")",
     "- **How it is tested:** \(.prompt)",

@@ -373,7 +373,7 @@ write_results_md() {
     "- Time: the test script, m:ss (resets not included)", "",
     "| ID | Mode | Severity | Area | Issue | Prior | Result | Outcome | Workaround | Comment | Time | Run |",
     "|---|---|---|---|---|---|---|---|---|---|---|---|",
-    (.results[]
+    (.results | sort_by(.id, .mode // "")[]
      | ((.title | esc) as $t | (.url // .forumUrl // "") as $u
         | if $u != "" then "[\($t)](\($u))" else $t end) as $issue
      | (if .kind == "bug" then "" else " (\(.kind))" end) as $kind

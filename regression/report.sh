@@ -28,7 +28,7 @@ def link: (.forumUrl // .articleUrl) as $u
   | (.title | esc) as $title
   | if $u then "[\($title)](\($u))\($k)" else "\($title)\($k)" end;
 # one entry per test and APEX mode, with the mode fields applied ("" = mode-independent)
-def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mode: .key}
+def variants: if .modes then . as $t | .modes | to_entries | sort_by(.key)[] | $t + .value + {mode: .key}
               else . + {mode: ""} end;
 
 [inputs] as $runs
@@ -36,7 +36,7 @@ def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mo
          | from_entries) as $by
 | ($versions | split(" ")) as $vs
 | ([$tests[0][] | select(.active) | variants]
-   | sort_by((.severity | sevrank), .id, ({"": 0, "readable": 1, "apexlang": 2}[.mode] // 9))) as $t
+   | sort_by(.id, .mode)) as $t
 | $by[$latest] as $L
 | def items(o): [$t[] | select($L[key].outcome == o)
                 | "- \(name) \(.severity) \(link): \($L[key].comment | esc)"]
@@ -56,7 +56,7 @@ def variants: if .modes then . as $t | .modes | to_entries[] | $t + .value + {mo
   "",
   "| Severity | ID | Mode | Area | Issue | Since | Workaround | Workaround tested |",
   "|---|---|---|---|---|---|---|---|",
-  ($t[] | select($L[key].result == "FAIL")
+  ([$t[] | select($L[key].result == "FAIL")] | sort_by(.severity | sevrank)[]
    | "| \(.severity) | \(.id) | \(if .mode == "" then "–" else .mode end) | \(.area) | \(link) | \(.introducedIn // "?") | \((.workaround // "") | esc) | \(($L[key].workaround // "") | if . == "" then "–" else esc end) |"),
   "",
   "## Results by version",

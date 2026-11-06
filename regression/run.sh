@@ -251,7 +251,7 @@ jq -n --argjson old "$old" --argjson new "$new" --arg sqlcl "$SQLCL_RELEASE" \
   | { sqlcl: $sqlcl, version: $version, date: $date, priorVersion: $prior,
       runSeconds: $seconds, partialRun: ($partial == "true"), baseline: $baseline, testBranch: $branch,
       results: ($old | map(select(key as $k | $keys | index($k) | not))) + $new
-               | sort_by(.id, ({"": 0, "readable": 1, "apexlang": 2}[.mode // ""] // 9)) }
+               | sort_by(.id, .mode // "") }
 ' >"$OUT_DIR/results.json"
 write_results_md "$OUT_DIR"
 
