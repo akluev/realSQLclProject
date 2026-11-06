@@ -21,7 +21,8 @@
       },
       "apexlang": {
         "introducedIn": "26.1.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.0",
+        "fixedIn": "26.3.1"
       }
     }
   },
@@ -47,9 +48,9 @@
         "lastFailedIn": "26.1.2"
       },
       "apexlang": {
-        "introducedIn": null,
-        "fixedIn": null,
-        "oracleStatus": "not reported (the readable-mode fix of 26.2.2 does not cover APEXlang mode)",
+        "introducedIn": "26.2.2",
+        "fixedIn": "26.3.1",
+        "oracleStatus": "fixed in 26.3.1 (not reported; the readable-mode fix of 26.2.2 did not cover APEXlang mode)",
         "lastFailedIn": "26.3.0"
       }
     }
@@ -84,7 +85,7 @@
     "area": "export",
     "active": true,
     "introducedIn": null,
-    "fixedIn": null,
+    "fixedIn": "26.3.0",
     "lastFailedIn": "26.2.2",
     "oracleStatus": "confirmed and filed (Oussama Assouar-Oracle, Aug 27 2026)",
     "forumUrl": "https://forums.oracle.com/ords/apexds/post/sqlcl-project-synonyms-are-not-exported-with-o-switch-0194",
@@ -117,7 +118,8 @@
       },
       "apexlang": {
         "introducedIn": "26.1.2",
-        "lastFailedIn": "26.3.0"
+        "lastFailedIn": "26.3.0",
+        "fixedIn": "26.3.1"
       }
     }
   },
@@ -444,7 +446,7 @@
         "fixedIn": "26.1.2"
       },
       "apexlang": {
-        "introducedIn": null,
+        "introducedIn": "26.2.2",
         "fixedIn": null,
         "lastFailedIn": "26.3.1"
       }
@@ -498,7 +500,7 @@
         "fixedIn": "26.1.2"
       },
       "apexlang": {
-        "introducedIn": null,
+        "introducedIn": "26.2.2",
         "fixedIn": null,
         "lastFailedIn": "26.3.1"
       }

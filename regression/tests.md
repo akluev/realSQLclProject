@@ -8,14 +8,14 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 
 | ID | Mode | Severity | Kind | Area | Issue | Introduced | Fixed | Last failed | Active |
 |---|---|---|---|---|---|---|---|---|---|
-| [001](#t001) | apexlang | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | – | 26.3.0 | yes |
+| [001](#t001) | apexlang | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | 26.3.1 | 26.3.0 | yes |
 | [001](#t001) | readable | P2 | bug | export | project export lowercases APEXlang file and folder names | 26.1.2 | – | 26.3.1 | yes |
-| [002](#t002) | apexlang | P0 | bug | export | project export corrupts binary APEX static files | – | – | 26.3.0 | yes |
+| [002](#t002) | apexlang | P0 | bug | export | project export corrupts binary APEX static files | 26.2.2 | 26.3.1 | 26.3.0 | yes |
 | [002](#t002) | readable | P0 | bug | export | project export corrupts binary APEX static files | 26.1.2 | 26.2.2 | 26.1.2 | yes |
 | [003](#t003) | apexlang | P2 | bug | export | project export keeps files of APEX components deleted in APEX | – | – | – | yes |
 | [003](#t003) | readable | P2 | bug | export | project export keeps files of APEX components deleted in APEX | – | – | 26.3.1 | yes |
-| [004](#t004) | – | P2 | bug | export | project export -o does not export synonyms | – | – | 26.2.2 | yes |
-| [005](#t005) | apexlang | P1 | bug | export | APEXlang source written by project export fails apex validate | 26.1.2 | – | 26.3.0 | yes |
+| [004](#t004) | – | P2 | bug | export | project export -o does not export synonyms | – | 26.3.0 | 26.2.2 | yes |
+| [005](#t005) | apexlang | P1 | bug | export | APEXlang source written by project export fails apex validate | 26.1.2 | 26.3.1 | 26.3.0 | yes |
 | [005](#t005) | readable | P1 | bug | export | APEXlang source written by project export fails apex validate | 26.1.2 | – | 26.3.1 | yes |
 | [006](#t006) | apexlang | P1 | bug | export | project export does not use the documented f&lt;app_id>/&lt;app-alias>/ folder | 26.2.2 | – | 26.3.1 | yes |
 | [006](#t006) | readable | P1 | bug | export | project export does not use the documented f&lt;app_id>/&lt;app-alias>/ folder | 26.2.2 | – | 26.3.1 | yes |
@@ -34,11 +34,11 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 | [018](#t018) | – | P1 | bug | stage | Staged ORDS changeset installs into the deploying user instead of the project schema | – | – | 26.3.0 | no |
 | [019](#t019) | – | P1 | feature | stage | Connected as the schema, project export exports ORDS and project stage leaves unchanged ORDS alone | – | 26.1.2 | – | yes |
 | [020](#t020) | – | P0 | bug | stage | project stage fails with "Unable to save changelog, changelog is empty" for a change of more than one statement | 26.3 | – | 26.3.0 | yes |
-| [021](#t021) | apexlang | P2 | bug | export | A second project export of an APEX application, with nothing changed, fails in APEXlang mode | – | – | 26.3.1 | yes |
+| [021](#t021) | apexlang | P2 | bug | export | A second project export of an APEX application, with nothing changed, fails in APEXlang mode | 26.2.2 | – | 26.3.1 | yes |
 | [021](#t021) | readable | P2 | bug | export | A second project export of an APEX application, with nothing changed, fails in APEXlang mode | – | 26.1.2 | – | yes |
 | [022](#t022) | apexlang | P1 | bug | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | – | – | 26.3.1 | yes |
 | [022](#t022) | readable | P1 | bug | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | – | 26.1.2 | – | yes |
-| [023](#t023) | apexlang | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | – | – | 26.3.1 | yes |
+| [023](#t023) | apexlang | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | 26.2.2 | – | 26.3.1 | yes |
 | [023](#t023) | readable | P0 | bug | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | – | 26.1.2 | – | yes |
 
 <a id="t001"></a>
@@ -46,7 +46,7 @@ Each test checks one SQLcl Project issue. **Introduced** / **Fixed** are the SQL
 
 P2 bug, area `export`.
 
-- **apexlang mode:** Introduced: 26.1.2; fixed: –; last failed: 26.3.0
+- **apexlang mode:** Introduced: 26.1.2; fixed: 26.3.1; last failed: 26.3.0
 - **readable mode:** Introduced: 26.1.2; fixed: –; last failed: 26.3.1
 - **Oracle status:** not confirmed
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571), [Documentation](../docs/10.1-sqlcl_project_bugs.md#new-sqlcl-2612--apexlang-bugs)
@@ -60,7 +60,7 @@ P2 bug, area `export`.
 
 P0 bug, area `export`.
 
-- **apexlang mode:** Introduced: –; fixed: –; last failed: 26.3.0. Oracle status: not reported (the readable-mode fix of 26.2.2 does not cover APEXlang mode)
+- **apexlang mode:** Introduced: 26.2.2; fixed: 26.3.1; last failed: 26.3.0. Oracle status: fixed in 26.3.1 (not reported; the readable-mode fix of 26.2.2 did not cover APEXlang mode)
 - **readable mode:** Introduced: 26.1.2; fixed: 26.2.2; last failed: 26.1.2
 - **Oracle status:** fixed (thatJeffSmith-Oracle, Neil Fernandez-Oracle)
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-corrupts-apex-static-files-during-export-apexlang-7800), [Documentation](../docs/16.-APEX-26.1-and-SQLcl-26.1-Upgrade-Guide.md#33-binary-file-corruption-during-apexlang-export)
@@ -88,7 +88,7 @@ P2 bug, area `export`.
 
 P2 bug, area `export`.
 
-- **Versions:** Introduced: –; fixed: –; last failed: 26.2.2
+- **Versions:** Introduced: –; fixed: 26.3.0; last failed: 26.2.2
 - **Oracle status:** confirmed and filed (Oussama Assouar-Oracle, Aug 27 2026)
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-synonyms-are-not-exported-with-o-switch-0194), [Documentation](../docs/10.1-sqlcl_project_bugs.md#18--o-option-of-project-export-does-not-export-synonyms)
 - **Workaround:** Export the synonym together with its table (`project export -o <table>`) or run a full `project export`.
@@ -101,7 +101,7 @@ P2 bug, area `export`.
 
 P1 bug, area `export`.
 
-- **apexlang mode:** Introduced: 26.1.2; fixed: –; last failed: 26.3.0
+- **apexlang mode:** Introduced: 26.1.2; fixed: 26.3.1; last failed: 26.3.0
 - **readable mode:** Introduced: 26.1.2; fixed: –; last failed: 26.3.1
 - **Oracle status:** not reported separately (consequence of the lowercasing bug, 001)
 - **Sources:** [Forum post](https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571), [Article](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain)
@@ -299,7 +299,7 @@ P0 bug, area `stage`.
 
 P2 bug, area `export`.
 
-- **apexlang mode:** Introduced: –; fixed: –; last failed: 26.3.1
+- **apexlang mode:** Introduced: 26.2.2; fixed: –; last failed: 26.3.1
 - **readable mode:** Introduced: –; fixed: 26.1.2; last failed: –
 - **Oracle status:** not reported
 - **Workaround:** Commit the application folder after each export, before exporting again.
@@ -325,7 +325,7 @@ P1 bug, area `stage`.
 
 P0 bug, area `deploy`.
 
-- **apexlang mode:** Introduced: –; fixed: –; last failed: 26.3.1
+- **apexlang mode:** Introduced: 26.2.2; fixed: –; last failed: 26.3.1
 - **readable mode:** Introduced: –; fixed: 26.1.2; last failed: –
 - **Oracle status:** not reported
 - **Workaround:** None known for the generated APEXlang install.
