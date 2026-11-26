@@ -1,15 +1,15 @@
 # SQLcl 26.3.1 regression results
 
 - SQLcl: Release 26.3.1.0 Production Build: 26.3.1.301.1413
-- Last run: 2026-11-04 13:19, 62:53; test time of all rows: 42:11
+- Last run: 2026-11-25 19:34, 5:54 (selected tests only); test time of all rows: 46:13
 - Prior version: 26.3.0
-- Baseline: `baseline (3155bcd)`, test branch `regression-26.3.1-20261104-121613*`
+- Baseline: `baseline (3155bcd)`, test branch `regression-26.3.1-20261125-192823*`
 
 ## Summary
 
 | Passed | Failed | New issues | Regressions | Still failing | Fixed | Errors | N/A | Workaround works | Workaround does not work |
 |---|---|---|---|---|---|---|---|---|---|
-| 17 | 13 | 0 | 0 | 13 | 3 | 0 | 0 | 2 | 2 |
+| 17 | 14 | 0 | 0 | 14 | 3 | 0 | 0 | 2 | 2 |
 
 - Prior: result of the same test (and mode) in the prior version; empty when it was not run there
 - Outcome: OK (passed), NEW ISSUE (failed, no prior result), REGRESSION (passed in the prior version), STILL FAILING (failed there too), FIXED (failed there, passes now)
@@ -49,3 +49,4 @@
 | 022 | readable | P1 | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | PASS | PASS | **OK** | – | apex.changelog.xml includes only f106/f106.xml (dist/releases/apex/f106/f106.sql, dist/releases/apex/f106/f106.xml) | 0:53 | 2026-11-04 13:19 |
 | 023 | apexlang | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | FAIL | FAIL | **STILL FAILING** | – | deploy of demo1/demo1.xml failed (2 workspaces for DEMO1): Multiple workspaces available, use the workspaceId or the workspace option.; yet DATABASECHANGELOG records the changeset as run | 2:49 | 2026-11-04 13:19 |
 | 023 | readable | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | PASS | PASS | **OK** | – | deployed through f106/f106.xml (2 workspaces for DEMO1); a second deploy skipped it | 2:06 | 2026-11-04 13:19 |
+| 024 | readable | P1 | stage | [project stage regenerates f&lt;app_id>.sql but not the sqlcl_checksum in f&lt;app_id>.xml, so a changed APEX application is not redeployed](https://forums.oracle.com/ords/apexds/post/sqlcl-26-3-projects-not-updating-the-apex-xml-sqlcl-checksu-8305) | FAIL | FAIL | **STILL FAILING** | – | f106.sql changed (snapshot hash 446d51c0e7e654905a0917814964ef50a429aa67 -> 20c134f91a01cabfb5dddc1a71788509e1f8d861) but f106.xml sqlcl_checksum stayed 3bcc08547203961cf11baa0d7746636d32ac74ca: Liquibase would not redeploy the application | 4:02 | 2026-11-25 19:34 |

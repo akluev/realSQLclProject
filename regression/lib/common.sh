@@ -52,7 +52,7 @@ load_config() {
     [[ -n ${!v:-} ]] || die "$v is not set in $cfg"
     export "${v?}"
   done
-  for v in SCHEMA_CONN APEX_SPARE_PAGE RESET_CMD KEEP_TEST_BRANCHES SHOW_SQLCL_OUTPUT; do
+  for v in SCHEMA_CONN APEX_SPARE_PAGE APEX_TITLE_PAGE RESET_CMD KEEP_TEST_BRANCHES SHOW_SQLCL_OUTPUT; do
     [[ -z ${!v:-} ]] || export "${v?}"
   done
 }

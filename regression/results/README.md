@@ -1,6 +1,6 @@
 # SQLcl regression report
 
-Generated 2026-11-06 from tests.json and the results of SQLcl 26.1.2, 26.2.2, 26.3.0, 26.3.1. Tests that depend on the APEX export mode are listed per mode: `readable` (apex.apexlang not set) and `apexlang` (apex.apexlang=true).
+Generated 2026-11-25 from tests.json and the results of SQLcl 26.1.2, 26.2.2, 26.3.0, 26.3.1. Tests that depend on the APEX export mode are listed per mode: `readable` (apex.apexlang not set) and `apexlang` (apex.apexlang=true).
 
 ## SQLcl 26.3.1: what needs attention
 
@@ -26,7 +26,7 @@ Generated 2026-11-06 from tests.json and the results of SQLcl 26.1.2, 26.2.2, 26
 
 | Severity | ID | Mode | Area | Issue | Since | Workaround | Workaround tested |
 |---|---|---|---|---|---|---|---|
-| P0 | 023 | apexlang | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | ? | None known for the generated APEXlang install. | – |
+| P0 | 023 | apexlang | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | 26.2.2 | None known for the generated APEXlang install. | – |
 | P1 | 005 | readable | export | [APEXlang source written by project export fails apex validate](https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571) | 26.1.2 | Run `apex export -applicationid &lt;id> -exptype APEXLANG -dir src/database/&lt;schema>/apex_apps/f&lt;id> -f` after `project export`. | – |
 | P1 | 006 | apexlang | export | [project export does not use the documented f&lt;app_id>/&lt;app-alias>/ folder](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777) | 26.2.2 | None; do not enable apex.apexlang. | – |
 | P1 | 006 | readable | export | [project export does not use the documented f&lt;app_id>/&lt;app-alias>/ folder](https://forums.oracle.com/ords/apexds/post/bug-sqlcl-26-2-2-project-export-apexlang-structure-is-incon-9777) | 26.2.2 | None; stay on SQLcl 26.1. | – |
@@ -35,10 +35,11 @@ Generated 2026-11-06 from tests.json and the results of SQLcl 26.1.2, 26.2.2, 26
 | P1 | 010 | apexlang | stage | [Switching to APEXlang mode leaves the legacy SQL controller in apex.changelog.xml](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#apexlang-mode-export-and-stage-deep-dive) | 26.2.2 | Remove the legacy dist/releases/apex/f&lt;id> folder and its &lt;include> from apex.changelog.xml by hand. | – |
 | P1 | 011 | – | export | [project export exports ORDS of the connected user instead of the project schemas](https://forums.oracle.com/ords/apexds/post/sqlcl-project-ords-export-should-use-configured-project-sch-9778) | 26.1.2 | Export ORDS while connected as the schema itself (SCHEMA_CONN). The undocumented setting export.ords.ordsAdmin=true does not help: no code reads it in 26.1 or 26.2. | – |
 | P1 | 022 | apexlang | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | ? | APEXlang mode: comment out the legacy f&lt;app_id> entries in apex.changelog.xml after every stage. | – |
+| P1 | 024 | readable | stage | [project stage regenerates f&lt;app_id>.sql but not the sqlcl_checksum in f&lt;app_id>.xml, so a changed APEX application is not redeployed](https://forums.oracle.com/ords/apexds/post/sqlcl-26-3-projects-not-updating-the-apex-xml-sqlcl-checksu-8305) | 26.2.2 | Delete dist/releases/apex/f*, run `project stage`, then copy the sqlcl_snapshot hash at the end of each f&lt;app_id>.sql into the sqlcl_checksum line of f&lt;app_id>.xml (scripts/bash/fix-apex-checksums.sh; alias prj_apex_stage). Fixing the line without deleting the folders first makes the next stage refuse the XML as edited. | – |
 | P2 | 001 | readable | export | [project export lowercases APEXlang file and folder names](https://forums.oracle.com/ords/apexds/post/sqlcl-project-export-lowercases-apexlang-file-and-folder-na-5571) | 26.1.2 | Run `apex export -applicationid &lt;id> -exptype APEXLANG -dir src/database/&lt;schema>/apex_apps/f&lt;id> -f` after `project export`. | does not work: apex export -f leaves 1 of 1 name(s) wrong where project export put them |
 | P2 | 003 | readable | export | [project export keeps files of APEX components deleted in APEX](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#the-old-export-defects-remain) | ? | Delete src/database/&lt;schema>/apex_apps/f&lt;id> before `project export`, or run `apex export -applicationid &lt;id> -exptype APEXLANG -dir src/database/&lt;schema>/apex_apps/f&lt;id> -f` after it. | does not work: apex export -f leaves the page file too |
 | P2 | 008 | readable | stage | [project stage refuses the APEX controller generated by an earlier SQLcl version](https://alexonapex.com/blog/2026/09/11/sqlcl-project-26-2-2-two-apexlang-directory-structures-one-migration-blocker/#staging-changes-the-controller-and-removes-deployment-properties) | 26.2.2 | Delete dist/releases/apex/f&lt;id>/f&lt;id>.xml before `project stage`. | – |
-| P2 | 021 | apexlang | export | A second project export of an APEX application, with nothing changed, fails in APEXlang mode | ? | Commit the application folder after each export, before exporting again. | – |
+| P2 | 021 | apexlang | export | A second project export of an APEX application, with nothing changed, fails in APEXlang mode | 26.2.2 | Commit the application folder after each export, before exporting again. | – |
 
 ## Results by version
 
@@ -74,3 +75,4 @@ Generated 2026-11-06 from tests.json and the results of SQLcl 26.1.2, 26.2.2, 26
 | 022 | readable | P1 | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) | PASS | PASS | PASS | PASS |
 | 023 | apexlang | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | n/a | **FAIL: new** | FAIL | FAIL |
 | 023 | readable | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once | PASS | PASS | PASS | PASS |
+| 024 | readable | P1 | stage | [project stage regenerates f&lt;app_id>.sql but not the sqlcl_checksum in f&lt;app_id>.xml, so a changed APEX application is not redeployed](https://forums.oracle.com/ords/apexds/post/sqlcl-26-3-projects-not-updating-the-apex-xml-sqlcl-checksu-8305) | PASS | **FAIL: regression** | FAIL | FAIL |

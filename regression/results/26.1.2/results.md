@@ -1,15 +1,15 @@
 # SQLcl 26.1.2 regression results
 
 - SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334
-- Last run: 2026-11-03 12:20, 36:28; test time of all rows: 23:40
+- Last run: 2026-11-25 19:55, 5:09 (selected tests only); test time of all rows: 27:17
 - Prior version: none (first version tested)
-- Baseline: `baseline (3155bcd)`, test branch `regression-26.1.2-20261103-114400*`
+- Baseline: `baseline (3155bcd)`, test branch `regression-26.1.2-20261125-195027*`
 
 ## Summary
 
 | Passed | Failed | New issues | Regressions | Still failing | Fixed | Errors | N/A | Workaround works | Workaround does not work |
 |---|---|---|---|---|---|---|---|---|---|
-| 10 | 7 | 7 | 0 | 0 | 0 | 0 | 13 | 3 | 0 |
+| 11 | 7 | 7 | 0 | 0 | 0 | 0 | 13 | 3 | 0 |
 
 - Prior: result of the same test (and mode) in the prior version; empty when it was not run there
 - Outcome: OK (passed), NEW ISSUE (failed, no prior result), REGRESSION (passed in the prior version), STILL FAILING (failed there too), FIXED (failed there, passes now)
@@ -49,3 +49,4 @@
 | 022 | readable | P1 | stage | After the application deployment is regenerated from scratch, project stage writes more than the controller of the APEX mode (APEXlang: legacy f&lt;app_id> entries come back) |  | PASS | **OK** | – | apex.changelog.xml includes only f106/f106.xml (dist/releases/apex/f106/f106.sql, dist/releases/apex/f106/f106.xml) | 0:57 | 2026-11-03 12:20 |
 | 023 | apexlang | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once |  | SKIP | **N/A** | – | apex.apexlang not supported by SQLcl 26.1.2 | – | 2026-11-03 12:20 |
 | 023 | readable | P0 | deploy | APEX deployment with the schema in two workspaces: APEXlang fails ("Multiple workspaces available") and records the failed changeset as run; readable must deploy once |  | PASS | **OK** | – | deployed through f106/f106.xml (2 workspaces for DEMO1); a second deploy skipped it | 2:14 | 2026-11-03 12:20 |
+| 024 | readable | P1 | stage | [project stage regenerates f&lt;app_id>.sql but not the sqlcl_checksum in f&lt;app_id>.xml, so a changed APEX application is not redeployed](https://forums.oracle.com/ords/apexds/post/sqlcl-26-3-projects-not-updating-the-apex-xml-sqlcl-checksu-8305) |  | PASS | **OK** | – | f106.sql changed (snapshot hash 99ebc9fb16d18bccb5e84c1494913e3f240a7031 -> a747120c5896105bdaeffa8e087a6a5093aa4f68) and f106.xml sqlcl_checksum changed (1795654349064 -> 1795654455004) | 3:37 | 2026-11-25 19:55 |
