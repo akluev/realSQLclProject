@@ -152,14 +152,16 @@ cd ..]]></sql>
                 <sql><![CDATA[
 pause This will FORCE re-deployment or synching of APEX application even if no changes detected. Press ENTER to continue or Ctrl-C to cancel...
 delete FROM databasechangelog_actions
-    where ID like 'INSTALL_%'
+    where ID like 'INSTALL\_%' escape '\'
     and author ='SQLCL-Generated'
-    and filename like 'releases/apex/f%/f%.xml'  ;  
+    and filename like 'releases_apex_f%_f%.xml' 
+    and description like 'runApexScript%' ;  
 delete from databasechangelog
-where ID like 'INSTALL_%'
+where ID like 'INSTALL\_%' escape '\'
 and author ='SQLCL-Generated'
-and filename like 'releases/apex/f%/f%.xml'
-and description like '%runApexScript%';
+and filename like 'releases_apex_f%_f%.xml'
+and description like 'runApexScript%';
+commit;
 prompt Done. Run 'prj_install' to re-install APEX applications or 'prj_sync' to update the catalog now.
 ]]></sql>
             </query>
