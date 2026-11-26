@@ -30,6 +30,8 @@ APEX_WORKSPACE=DEMO1
 APEX_APP_ID=106
 # A page the baseline app can lose without breaking validation (test 003)
 APEX_SPARE_PAGE=100
+# A page whose title test 024 changes (the smallest real application change)
+APEX_TITLE_PAGE=6
 
 # One SQLcl home per version label passed to run.sh (dots become underscores)
 SQLCL_HOME_26_1=/c/Install/sqlcl-26.1/sqlcl

@@ -13,6 +13,8 @@ Use `project stage add-custom` for seed data, reference data, assertion migratio
 
 Never create a custom file or changelog include manually.
 
+For a custom changeset that creates a private database link, follow Part A of [db-link-changesets.md](db-link-changesets.md).
+
 ## Branch immutability
 
 Do not edit a custom changeset belonging to a deployed release branch. Create a new incremental custom file in the current branch instead. Preserve the earlier file as deployment history.

@@ -39,12 +39,12 @@ column cmd new_value cmd noprint
 column msg  new_value msg noprint
 set verify off
 select 
- case when '&_SQLPLUS_RELEASE' = '2601020000' 
+ case when '&_SQLPLUS_RELEASE' >= '2601020000' 
   then 'export -applicationid &APP_ID. -exptype APEXLANG -dir src/database/'||lower(owner)||'/apex_apps/f'||application_id|| ' -f'
   else 'validate  -input '||'src/database/'||lower(owner)||'/apex_apps/f'||application_id||'/'||lower(alias)||' -ws '||workspace
  end as cmd,
- case when '&_SQLPLUS_RELEASE' = '2601020000' 
-    then 'Bug in 26.1 -Rexported application '||application_id||' to src/database/'||lower(owner)||'/apex_apps/f'||application_id 
+ case when '&_SQLPLUS_RELEASE' >= '2601020000' 
+    then 'Bug in 26.1 to 26.3 -Rexported application '||application_id||' to src/database/'||lower(owner)||'/apex_apps/f'||application_id 
     else 'Validating APEXlang app &APP_ID.  ...'
  end as msg   
 from apex_applications where application_id = :app_id;
@@ -173,6 +173,22 @@ prompt Done. Run 'prj_install' to re-install APEX applications or 'prj_sync' to 
             </query>
         </queries>
     </alias>
+    <alias name="prj_apex_stage">
+        <description/>
+        <queries>
+            <query minversion="8">
+                <sql><![CDATA[
+
+prompt Deleting dist/releases/apex/f* directories...
+!bash -c "cd $(git rev-parse --show-toplevel) && rm -fr dist/releases/apex/f*"
+prompt Running project stage ....
+project stage
+prompt APEX 26.2 checksum fix                    
+!bash -c "$(git rev-parse --show-toplevel)/scripts/bash/fix-apex-checksums.sh"
+]]></sql>
+            </query>
+        </queries>
+    </alias>
     <alias name="prj_compile">
         <description/>
         <queries>
@@ -206,8 +222,8 @@ apex validate -input &APEX_SRC_PATH.
 set define off
 ]]></sql>
                 <binds>
-                    <bind id="APP_ID">
-                        <tooltip><![CDATA[APP_ID]]></tooltip>
+                    <bind id="app_id">
+                        <tooltip><![CDATA[app_id]]></tooltip>
                     </bind>
                 </binds>
             </query>

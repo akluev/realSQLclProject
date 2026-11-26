@@ -1,6 +1,6 @@
 ---
 name: sqlcl-project
-description: 'Oracle SQLcl Project deployment pipeline skill. Use when: project export, project stage, project stage add-custom, DML file creation, changeset splitting, Liquibase changesets, deploy install.sql, stage.changelog.xml, branch immutability, MCP SQLcl connection, seed data, lookup table DML, APEX workspace setup via SQLcl, APEXlang compile apex import, APEXlang validate apex validate, prj_compile, prj_validate.'
+description: 'Oracle SQLcl Project deployment pipeline skill. Use when: project export, project stage, project stage add-custom, DML file creation, changeset splitting, Liquibase changesets, deploy install.sql, stage.changelog.xml, branch immutability, MCP SQLcl connection, seed data, lookup table DML, APEX workspace setup via SQLcl, APEXlang compile apex import, APEXlang validate apex validate, prj_compile, prj_validate, prj_apex_stage, sqlcl_checksum, APEX changeset checksum not updated, create database link custom changeset, refresh or rewrite materialized view changesets, private database link, ORA-02019.'
 ---
 
 # SQLcl Project Workflows
@@ -38,9 +38,10 @@ Older SQLcl MCP releases may expose equivalent tools under older names. Use the 
 Read only the references needed for the request:
 
 - **Object or application export:** [references/object-export.md](references/object-export.md)
-- **Ordinary `project stage`:** [references/project-stage.md](references/project-stage.md), followed by [references/changeset-splitting.md](references/changeset-splitting.md)
+- **Ordinary `project stage`, including `prj_apex_stage` (SQLcl 26.3 APEX checksum workaround):** [references/project-stage.md](references/project-stage.md), followed by [references/changeset-splitting.md](references/changeset-splitting.md) and, for objects that use a private database link, [references/db-link-changesets.md](references/db-link-changesets.md)
 - **`project stage add-custom`, seed/reference data, or APEX workspace setup:** [references/custom-files.md](references/custom-files.md)
 - **Split generated multi-statement changesets:** [references/changeset-splitting.md](references/changeset-splitting.md)
+- **Create a private database link as a custom changeset; refresh or rewrite staged changesets (such as materialized views) that select through such a link, for example "refresh my MV changesets"; or a deployment failing with ORA-02019:** [references/db-link-changesets.md](references/db-link-changesets.md)
 - **Deploy with `dist/install.sql`:** [references/deployment.md](references/deployment.md)
 - **Compile or validate APEXlang:** [references/apexlang.md](references/apexlang.md)
 

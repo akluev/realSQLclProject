@@ -11,8 +11,11 @@
 - [13. Integrating SQLcl Project with GitHub Copilot](13.-Integrating-SQLcl-Project-with-GitHub-Copilot.md)
 - [14. SQLcl Project with APEXlang: First Impressions](14.-SQLcl-Project-with-APEXlang-First-Impressions.md)
 - [15. Native Boolean Columns in Oracle APEX 26.1 and APEXlang](APEXlang/15.-Native-Boolean-Columns-in-Oracle-APEX-26.1-and-APEXlang.md)
+- [16. APEX 26.1 and SQLcl 26.1 Upgrade Guide](16.-APEX-26.1-and-SQLcl-26.1-Upgrade-Guide.md)
 - [17. APEXlang or SQL for APEX Deployment?](APEXlang/17.-APEXlang-vs-SQL-Deployment-Performance.md)
+- [18. APEX 26.2 and SQLcl 26.3 Upgrade Notes](18.-APEX-26.2-and-SQLcl-26.3-Upgrade-Notes.md)
 
-### VM Configuration
+### VM Configuration and Upgrades
 
 - [VM 1. Configure APEX and ORDS on Secondary PDB](vm/01.-Configure-APEX-and-ORDS-on-Secondary-PDB.md)
+- [VM 2. Upgrade ORDS and APEX Images on a VM](vm/02.-Upgrade-ORDS-and-APEX-Images-on-VM.md)
